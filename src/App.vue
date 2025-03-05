@@ -8,7 +8,6 @@ import { RouterLink, RouterView } from 'vue-router'
       <div>
         <nav>
           <RouterLink to="/">Home</RouterLink>
-          <p>test first commit</p>
         </nav>
       </div>
     </header>
