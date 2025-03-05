@@ -1,1 +1,18 @@
 @import 'tailwindcss';
+
+@theme {
+    --color-accent1: #00EC86;
+    --color-accent2: #F74949;
+    --color-hover: #26D388;
+    --color-gray: #262A29;
+    --color-black: #101710;
+    --color-white: #FBFBFB;
+    --color-light-gray: #F2F2F2;
+    --color-dark-gray: #ECECEC;
+    
+    --font-roboto: 'Roboto Mono', sans-serif;
+    --font-flex: 'Roboto Flex', sans-serif;
+    --font-main: 'Bebas Neue', sans-serif;
+
+   
+}
