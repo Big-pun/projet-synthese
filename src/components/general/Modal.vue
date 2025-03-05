@@ -2,7 +2,8 @@
 </script>
 
 <template>
-  <main>
-
-  </main>
+  Modal works
+  <slot></slot>
 </template>
+
+<style></style>
