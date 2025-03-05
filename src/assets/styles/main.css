@@ -1,1 +1,36 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@theme {
+    --color-accent1: #00EC86;
+    --color-accent2: #F74949;
+    --color-hover: #26D388;
+    --color-gray: #262A29;
+    --color-black: #101710;
+    --color-white: #FBFBFB;
+    --color-light-gray: #F2F2F2;
+    --color-dark-gray: #ECECEC;
+    
+    --font-roboto: 'Roboto Mono', sans-serif;
+    --font-flex: 'Roboto Flex', sans-serif;
+    --font-main: 'Bebas Neue', sans-serif;
+
+   
+}
+
+@layer base {
+    h1 {
+        @apply text-3xl text-accent2 font-roboto;
+    }
+    h2 {
+        @apply text-2xl text-accent1 font-flex;
+    }
+    h3 {
+        @apply text-xl font-main;
+    }
+    h4 {
+        @apply text-lg font-main;
+    }
+    h5 {
+        @apply text-base font-main;
+    }
+}
