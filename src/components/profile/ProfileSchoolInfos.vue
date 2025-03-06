@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  ProfileSchoolInfos works
+  <p>ProfileSchoolInfos works</p>
 </template>
 
 <style></style>

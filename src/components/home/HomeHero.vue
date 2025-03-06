@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  HomeHero works
+  <p>HomeHero works</p>
 </template>
 
 <style></style>

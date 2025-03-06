@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  Footer works
+  <p>Footer works</p>
 </template>
 
 <style></style>

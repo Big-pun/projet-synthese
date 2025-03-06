@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  ProfilePersonnalInfos works
+  <p>ProfilePersonnalInfos works</p>
 </template>
 
 <style></style>

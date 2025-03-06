@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  SubscriptionForm works
+  <p>SubscriptionForm works</p>
 </template>
 
 <style></style>

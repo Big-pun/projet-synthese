@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  ProfileBankingInfos works
+  <p>ProfileBankingInfos works</p>
 </template>
 
 <style></style>

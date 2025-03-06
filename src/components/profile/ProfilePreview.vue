@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  ProfilePreview works
+  <p>ProfilePreview works</p>
 </template>
 
 <style></style>

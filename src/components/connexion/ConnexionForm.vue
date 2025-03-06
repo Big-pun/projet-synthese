@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  ConnexionForm works
+  <p>ConnexionForm works</p>
 </template>
 
 <style></style>

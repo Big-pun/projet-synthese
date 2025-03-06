@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  HomeCallToAction works
+  <p>HomeCallToAction works</p>
 </template>
 
 <style></style>

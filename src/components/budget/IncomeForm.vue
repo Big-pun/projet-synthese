@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  IncomeForm works
+  <p>IncomeForm works</p>
 </template>
 
 <style></style>
