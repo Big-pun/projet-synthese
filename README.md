@@ -5,10 +5,14 @@ J'ai ajouté le routes dans le fichier routes/index.js.
 
 Les views BudgetView et ProfileView ayant le même layout (sidebar + header + footer + contenu variable), c'est le composant layout/ClientInterface qui gère l'affichage des éléments communs. La structure des routes est la suivante:
 
- 📌 /accueil => composant HomeView
- 📌/espace-client => composant ClientInterface (inclue un <RouterView> qui injecte dynamiquement le contenu principal en fonction de la route (voir children)
-         children: 
+📌 /accueil => composant HomeView
+
+📌/espace-client => composant ClientInterface (inclue un <RouterView> qui injecte dynamiquement le contenu principal en fonction de la route (voir children)
+
+- children: 
+
                 📌 /espace-client/budget  => <RouterView> est remplacé par le composant BudgetView
+
                 📌 /espace-client/profil => <RouterView> est remplacé par le composant ProfileView
 
 J'ai mis les liens des pages Accueil, Budget et Profil dans App.vue pour y avoir accès facilement à toutes nos pages / que vous puissiez tester en attendant que le header soit fonctionnel, on pourra les effacer ensuite ! 
