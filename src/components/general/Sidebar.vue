@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  Sidebar works
+  <p>Sidebar works</p>
 </template>
 
 <style></style>

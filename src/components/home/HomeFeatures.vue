@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  HomeFeatures works
+  <p>HomeFeatures works</p>
 </template>
 
 <style></style>

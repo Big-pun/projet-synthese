@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  BudgetPreview works
+  <p>BudgetPreview works</p>
 </template>
 
 <style></style>

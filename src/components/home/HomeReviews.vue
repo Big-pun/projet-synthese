@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  HomeReviews works
+  <p>HomeReviews works</p>
 </template>
 
 <style></style>

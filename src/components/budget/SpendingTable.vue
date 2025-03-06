@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  SpendingTable works
+  <p>SpendingTable works</p>
 </template>
 
 <style></style>

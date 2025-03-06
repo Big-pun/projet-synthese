@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  Modal works
+  <p>Modal works</p>
   <slot></slot>
 </template>
 

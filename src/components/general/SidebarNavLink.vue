@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  SidebarNavLink works
+  <p>SidebarNavLink works</p>
 </template>
 
 <style></style>

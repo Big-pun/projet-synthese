@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  SpendingForm works
+  <p>SpendingForm works</p>
 </template>
 
 <style></style>

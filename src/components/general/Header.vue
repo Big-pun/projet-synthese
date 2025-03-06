@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  Header works
+  <p>Header works</p>
 </template>
 
 <style></style>

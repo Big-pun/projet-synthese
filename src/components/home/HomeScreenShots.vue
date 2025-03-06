@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  HomeScreenShots works
+  <p>HomeScreenShots works</p>
 </template>
 
 <style></style>

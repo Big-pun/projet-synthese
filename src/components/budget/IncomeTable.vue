@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  IncomeTable works
+  <p>IncomeTable works</p>
 </template>
 
 <style></style>
