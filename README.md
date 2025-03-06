@@ -7,13 +7,13 @@ Les views BudgetView et ProfileView ayant le même layout (sidebar + header + fo
 
 📌 /accueil => composant HomeView
 
-📌/espace-client => composant ClientInterface (inclue un <RouterView> qui injecte dynamiquement le contenu principal en fonction de la route (voir children)
+📌/espace-client => composant ClientInterface (inclue une balise RouterView qui injecte dynamiquement le contenu principal en fonction de la route (voir children)
 
 - children: 
 
-                📌 /espace-client/budget  => <RouterView> est remplacé par le composant BudgetView
+                📌 /espace-client/budget  => la  balise RouterView est remplacé par le composant BudgetView
 
-                📌 /espace-client/profil => <RouterView> est remplacé par le composant ProfileView
+                📌 /espace-client/profil => la  balise RouterView est remplacé par le composant ProfileView
 
 J'ai mis les liens des pages Accueil, Budget et Profil dans App.vue pour y avoir accès facilement à toutes nos pages / que vous puissiez tester en attendant que le header soit fonctionnel, on pourra les effacer ensuite ! 
 
