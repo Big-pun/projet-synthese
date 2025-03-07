@@ -17,14 +17,11 @@ const userData = ref({
       <h1 class="uppercase text-gray font-bold ">Details du profil</h1>
     </div>
 
-    <!-- Carte de profil -->
+    <!-- Carte de profil avec bordure -->
     <div class="grid grid-cols-12 gap-4">
       <!-- Carte d'aperçu - occupe toute la largeur sur mobile -->
-      <div class="col-span-12 md:col-span-6 bg-light-gray rounded-3xl p-8 relative overflow-hidden shadow-sm">
-        <!-- Bordure rouge en bas -->
-        <div class="absolute bottom-0 left-0 right-0 h-3 bg-accent2"></div>
-        
-        <h2 class="text-center text-accent2 mb-6 font-medium">Aperçu</h2>
+      <div class="col-span-12 md:col-span-6 bg-light-gray p-8 shadow-sm rounded-3xl border-b-8 border-accent2">
+        <h2 class="text-center text-accent2 mb-4 font-medium">Aperçu</h2>
         <div class="flex flex-row items-center gap-8">
           <div class="shrink-0 w-28 h-28">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 92 84" fill="none">
@@ -33,11 +30,11 @@ const userData = ref({
                 fill="#F74949" />
             </svg>
           </div>
-          
-          <div class="flex flex-col text-left space-y-1">  
-            <p class="text-xl text-black">{{ userData.nom }}</p>
-            <p class="text-gray text-base">{{ userData.email }}</p>
-            <p class="text-gray text-base">{{ userData.telephone }}</p>
+
+          <div class="flex flex-col text-left space-y-1">
+            <p class="text-base text-gray">{{ userData.nom }}</p>
+            <p class="text-base text-gray">{{ userData.email }}</p>
+            <p class="text-base text-gray">{{ userData.telephone }}</p>
           </div>
         </div>
       </div>
@@ -55,12 +52,20 @@ const userData = ref({
         </button>
 
         <button
-          class="flex items-center justify-center bg-gray text-white py-3 px-4 rounded-lg hover:bg-accent2 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
-            <path d="M3 6h18" />
-            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+          class="flex items-center justify-around bg-gray text-white py-3 px-4 rounded-lg hover:bg-accent2 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M30.75 36H5.25V5.25H30.75V36ZM6.75 34.5H29.25V6.75H6.75V34.5Z" fill="#FBFBFB" />
+            <path d="M26.25 6.75H9.75V0.75H26.25V6.75ZM11.25 5.25H24.75V2.25H11.25V5.25Z" fill="#FBFBFB" />
+            <path
+              d="M12 30.75C11.5853 30.75 11.25 30.4147 11.25 30V11.25C11.25 10.8353 11.5853 10.5 12 10.5C12.4147 10.5 12.75 10.8353 12.75 11.25V30C12.75 30.4147 12.4147 30.75 12 30.75Z"
+              fill="#FBFBFB" />
+            <path
+              d="M18 30.75C17.5853 30.75 17.25 30.4147 17.25 30V11.25C17.25 10.8353 17.5853 10.5 18 10.5C18.4147 10.5 18.75 10.8353 18.75 11.25V30C18.75 30.4147 18.4147 30.75 18 30.75Z"
+              fill="#FBFBFB" />
+            <path
+              d="M24 30.75C23.5853 30.75 23.25 30.4147 23.25 30V11.25C23.25 10.8353 23.5853 10.5 24 10.5C24.4147 10.5 24.75 10.8353 24.75 11.25V30C24.75 30.4147 24.4147 30.75 24 30.75Z"
+              fill="#FBFBFB" />
+            <path d="M36 5.25H0V6.75H36V5.25Z" fill="#FBFBFB" />
           </svg>
           Supprimer mon profil
         </button>
@@ -70,5 +75,5 @@ const userData = ref({
 </template>
 
 <style scoped>
-/* Styles spécifiques au composant si nécessaire */
+/* Le style ::after a été supprimé et remplacé par une div dans le template */
 </style>
