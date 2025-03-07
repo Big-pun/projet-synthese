@@ -9,7 +9,7 @@ export default {
     <!-- Container -->
     <div class="md:py-10 mx-auto w-full max-w-9xl px-5 md:px-1">
       <!-- Component -->
-      <div class="mb-8 w-full border-b border-black mt-16"></div> <!--REVOIR L'ÉPAISSEUR ET LA COULEUR ET SI ON L'A MET PARTOUT OU NON-->
+      <div class="mb-8 w-full border-b border-[#00EC86] mt-16 border-2"></div> <!--REVOIR L'ÉPAISSEUR ET LA COULEUR ET SI ON L'A MET PARTOUT OU NON-->
       <div class="flex md:flex-row flex-col items-center justify-between">
         <!-- LOGO -->
         <img src="@/assets/img/LogoNom.svg" alt="Flow logo" class="w-[100px] pb-8 md:pb-0" />
