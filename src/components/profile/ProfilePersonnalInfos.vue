@@ -1,10 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue';
-
+import { useModalStore } from '@/stores/modalStore';
 // État pour le survol
 const hovered = ref(false);
 
-// Données utilisateur (API)
 const userData = reactive({
   prenom: 'Bruno',
   nom: 'Gautier',
@@ -15,6 +14,27 @@ const userData = reactive({
   adresseTravail: '22 rue du Fort, Trois-Rivieres, G3L5M4'
 });
 
+const modalStore = useModalStore();
+
+const personalInfoFields = [
+  { key: 'prenom', label: 'Prénom' },
+  { key: 'nom', label: 'Nom' },
+  { key: 'dateNaissance', label: 'Date de naissance' },
+  { key: 'telephone', label: 'Téléphone' },
+  { key: 'courriel', label: 'Courriel' },
+  { key: 'adressePersonnelle', label: 'Adresse personnelle' },
+  { key: 'adresseTravail', label: 'Adresse au travail' }
+];
+
+// Fonction pour ouvrir le modal d'édition
+function openEditModal() {
+  modalStore.openModal(
+    'personalInfo',
+    'Éditer les renseignements personnels',
+    personalInfoFields,
+    { ...userData } // Clone pour éviter les modifications directes
+  );
+}
 </script>
 
 <template>
