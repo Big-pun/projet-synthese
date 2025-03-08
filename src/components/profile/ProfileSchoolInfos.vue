@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { useModalStore } from '@/stores/modalStore';
 
 // État pour le survol
 const hovered = ref(false);
@@ -12,10 +13,25 @@ const schoolData = reactive({
   finProgramme: '06/06/2025'
 });
 
-// Fonction pour ouvrir le modal d'édition (à implémenter plus tard)
+// Store modal
+const modalStore = useModalStore();
+
+// Configurer les champs du formulaire pour les informations scolaires
+const schoolInfoFields = [
+  { key: 'nom', label: 'Nom de l\'établissement' },
+  { key: 'domaine', label: 'Domaine d\'études' },
+  { key: 'debutProgramme', label: 'Début du programme' },
+  { key: 'finProgramme', label: 'Fin du programme' }
+];
+
+// Fonction pour ouvrir le modal d'édition
 function openEditModal() {
-  // Cette fonction sera implémentée avec le backend
-  console.log('Ouverture du modal d\'édition');
+  modalStore.openModal(
+    'schoolInfo',
+    'Éditer les informations scolaires',
+    schoolInfoFields,
+    { ...schoolData } // Clone pour éviter les modifications directes
+  );
 }
 </script>
 
