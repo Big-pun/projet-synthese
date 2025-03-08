@@ -20,7 +20,7 @@ const userData = ref({
     <!-- Section complète en grille -->
     <div class="grid grid-cols-1 lg:grid-cols-2 space-y-6 lg:space-y-0">
       <!-- Carte d'aperçu -->
-      <div class="bg-light-gray p-6 md:p-8 shadow-sm rounded-3xl border-b-8 border-accent2 flex flex-col mt-4 items-center">
+      <div class="bg-light-gray text-lg lg:text-xl p-6 md:p-8 shadow-sm rounded-3xl border-b-8 border-accent2 flex flex-col mt-4 items-center">
         <h2 class="text-center text-accent2 mb-4 font-medium">Aperçu</h2>
         <div class="flex flex-row items-center space-x-4 w-full justify-center lg:justify-start">
           <div class="shrink-0 w-20 h-20 md:w-28 md:h-28 md:p-4">
@@ -31,7 +31,7 @@ const userData = ref({
             </svg>
           </div>
 
-          <div class="flex flex-col text-gray text-left space-y-1 font-medium text-lg md:text-xl">
+          <div class="flex flex-col text-gray text-left space-y-1 font-medium ">
             <p class="">{{ userData.nom }}</p>
             <p class="">{{ userData.email }}</p>
             <p class="">{{ userData.telephone }}</p>
@@ -40,7 +40,7 @@ const userData = ref({
       </div>
 
       <!-- Boutons -->
-      <div class="flex flex-col justify-center items-center space-y-4 md:space-y-6">
+      <div class="flex text-lg flex-col justify-center items-center space-y-4 md:space-y-6">
         <button
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-hover transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
