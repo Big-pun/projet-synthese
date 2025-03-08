@@ -5,8 +5,8 @@
        @mouseleave="hovered = false">
     
     <!-- En-tête de la section avec pastille de statut -->
-    <div class="flex items-center justify-between mb-4 p-4 rounded-t-lg bg-gray relative">
-      <h3 class="text-white">Renseignements personnels</h3>
+    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
+      <h3 class="text-white ml-8">Renseignements personnels</h3>
       
       <!-- Rectangle SVG avec changement de couleur lors du survol -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -20,12 +20,12 @@
       <!-- Première colonne -->
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
-          <p class="responsive-margin text-sm text-gray-500">Prenom</p>
+          <p class="font-medium responsive-margin ">Prenom</p>
           <p class="">{{ userData.prenom || 'Non spécifié' }}</p>
         </div>
         
         <div class="rounded-lg bg-white p-4 flex flex-row items-center">
-          <p class="responsive-margin text-sm text-gray-500">Date de naissance</p>
+          <p class="font-medium responsive-margin  ">Date de naissance</p>
           <p class="">{{ userData.dateNaissance || 'Non spécifié' }}</p>
         </div>
       </div>
@@ -33,12 +33,12 @@
       <!-- Deuxième colonne -->
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
-          <p class="responsive-margin text-sm text-gray-500">Nom</p>
+          <p class="font-medium responsive-margin  ">Nom</p>
           <p class="">{{ userData.nom || 'Non spécifié' }}</p>
         </div>
         
         <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
-          <p class="responsive-margin text-sm text-gray-500">Telephone</p>
+          <p class="font-medium responsive-margin  ">Telephone</p>
           <p class="">{{ userData.telephone || 'Non spécifié' }}</p>
         </div>
       </div>
@@ -47,17 +47,17 @@
     <!-- Adresses -->
     <div class="mt-2 px-6">
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
-          <p class="responsive-margin text-sm text-gray-500">Courriel</p>
+          <p class="font-medium responsive-margin  ">Courriel</p>
           <p class="">{{ userData.courriel || 'Non spécifié' }}</p>
       </div>
 
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center ">
-        <p class="responsive-margin text-sm text-gray-500">Adresse personnelle</p>
+        <p class="responsive-margin  ">Adresse personnelle</p>
         <p class="">{{ userData.adressePersonnelle || 'Non spécifié' }}</p>
       </div>
       
       <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
-        <p class="responsive-margin text-sm text-gray-500">Adresse au travail</p>
+        <p class="responsive-margin  ">Adresse au travail</p>
         <p class="">{{ userData.adresseTravail || 'Non spécifié' }}</p>
       </div>
     </div>
