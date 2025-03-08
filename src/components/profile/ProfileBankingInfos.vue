@@ -13,13 +13,24 @@ const bankingData = reactive({
   autres: '-'
 });
 
-// Fonction pour ouvrir le modal d'édition (à implémenter plus tard)
+// Store modal
+const modalStore = useModalStore();
+
+// Configurer les champs du formulaire pour les informations bancaires
+const bankingInfoFields = [
+  { key: 'institution', label: 'Institution' },
+  { key: 'compte', label: 'Numéro de compte' },
+  { key: 'prets', label: 'Prêts' },
+  { key: 'autres', label: 'Autres informations' }
+];
+
+// Fonction pour ouvrir le modal d'édition
 function openEditModal() {
   modalStore.openModal(
     'bankingInfo',
     'Éditer les renseignements bancaires',
-    bankingFields,
-    { ...bankingData }
+    bankingInfoFields,
+    { ...bankingData } // Clone pour éviter les modifications directes
   );
 }
 </script>
