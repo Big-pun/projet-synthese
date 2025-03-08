@@ -1,6 +1,24 @@
+<script setup>
+import { ref, reactive } from 'vue';
+
+// État pour le survol
+const hovered = ref(false);
+
+// Données utilisateur (API)
+const userData = reactive({
+  prenom: 'Bruno',
+  nom: 'Gautier',
+  dateNaissance: '02/01/1992',
+  telephone: '581 - 422 - 5029',
+  courriel: 'brunogautier@gmail.com',
+  adressePersonnelle: '885 rue de l\'escarpement, Trois-Rivieres, G2X5L2',
+  adresseTravail: '22 rue du Fort, Trois-Rivieres, G3L5M4'
+});
+
+</script>
 
 <template>
-  <div class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg shadow-md mb-6 pb-1 transition-all duration-200" 
+  <div class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     
@@ -73,25 +91,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, reactive } from 'vue';
-
-// État pour le survol
-const hovered = ref(false);
-
-// Données utilisateur (API)
-const userData = reactive({
-  prenom: 'Bruno',
-  nom: 'Gautier',
-  dateNaissance: '02/01/1992',
-  telephone: '581 - 422 - 5029',
-  courriel: 'brunogautier@gmail.com',
-  adressePersonnelle: '885 rue de l\'escarpement, Trois-Rivieres, G2X5L2',
-  adresseTravail: '22 rue du Fort, Trois-Rivieres, G3L5M4'
-});
-
-</script>
 
 <style>
 .responsive-margin {
