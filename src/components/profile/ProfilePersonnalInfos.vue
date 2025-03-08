@@ -71,60 +71,6 @@
       </button>
     </div>
     
-    <!-- Modal d'édition (affiché lorsque showModal est true)
-    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-        <h3 class="text-xl font-bold mb-4">Modifier les renseignements personnels</h3>
-        
-        <form @submit.prevent="saveUserData">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label class="block text-sm text-gray-500 mb-1">Prénom</label>
-              <input v-model="editableUserData.prenom" class="w-full px-3 py-2 border rounded-md" type="text">
-            </div>
-            
-            <div>
-              <label class="block text-sm text-gray-500 mb-1">Nom</label>
-              <input v-model="editableUserData.nom" class="w-full px-3 py-2 border rounded-md" type="text">
-            </div>
-            
-            <div>
-              <label class="block text-sm text-gray-500 mb-1">Date de naissance</label>
-              <input v-model="editableUserData.dateNaissance" class="w-full px-3 py-2 border rounded-md" type="text">
-            </div>
-            
-            <div>
-              <label class="block text-sm text-gray-500 mb-1">Téléphone</label>
-              <input v-model="editableUserData.telephone" class="w-full px-3 py-2 border rounded-md" type="text">
-            </div>
-            
-            <div class="md:col-span-2">
-              <label class="block text-sm text-gray-500 mb-1">Courriel</label>
-              <input v-model="editableUserData.courriel" class="w-full px-3 py-2 border rounded-md" type="email">
-            </div>
-            
-            <div class="md:col-span-2">
-              <label class="block text-sm text-gray-500 mb-1">Adresse personnelle</label>
-              <input v-model="editableUserData.adressePersonnelle" class="w-full px-3 py-2 border rounded-md" type="text">
-            </div>
-            
-            <div class="md:col-span-2">
-              <label class="block text-sm text-gray-500 mb-1">Adresse au travail</label>
-              <input v-model="editableUserData.adresseTravail" class="w-full px-3 py-2 border rounded-md" type="text">
-            </div>
-          </div>
-          
-          <div class="flex justify-end space-x-3">
-            <button type="button" @click="closeModal" class="px-4 py-2 border border-accent2 text-accent2 rounded-md">
-              Annuler
-            </button>
-            <button type="submit" class="px-4 py-2 bg-accent1 text-white rounded-md">
-              Enregistrer
-            </button>
-          </div>
-        </form>
-      </div>
-    </div> -->
   </div>
 </template>
 
