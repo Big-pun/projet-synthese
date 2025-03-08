@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { useModalStore } from '@/stores/modalStore';
 
 // État pour le survol
 const hovered = ref(false);
@@ -14,8 +15,12 @@ const bankingData = reactive({
 
 // Fonction pour ouvrir le modal d'édition (à implémenter plus tard)
 function openEditModal() {
-  // Cette fonction sera implémentée avec le backend
-  console.log('Ouverture du modal d\'édition bancaire');
+  modalStore.openModal(
+    'bankingInfo',
+    'Éditer les renseignements bancaires',
+    bankingFields,
+    { ...bankingData }
+  );
 }
 </script>
 
