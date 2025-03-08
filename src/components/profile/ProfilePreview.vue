@@ -20,9 +20,9 @@ const userData = ref({
     <!-- Section complète en grille -->
     <div class="grid grid-cols-1 lg:grid-cols-2 ">
       <!-- Carte d'aperçu -->
-      <div class="bg-light-gray p-6 md:p-8 shadow-sm rounded-3xl border-b-8 border-accent2 flex flex-col items-center m-6">
+      <div class="bg-light-gray p-6 md:p-8 shadow-sm rounded-3xl border-b-8 border-accent2 flex flex-col mt-4 items-center">
         <h2 class="text-center text-accent2 mb-4 font-medium">Aperçu</h2>
-        <div class="flex flex-row items-center space-x-4 md:space-x-8 w-full">
+        <div class="flex flex-row items-center space-x-4  w-full">
           <div class="shrink-0 w-20 h-20 md:w-28 md:h-28 md:p-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 92 84" fill="none">
               <path
@@ -42,7 +42,7 @@ const userData = ref({
       <!-- Boutons -->
       <div class="flex flex-col justify-center items-center space-y-4 md:space-y-6">
         <button
-          class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-lg hover:bg-hover transition-colors">
+          class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-hover transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
               d="M22.0612 23.3763L15.6875 29.75H11.4688V33.9688H7.25V38.1875H0.21875V31.1562L15.0299 16.3451C14.5458 15.0459 14.2812 13.6398 14.2812 12.1719C14.2812 5.57035 19.6328 0.21875 26.2344 0.21875C32.8359 0.21875 38.1875 5.57035 38.1875 12.1719C38.1875 18.7734 32.8359 24.125 26.2344 24.125C24.7665 24.125 23.3604 23.8604 22.0612 23.3763ZM15.6858 17.7986L1.625 31.8594V36.7812H5.84375V32.5625H10.0625V28.3438H14.9844L20.6076 22.7205C18.5197 21.6044 16.8018 19.8866 15.6858 17.7986ZM36.7812 12.1719C36.7812 6.347 32.0593 1.625 26.2344 1.625C20.4095 1.625 15.6875 6.347 15.6875 12.1719C15.6875 17.9968 20.4095 22.7188 26.2344 22.7188C32.0593 22.7188 36.7812 17.9968 36.7812 12.1719ZM33.9688 8.65625C33.9688 6.3263 32.08 4.4375 29.75 4.4375C27.42 4.4375 25.5312 6.3263 25.5312 8.65625C25.5312 10.9862 27.42 12.875 29.75 12.875C32.08 12.875 33.9688 10.9862 33.9688 8.65625ZM32.5625 8.65625C32.5625 7.10295 31.3033 5.84375 29.75 5.84375C28.1967 5.84375 26.9375 7.10295 26.9375 8.65625C26.9375 10.2096 28.1967 11.4688 29.75 11.4688C31.3033 11.4688 32.5625 10.2096 32.5625 8.65625Z"
@@ -52,7 +52,7 @@ const userData = ref({
         </button>
 
         <button
-          class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-lg hover:bg-accent2 transition-colors">
+          class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-accent2 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
             <path d="M30.75 36H5.25V5.25H30.75V36ZM6.75 34.5H29.25V6.75H6.75V34.5Z" fill="#FBFBFB" />
             <path d="M26.25 6.75H9.75V0.75H26.25V6.75ZM11.25 5.25H24.75V2.25H11.25V5.25Z" fill="#FBFBFB" />
