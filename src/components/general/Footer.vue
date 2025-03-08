@@ -9,7 +9,7 @@ export default {
     <!-- Container -->
     <div class="md:py-10 mx-auto w-full max-w-9xl px-5 md:px-1">
       <!-- Component -->
-      <div class="mb-8 w-full border-b border-[#00EC86] mt-16 border-2"></div> <!--REVOIR L'ÉPAISSEUR ET LA COULEUR ET SI ON L'A MET PARTOUT OU NON-->
+      <div class="mb-8 w-full border-accent1 mt-16 border-4"></div> <!--VOIR SI ON L'A MET PARTOUT OU NON-->
       <div class="flex md:flex-row flex-col items-center justify-between">
         <!-- LOGO -->
         <img src="@/assets/img/LogoNom.svg" alt="Flow logo" class="w-[100px] pb-8 md:pb-0" />
@@ -17,7 +17,7 @@ export default {
         <!-- Copyright and Icons -->
         <div class="flex md:flex-row flex-col items-center">
           <!-- Copyright Text -->
-          <p class="text-gray-500 text-sm p-[6px] text-center"> <!--REVOIR LA COULEUR (text-nom-dans-le-theme) ET LA FONTE POUR ROBOTO MONO class="font-[???] ..." -->
+          <p class="text-black font-roboto text-sm p-[6px] text-center">
             Team 1: Web Development ->
           </p>
 
@@ -43,7 +43,7 @@ export default {
               </svg>
             </a>
             <a
-              href="#"
+              href="https://github.com/jeannepietropaoli"
               target="_blank"
               class="inline-block py-2"
             >
@@ -62,7 +62,7 @@ export default {
               </svg>
             </a>
             <a
-              href="#"
+              href="https://github.com/ines-taborin"
               target="_blank"
               class="inline-block py-2"
             >
