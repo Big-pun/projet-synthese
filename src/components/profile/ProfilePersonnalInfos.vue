@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg shadow-md mb-6 pb-1 transition-all duration-200" 
+  <div class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     
