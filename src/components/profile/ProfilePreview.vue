@@ -10,7 +10,7 @@ const userData = ref({
 </script>
 
 <template>
-  <div class="mb-8 font-roboto p-4 max-w-screen-lg mx-auto">
+  <div class="mb-8 font-roboto max-w-screen-lg mx-auto">
     <!-- Titre de la section -->
     <div class="flex items-center mb-4 md:-ml-8">
       <img src="@/assets/img/logo.svg" alt="Logo" class="w-6 h-6 mr-2" />
