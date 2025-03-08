@@ -71,7 +71,6 @@
         <span class="mr-2">+</span> Editer cette section
       </button>
     </div>
-    
   </div>
 </template>
 
