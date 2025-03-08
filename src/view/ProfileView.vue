@@ -11,7 +11,7 @@ import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
     <ProfilePersonnalInfos></ProfilePersonnalInfos>
     
     <!-- Section avec informations scolaires et bancaires côte à côte -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-screen-lg mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
       <ProfileSchoolInfos></ProfileSchoolInfos>
       <ProfileBankingInfos></ProfileBankingInfos>
     </div>

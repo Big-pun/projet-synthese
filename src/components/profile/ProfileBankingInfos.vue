@@ -20,7 +20,7 @@ function openEditModal() {
 </script>
 
 <template>
-  <div class="font-roboto w-full bg-light-gray rounded-lg shadow-md mb-6 pb-1 transition-all duration-200" 
+  <div class="font-roboto w-full bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     
