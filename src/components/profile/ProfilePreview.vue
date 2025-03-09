@@ -18,7 +18,11 @@ function openChangePasswordModal() {
     'changePassword',
     'Changer mon mot de passe',
     passwordFields,
-    {} // Pas de données initiales pour les mots de passe
+    {
+      currentPassword: '123456',
+      newPassword: '',
+      confirmPassword: ''
+    } 
   );
 }
 
