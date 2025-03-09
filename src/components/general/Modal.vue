@@ -6,7 +6,8 @@ const props = defineProps({
   title: String,
   isOpen: Boolean,
   formFields: Array,
-  formData: Object
+  formData: Object,
+  modalType: String
 });
 
 // Créer une copie locale des données du formulaire pour éviter de modifier directement la prop
@@ -30,6 +31,10 @@ watch(() => props.formFields, (newFields) => {
   }
 }, { immediate: true });
 
+watch(() => props.modalType, (newVal) => {
+  console.log('modalType:', newVal);
+}, { immediate: true });
+
 const emit = defineEmits(['update:isOpen', 'save']);
 
 function closeModal() {
@@ -40,6 +45,8 @@ function handleSave() {
   emit('save', localFormData.value);
   closeModal();
 }
+
+
 
 function togglePasswordVisibility(key) {
   passwordVisibility.value[key] = !passwordVisibility.value[key];
@@ -59,7 +66,7 @@ function getEyeIconClass(key) {
   return passwordVisibility.value[key] ? 'text-accent1' : 'text-accent2';
 }
 
-// Fonction pour basculer la visibilité de tous les mots de passe
+// Fonction pour basculer la visibilité de tous les mots de passe (TODO: à modifier)
 function toggleAllPasswordsVisibility() {
   for (const key in passwordVisibility.value) {
     passwordVisibility.value[key] = !passwordVisibility.value[key];
@@ -85,6 +92,7 @@ function toggleAllPasswordsVisibility() {
       <!-- Bouton pour basculer la visibilité de tous les mots de passe -->
       <div class="flex justify-end p-4">
         <button 
+          v-if="modalType === 'changePassword'"
           @click="toggleAllPasswordsVisibility"
           class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
           mots de passe

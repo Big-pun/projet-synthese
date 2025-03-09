@@ -83,6 +83,7 @@ function handleFormDataUpdate(newData) {
       :is-open="modalStore.isModalOpen"
       :form-fields="modalStore.formFields"
       :form-data="modalStore.formData"
+      :modal-type="modalStore.modalType"
       @update:is-open="modalStore.closeModal"
       @update:form-data="handleFormDataUpdate"
       @save="handleSave"
