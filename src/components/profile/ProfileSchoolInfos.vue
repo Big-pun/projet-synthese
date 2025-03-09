@@ -83,7 +83,7 @@ function openEditModal() {
       <button 
         @click="openEditModal"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray"
-        :class="hovered ? 'text-white bg-accent1' : 'bg-white'">
+        :class="hovered ? 'text-white bg-hover' : 'bg-white'">
         <span class="mr-2">+</span> Editer cette section
       </button>
     </div>
