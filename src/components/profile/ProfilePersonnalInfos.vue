@@ -29,7 +29,7 @@ const personalInfoFields = [
 // Fonction pour ouvrir le modal d'édition
 function openEditModal() {
   modalStore.openModal(
-    'personalInfo',
+    'personnalInfo',
     'Éditer les renseignements personnels',
     personalInfoFields,
     { ...userData } // Clone pour éviter les modifications directes
@@ -90,12 +90,12 @@ function openEditModal() {
       </div>
 
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center ">
-        <p class="responsive-margin  ">Adresse personnelle</p>
+        <p class="font-medium responsive-margin">Adresse personnelle</p>
         <p class="">{{ userData.adressePersonnelle || 'Non spécifié' }}</p>
       </div>
       
       <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
-        <p class="responsive-margin  ">Adresse au travail</p>
+        <p class="font-medium responsive-margin">Adresse au travail</p>
         <p class="">{{ userData.adresseTravail || 'Non spécifié' }}</p>
       </div>
     </div>

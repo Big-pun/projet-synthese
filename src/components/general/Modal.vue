@@ -63,9 +63,17 @@ function getFieldType(field) {
   return field.type || 'text';
 }
 
+// Changer le grid si c'est les personnalInfos, sur mobile, garder le grid-cols-1
+function getGridPersonnalInfo(modalType) {
+  if (modalType === 'personnalInfo' && window.innerWidth > 768) {
+    return 'grid grid-cols-2';
+  }
+  return 'grid grid-cols-1';
+}
+
 // Obtenir la classe CSS pour l'icône d'œil en fonction de la visibilité
 function getEyeIconClass(key) {
-  return passwordVisibility.value[key] ? 'text-accent1' : 'text-accent2';
+  return passwordVisibility.value[key] ? 'text-accent1 hover:text-accent1' : 'text-accent2 hover:text-accent2';
 }
 
 // Fonction pour basculer la visibilité de tous les mots de passe
@@ -79,7 +87,7 @@ function toggleAllPasswordsVisibility() {
 <template>
   <div v-if="isOpen" 
        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 font-roboto">
-    <div class="bg-light-gray rounded-lg shadow-xl w-full max-w-xl mx-4 transition-all duration-200">
+    <div class="bg-light-gray max-h-screen overflow-y-auto  max-w-screen-xl rounded-lg shadow-xl mx-4 transition-all duration-200">
       <!-- En-tête du modal avec style cohérent -->
       <div class="flex items-center justify-between p-3 rounded-t-lg bg-gray relative">
         <h3 class="text-white ml-8">{{ title }}</h3>
@@ -102,10 +110,10 @@ function toggleAllPasswordsVisibility() {
       </div>
       
       <!-- Corps du formulaire -->
-      <div class="p-6 space-y-3">
-        <div v-for="field in formFields" :key="field.key" class="mb-4">
-          <div class="rounded-lg bg-white p-4 max-w-xl grid grid-cols-2">
-            <label class="block font-medium mb-2">{{ field.label }}</label>
+      <div :class="getGridPersonnalInfo(modalType)" class="px-6">
+        <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
+          <div class="rounded-lg bg-white p-4 grid grid-cols-2 items-center ">
+            <label class="block font-medium">{{ field.label }}</label>
             <div class="relative">
               <input 
                 v-model="localFormData[field.key]" 
@@ -137,7 +145,7 @@ function toggleAllPasswordsVisibility() {
       </div>
       
       <!-- Pied du modal avec actions -->
-      <div class="flex justify-end space-x-3 p-4 px-6 mb-4">
+      <div class="flex justify-end space-x-3 p-4 px-6">
         <button 
           @click="closeModal" 
           class="px-6 py-3 text-gray rounded-md border-2 border-accent2 hover:bg-accent2 hover:text-white transition-colors duration-200">
