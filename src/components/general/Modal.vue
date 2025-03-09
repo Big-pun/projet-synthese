@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, watch } from 'vue';
 
-// Renommer implicitement le composant en "ModalForm" pour respecter la règle multi-mot
+// Définition des props
 const props = defineProps({
   title: String,
   isOpen: Boolean,
@@ -10,17 +10,21 @@ const props = defineProps({
   modalType: String
 });
 
-// Créer une copie locale des données du formulaire pour éviter de modifier directement la prop
+// Émissions d'événements
+const emit = defineEmits(['update:isOpen', 'save']);
+
+// Données locales
 const localFormData = ref({});
 const passwordVisibility = ref({});
-// Initialiser les données locales à partir des props
+
+// Initialisation des données locales à partir des props
 watch(() => props.formData, (newVal) => {
   if (newVal) {
     localFormData.value = { ...newVal };
   }
 }, { immediate: true, deep: true });
 
-// Initialiser la visibilité des mots de passe
+// Initialisation de la visibilité des mots de passe
 watch(() => props.formFields, (newFields) => {
   if (newFields) {
     newFields.forEach(field => {
@@ -31,12 +35,12 @@ watch(() => props.formFields, (newFields) => {
   }
 }, { immediate: true });
 
+// Surveillance de modalType pour le débogage
 watch(() => props.modalType, (newVal) => {
   console.log('modalType:', newVal);
 }, { immediate: true });
 
-const emit = defineEmits(['update:isOpen', 'save']);
-
+// Fonctions liées à l'interaction utilisateur
 function closeModal() {
   emit('update:isOpen', false);
 }
@@ -46,11 +50,9 @@ function handleSave() {
   closeModal();
 }
 
-
-
+// Gestion de la visibilité des mots de passe
 function togglePasswordVisibility(key) {
   passwordVisibility.value[key] = !passwordVisibility.value[key];
-  // La couleur de l'œil sera gérée via des classes dynamiques dans le template
 }
 
 // Déterminer le type de champ en fonction de la visibilité
@@ -66,7 +68,7 @@ function getEyeIconClass(key) {
   return passwordVisibility.value[key] ? 'text-accent1' : 'text-accent2';
 }
 
-// Fonction pour basculer la visibilité de tous les mots de passe (TODO: à modifier)
+// Fonction pour basculer la visibilité de tous les mots de passe
 function toggleAllPasswordsVisibility() {
   for (const key in passwordVisibility.value) {
     passwordVisibility.value[key] = !passwordVisibility.value[key];
