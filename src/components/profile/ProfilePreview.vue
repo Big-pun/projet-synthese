@@ -1,12 +1,50 @@
 <script setup>
 import { ref } from 'vue';
+import { useModalStore } from '@/stores/modalStore';
 
+// Store modal
+const modalStore = useModalStore();
+
+
+// Fonction pour ouvrir le modal de changement de mot de passe
+function openChangePasswordModal() {
+  const passwordFields = [
+    { key: 'currentPassword', label: 'Mot de passe actuel', type: 'password' },
+    { key: 'newPassword', label: 'Nouveau mot de passe', type: 'password' },
+    { key: 'confirmPassword', label: 'Confirmer le mot de passe', type: 'password' }
+  ];
+  
+  modalStore.openModal(
+    'changePassword',
+    'Changer mon mot de passe',
+    passwordFields,
+    {} // Pas de données initiales pour les mots de passe
+  );
+}
+
+// Fonction pour ouvrir le modal de confirmation de suppression du profil
+function openDeleteProfileModal() {
+  const confirmationFields = [
+    { key: 'confirmation', label: 'Tapez "SUPPRIMER" pour confirmer', type: 'text' },
+    { key: 'password', label: 'Mot de passe', type: 'password' }
+  ];
+  
+  modalStore.openModal(
+    'deleteProfile',
+    'Supprimer mon profil',
+    confirmationFields,
+    {} // Pas de données initiales
+  );
+}
+
+  
 // Ces données viendront du backend plus tard
 const userData = ref({
   nom: 'Bruno Gautier',
   email: 'brunogautier@gmail.com',
-  telephone: '581 - 422 - 5029'
+  telephone: '581-422-5029'
 });
+
 </script>
 
 <template>
@@ -42,6 +80,7 @@ const userData = ref({
       <!-- Boutons -->
       <div class="flex text-lg flex-col justify-center items-center space-y-4 md:space-y-6">
         <button
+          @click="openChangePasswordModal"
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-hover transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -52,6 +91,7 @@ const userData = ref({
         </button>
 
         <button
+          @click="openDeleteProfileModal"
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-accent2 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
             <path d="M30.75 36H5.25V5.25H30.75V36ZM6.75 34.5H29.25V6.75H6.75V34.5Z" fill="#FBFBFB" />

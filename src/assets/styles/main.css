@@ -33,4 +33,7 @@
     h5 {
         @apply text-base font-main;
     }
+    button {
+        @apply hover:cursor-pointer;
+}
 }

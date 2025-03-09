@@ -67,6 +67,5 @@ function handleSave() {
 </template>
 
 <style scoped>
-/* Les classes Tailwind devraient couvrir la plupart des besoins, 
-   mais on peut ajouter des styles spécifiques ici si nécessaire */
+
 </style>
