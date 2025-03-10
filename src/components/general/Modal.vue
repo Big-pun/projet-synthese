@@ -66,7 +66,7 @@ function getFieldType(field) {
 // Changer le grid si c'est les personnalInfos, sur mobile, garder le grid-cols-1
 function getGridPersonnalInfo(modalType) {
   if (modalType === 'personnalInfo' && window.innerWidth > 768) {
-    return 'grid grid-cols-2';
+    return 'grid md:grid-cols-2 grid-cols-1';
   }
   return 'grid grid-cols-1';
 }
@@ -87,7 +87,7 @@ function toggleAllPasswordsVisibility() {
 <template>
   <div v-if="isOpen" 
        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 font-roboto">
-    <div class="bg-light-gray max-h-screen overflow-y-auto  max-w-screen-xl rounded-lg shadow-xl mx-4 transition-all duration-200">
+    <div class="bg-light-gray max-h-screen overflow-y-auto  max-w-screen-lg w-full rounded-lg shadow-xl mx-4 transition-all duration-200">
       <!-- En-tête du modal avec style cohérent -->
       <div class="flex items-center justify-between p-3 rounded-t-lg bg-gray relative">
         <h3 class="text-white ml-8">{{ title }}</h3>
@@ -110,10 +110,10 @@ function toggleAllPasswordsVisibility() {
       </div>
       
       <!-- Corps du formulaire -->
-      <div :class="getGridPersonnalInfo(modalType)" class="px-6">
+      <div :class="getGridPersonnalInfo(modalType)" class="px-6 w-full">
         <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
-          <div class="rounded-lg bg-white p-4 grid grid-cols-2 items-center ">
-            <label class="block font-medium">{{ field.label }}</label>
+          <div class="rounded-lg bg-white p-4 flex items-center">
+            <label class="block font-medium responsive-margin">{{ field.label }}</label>
             <div class="relative">
               <input 
                 v-model="localFormData[field.key]" 
