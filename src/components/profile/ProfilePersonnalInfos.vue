@@ -28,11 +28,12 @@ const personalInfoFields = [
 
 // Fonction pour ouvrir le modal d'édition
 function openEditModal() {
+  console.log("Données utilisateur :", userData);
   modalStore.openModal(
     'personnalInfo',
     'Éditer les renseignements personnels',
     personalInfoFields,
-    { ...userData } // Clone pour éviter les modifications directes
+    { ...userData }
   );
 }
 </script>

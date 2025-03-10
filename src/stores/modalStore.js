@@ -12,11 +12,7 @@ export const useModalStore = defineStore('modal', () => {
     modalType.value = type;
     modalTitle.value = title;
     formFields.value = fields;
-    
-    // Réinitialiser puis assigner les données
-    Object.keys(formData).forEach(key => delete formData[key]);
-    Object.assign(formData, data);
-    
+    formData.value = { ...data };
     isModalOpen.value = true;
   }
   

@@ -1,7 +1,21 @@
 <script setup>
-import { defineEmits, ref, watch } from 'vue';
+/**
+ * Composant ProfileForm - Formulaire générique pour différents types de modals
+ * Ce composant gère différents types de formulaires (infos personnelles, bancaires, suppression de profil, etc.)
+ */
 
-// Définition des props
+// -------------------- IMPORTS --------------------
+import { defineEmits, ref, watch, onMounted } from 'vue';
+
+// -------------------- PROPS ET ÉMISSIONS --------------------
+/**
+ * Props du composant
+ * @param {String} title - Titre du modal
+ * @param {Boolean} isOpen - État d'ouverture du modal
+ * @param {Array} formFields - Champs du formulaire (label, key, type, etc.)
+ * @param {Object} formData - Données initiales du formulaire
+ * @param {String} modalType - Type de modal (personnalInfo, bankingInfo, etc.)
+ */
 const props = defineProps({
   title: String,
   isOpen: Boolean,
@@ -13,14 +27,37 @@ const props = defineProps({
 // Émissions d'événements
 const emit = defineEmits(['update:isOpen', 'save']);
 
-// Données locales
+// -------------------- ÉTAT LOCAL --------------------
+// Données du formulaire
 const localFormData = ref({});
+// État de visibilité des mots de passe
 const passwordVisibility = ref({});
+// Erreurs de validation
+const errors = ref({});
 
-// Initialisation des données locales à partir des props
+// -------------------- CYCLE DE VIE ET HOOKS --------------------
+// Chargement initial des données
+onMounted(() => {
+  loadFormData();
+});
+
+// -------------------- WATCHERS --------------------
+// Mise à jour des données locales depuis les props
 watch(() => props.formData, (newVal) => {
   if (newVal) {
-    localFormData.value = { ...newVal };
+    // Vérifier si les données sont encapsulées dans une propriété value
+    const dataToUse = newVal.value !== undefined ? newVal.value : newVal;
+    
+    // Créer un nouvel objet réactif
+    const newData = {};
+    // Copier toutes les propriétés de dataToUse dans newData
+    Object.keys(dataToUse).forEach(key => {
+      newData[key] = dataToUse[key];
+    });
+    // Assigner le nouvel objet à localFormData.value
+    localFormData.value = newData;
+  } else {
+    localFormData.value = {}; // Initialiser avec un objet vide si nécessaire
   }
 }, { immediate: true, deep: true });
 
@@ -35,27 +72,48 @@ watch(() => props.formFields, (newFields) => {
   }
 }, { immediate: true });
 
-// Surveillance de modalType pour le débogage
-watch(() => props.modalType, (newVal) => {
-  console.log('modalType:', newVal);
+// Réinitialisation des erreurs lors du changement de type de modal
+watch(() => props.modalType, () => {
+  errors.value = {};
 }, { immediate: true });
 
-// Fonctions liées à l'interaction utilisateur
-function closeModal() {
-  emit('update:isOpen', false);
+// Mise à jour des données lors de l'ouverture du modal
+watch(() => props.isOpen, (isOpen) => {
+  if (isOpen) {
+    loadFormData();
+  }
+}, { immediate: true });
+
+// Initialisation des champs manquants
+watch([() => props.formFields, () => localFormData.value], ([fields, data]) => {
+  if (fields && fields.length > 0 && data) {
+    fields.forEach(field => {
+      if (data[field.key] === undefined) {
+        data[field.key] = field.defaultValue || '';
+      }
+    });
+  }
+}, { immediate: true, deep: true });
+
+// -------------------- FONCTIONS D'AIDE (HELPERS) --------------------
+/**
+ * Charge les données du formulaire depuis les props
+ * Gère les données encapsulées dans une propriété value (cas des refs)
+ */
+function loadFormData() {
+  if (props.formData) {
+    const dataToUse = props.formData.value !== undefined ? props.formData.value : props.formData;
+    // Créer un nouvel objet pour éviter les problèmes de réactivité
+    const newData = { ...dataToUse };
+    localFormData.value = newData;
+  }
 }
 
-function handleSave() {
-  emit('save', localFormData.value);
-  closeModal();
-}
-
-// Gestion de la visibilité des mots de passe
-function togglePasswordVisibility(key) {
-  passwordVisibility.value[key] = !passwordVisibility.value[key];
-}
-
-// Déterminer le type de champ en fonction de la visibilité
+/**
+ * Détermine le type de champ en fonction de la visibilité des mots de passe
+ * @param {Object} field - Champ de formulaire
+ * @returns {String} Type de champ à utiliser
+ */
 function getFieldType(field) {
   if (field.type === 'password') {
     return passwordVisibility.value[field.key] ? 'text' : 'password';
@@ -63,7 +121,11 @@ function getFieldType(field) {
   return field.type || 'text';
 }
 
-// Changer le grid si c'est les personnalInfos, sur mobile, garder le grid-cols-1
+/**
+ * Détermine la classe de grille en fonction du type de modal
+ * @param {String} modalType - Type de modal
+ * @returns {String} Classe CSS pour la grille
+ */
 function getGridPersonnalInfo(modalType) {
   if (modalType === 'personnalInfo' && window.innerWidth > 768) {
     return 'grid md:grid-cols-2 grid-cols-1';
@@ -71,12 +133,144 @@ function getGridPersonnalInfo(modalType) {
   return 'grid grid-cols-1';
 }
 
-// Obtenir la classe CSS pour l'icône d'œil en fonction de la visibilité
+/**
+ * Obtient la classe CSS pour l'icône d'œil en fonction de la visibilité
+ * @param {String} key - Clé du champ
+ * @returns {String} Classe CSS pour l'icône
+ */
 function getEyeIconClass(key) {
   return passwordVisibility.value[key] ? 'text-accent1 hover:text-accent1' : 'text-accent2 hover:text-accent2';
 }
 
-// Fonction pour basculer la visibilité de tous les mots de passe
+// -------------------- VALIDATION --------------------
+/**
+ * Valide les données du formulaire en fonction du type de modal
+ * @param {Object} data - Données du formulaire
+ * @param {String} modalType - Type de modal
+ * @returns {Object} Erreurs de validation
+ */
+function validateForm(data, modalType) {
+  const errors = {};
+
+  if (!data) {
+    return { general: "Les données du formulaire sont manquantes." };
+  }
+
+  switch (modalType) {
+    case 'personnalInfo':
+      if (!data.prenom) {
+        errors.prenom = "Le prénom est requis.";
+      }
+      if (!data.nom) {
+        errors.nom = "Le nom est requis.";
+      }
+      if (!data.dateNaissance) {
+        errors.dateNaissance = "La date de naissance est requise.";
+      }
+      if (!data.telephone) {
+        errors.telephone = "Le téléphone est requis.";
+      }
+      if (!data.courriel || !/\S+@\S+\.\S+/.test(data.courriel)) {
+        errors.courriel = "Un courriel valide est requis.";
+      }
+      if (!data.adressePersonnelle) {
+        errors.adressePersonnelle = "L'adresse personnelle est requise.";
+      }
+      if (!data.adresseTravail) {
+        errors.adresseTravail = "L'adresse au travail est requise.";
+      }
+      break;
+
+    case 'schoolInfo':
+      if (!data.nom) {
+        errors.nom = "Le nom de l'établissement est requis.";
+      }
+      if (!data.domaine) {
+        errors.domaine = "Le domaine d'études est requis.";
+      }
+      if (!data.debutProgramme) {
+        errors.debutProgramme = "La date de début du programme est requise.";
+      }
+      if (!data.finProgramme) {
+        errors.finProgramme = "La date de fin du programme est requise.";
+      }
+      break;
+
+    case 'bankingInfo':
+      if (!data.institution) {
+        errors.institution = "L'institution bancaire est requise.";
+      }
+      if (!data.numeroCarte) {
+        errors.numeroCarte = "Le numéro de carte est requis.";
+      }
+      if (!data.dateExpiration) {
+        errors.dateExpiration = "La date d'expiration est requise.";
+      }
+      if (!data.codeSecurite) {
+        errors.codeSecurite = "Le code de sécurité est requis.";
+      }
+      break;
+
+    case 'changePassword':
+      if (!data.currentPassword) {
+        errors.currentPassword = "Le mot de passe actuel est requis.";
+      }
+      if (!data.newPassword) {
+        errors.newPassword = "Le nouveau mot de passe est requis.";
+      }
+      if (data.newPassword !== data.confirmPassword) {
+        errors.confirmPassword = "Les mots de passe ne correspondent pas.";
+      }
+      break;
+
+    case 'deleteProfile':
+      if (data.confirmation !== 'SUPPRIMER') {
+        errors.confirmation = 'Veuillez taper "SUPPRIMER" pour confirmer.';
+      }
+      if (!data.password) {
+        errors.password = "Le mot de passe est requis.";
+      }
+      break;
+
+    // Ajoutez d'autres cas si nécessaire
+  }
+
+  return errors;
+}
+
+// -------------------- ACTIONS UTILISATEUR --------------------
+/**
+ * Ferme le modal
+ */
+function closeModal() {
+  emit('update:isOpen', false);
+}
+
+/**
+ * Sauvegarde les données du formulaire après validation
+ */
+function handleSave() {
+  errors.value = validateForm(localFormData.value, props.modalType);
+  
+  if (Object.keys(errors.value).length > 0) {
+    return; // Ne pas continuer si des erreurs existent
+  }
+
+  emit('save', localFormData.value);
+  closeModal();
+}
+
+/**
+ * Bascule la visibilité d'un champ de mot de passe
+ * @param {String} key - Clé du champ
+ */
+function togglePasswordVisibility(key) {
+  passwordVisibility.value[key] = !passwordVisibility.value[key];
+}
+
+/**
+ * Bascule la visibilité de tous les mots de passe
+ */
 function toggleAllPasswordsVisibility() {
   for (const key in passwordVisibility.value) {
     passwordVisibility.value[key] = !passwordVisibility.value[key];
@@ -114,11 +308,22 @@ function toggleAllPasswordsVisibility() {
         <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
           <div class="rounded-lg bg-white p-4 flex w-full items-center flex-col sm:flex-row gap-4">
             <label class="block font-medium w-full sm:w-1/3">{{ field.label }}</label>
+
+            <!-- Affichage des erreurs -->
             <div class="relative w-full sm:w-2/3">
+              <div v-if="errors[field.key]" class="text-red-500 mb-1">
+                <small>{{ errors[field.key] }}</small>
+              </div>
+              <!-- Champ de saisie -->
               <input 
                 v-model="localFormData[field.key]" 
                 :type="getFieldType(field)" 
-                class="w-full p-2 border border-gray-300 rounded-md focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
+                :class="{
+                  'border-accent2': errors[field.key],
+                  'border-accent1': !errors[field.key] && localFormData[field.key]
+                }"
+                class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
+                :placeholder="field.placeholder || ''"
               >
               <!-- Icône d'œil pour les champs de mot de passe -->
               <button 
