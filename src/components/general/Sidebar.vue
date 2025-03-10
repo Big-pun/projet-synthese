@@ -5,21 +5,25 @@ const collapsed = ref(false);
 </script>
 
 <template>
-  <div class="sidebar py-10 text-dark-gray bg-black">
-        <nav class="nav flex flex-col relative top-[25vh]">
+  <div class="sidebar py-10 text-dark-gray bg-black h-full flex flex-col justify-center">
+        <nav class="nav flex flex-col min-h-full relative grow justify-center">
           <RouterLink to="/accueil" exact-active-class="active" class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4">
-            <img class="w-14" src="../../assets/icons/home_logo.svg" alt="aller a la page accueil">
+            <img class="w-14" src="../../assets/icons/home_icon.svg" alt="aller a la page accueil">
             Accueil
           </RouterLink>
           <RouterLink to="/espace-client/budget" exact-active-class="active" class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4">
-            <img class="w-14" src="../../assets/icons/budget_logo.svg" alt="aller a la page budget">
+            <img class="w-14" src="../../assets/icons/budget_icon.svg" alt="aller a la page budget">
             Budget
           </RouterLink>
           <RouterLink to="/espace-client/profil" exact-active-class="active" class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4">
-            <img class="w-14" src="../../assets/icons/profil_logo.svg" alt="aller a la page profile">
+            <img class="w-14" src="../../assets/icons/profil_icon.svg" alt="aller a la page profile">
             Profil
           </RouterLink>
         </nav>
+        <div class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4 cursor-pointer">
+            <img class="w-14" src="../../assets/icons/sign_out_icon.svg" alt="se deconnecter"> <!-- SIGN OUT LOGIC TO ADD -->
+            Deconnexion
+        </div>
   </div>
 </template>
 
