@@ -1,33 +1,69 @@
 <script setup>
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router'
-const collapsed = ref(false);
+import closeIcon from '../../assets/icons/close_icon.svg';
+import menuIcon from '../../assets/icons/menu_icon.svg';
+import homeIcon from '../../assets/icons/home_icon.svg';
+import budgetIcon from '../../assets/icons/budget_icon.svg';
+import profileIcon from '../../assets/icons/profil_icon.svg';
+import signOutIcon from '../../assets/icons/sign_out_icon_alt.svg';
+import SidebarNavLink from './SidebarNavLink.vue';
+
+const collapsed = ref(true);
+
+function collapseSidebar() {
+  collapsed.value = !collapsed.value;
+}
+
+const navLinks = [
+  {
+    name: 'Accueil',
+    icon: homeIcon,
+    route: '/accueil'
+  },
+  {
+    name: 'Budget',
+    icon: budgetIcon,
+    route: '/espace-client/budget'
+  },
+  {
+    name: 'Profil',
+    icon: profileIcon,
+    route: '/espace-client/profil'
+  }
+]
 </script>
 
 <template>
-  <div class="sidebar py-10 text-dark-gray bg-black h-full flex flex-col justify-center">
-        <nav class="nav flex flex-col min-h-full relative grow justify-center">
-          <RouterLink to="/accueil" exact-active-class="active" class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4">
-            <img class="w-14" src="../../assets/icons/home_icon.svg" alt="aller a la page accueil">
-            Accueil
-          </RouterLink>
-          <RouterLink to="/espace-client/budget" exact-active-class="active" class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4">
-            <img class="w-14" src="../../assets/icons/budget_icon.svg" alt="aller a la page budget">
-            Budget
-          </RouterLink>
-          <RouterLink to="/espace-client/profil" exact-active-class="active" class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4">
-            <img class="w-14" src="../../assets/icons/profil_icon.svg" alt="aller a la page profile">
-            Profil
-          </RouterLink>
-        </nav>
-        <div class="nav__link relative bg-transparent pl-6 pr-18 py-3 flex font-medium text-lg text-color-dark-gray items-center gap-4 cursor-pointer">
-            <img class="w-14" src="../../assets/icons/sign_out_icon.svg" alt="se deconnecter"> <!-- SIGN OUT LOGIC TO ADD -->
-            Deconnexion
-        </div>
+  <div class="sidebar relative py-5 text-dark-gray bg-black h-full flex flex-col justify-center">
+    <!-- sidebar is expandable only on md screen and above -->
+     <!-- collapse / expand sidebar button -->
+    <div @click="collapseSidebar" :class="collapsed ? 'justify-center': 'start w-max'" class="hidden md:flex nav__link relative bg-transparent px-6 py-3 font-medium text-md text-color-dark-gray items-center gap-4 cursor-pointer">
+      <img class="h-4" :src="collapsed ? menuIcon : closeIcon" :alt="collapsed ? 'Agrandir le menu' : 'Reduire le menu'"> <!-- SIGN OUT LOGIC TO ADD -->
+    </div>
+
+    <!-- navlinks -->
+    <nav class="nav flex flex-col min-h-full relative grow justify-center w-full min-w-18">
+      <ul>
+        <li v-for="link in navLinks" :key="link.route">
+          <SidebarNavLink :link="link" :collapsed="collapsed"></SidebarNavLink>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- sign out button -->
+    <div class="nav__link relative bg-transparent px-2 md:px-6 py-3 flex font-medium text-md text-color-dark-gray items-center gap-4 cursor-pointer">
+        <img class="w-12" :src="signOutIcon" alt="se deconnecter"> <!-- SIGN OUT LOGIC TO ADD -->
+        <span v-if="!collapsed" class="hidden md:inline-block pr-4 md:pr-18">Deconnexion</span>
+    </div>
   </div>
 </template>
 
-<style>
+<style scoped>
+
+.nav__link:not(.active):hover {
+  background-color: var(--color-accent1);
+  transition: all 200ms ease;
+}
 
 .nav__link::after {
   content: '';
@@ -40,14 +76,10 @@ const collapsed = ref(false);
   transition: all 150ms ease-in;
 }
 
-.nav__link:hover::after {
-  background-color: var(--color-accent1);
-}
-
 .nav__link.active::after {
   background-color: var(--color-gray);
   outline: 3px solid var(--color-accent1);
-  width: 112%;
+  width: 108%;
 }
 
 </style>
