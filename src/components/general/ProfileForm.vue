@@ -5,7 +5,9 @@
  */
 
 // -------------------- IMPORTS --------------------
-import { defineEmits, ref, watch, onMounted } from 'vue';
+import { defineEmits, ref, watch, onMounted, computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required, email, minLength, helpers, sameAs } from '@vuelidate/validators';
 
 // -------------------- PROPS ET ÉMISSIONS --------------------
 /**
@@ -32,8 +34,68 @@ const emit = defineEmits(['update:isOpen', 'save']);
 const localFormData = ref({});
 // État de visibilité des mots de passe
 const passwordVisibility = ref({});
-// Erreurs de validation
-const errors = ref({});
+// Pour suivre si le formulaire a été soumis
+const isSubmitted = ref(false);
+
+// -------------------- RÈGLES DE VALIDATION --------------------
+// Règles de validation selon le type de modal
+const validationRules = computed(() => {
+  const rules = {};
+  
+  switch (props.modalType) {
+    case 'personnalInfo':
+      rules.prenom = { required: helpers.withMessage('Le prénom est requis.', required) };
+      rules.nom = { required: helpers.withMessage('Le nom est requis.', required) };
+      rules.dateNaissance = { required: helpers.withMessage('La date de naissance est requise.', required) };
+      rules.telephone = { required: helpers.withMessage('Le téléphone est requis.', required) };
+      rules.courriel = { 
+        required: helpers.withMessage('Le courriel est requis.', required),
+        email: helpers.withMessage('Veuillez entrer un courriel valide.', email)
+      };
+      rules.adressePersonnelle = { required: helpers.withMessage('L\'adresse personnelle est requise.', required) };
+      rules.adresseTravail = { required: helpers.withMessage('L\'adresse au travail est requise.', required) };
+      break;
+
+    case 'schoolInfo':
+      rules.nom = { required: helpers.withMessage('Le nom de l\'établissement est requis.', required) };
+      rules.domaine = { required: helpers.withMessage('Le domaine d\'études est requis.', required) };
+      rules.debutProgramme = { required: helpers.withMessage('La date de début du programme est requise.', required) };
+      rules.finProgramme = { required: helpers.withMessage('La date de fin du programme est requise.', required) };
+      break;
+
+    case 'bankingInfo':
+      rules.institution = { required: helpers.withMessage('L\'institution bancaire est requise.', required) };
+      rules.numeroCarte = { required: helpers.withMessage('Le numéro de carte est requis.', required) };
+      rules.dateExpiration = { required: helpers.withMessage('La date d\'expiration est requise.', required) };
+      rules.codeSecurite = { required: helpers.withMessage('Le code de sécurité est requis.', required) };
+      break;
+
+    case 'changePassword':
+      rules.currentPassword = { required: helpers.withMessage('Le mot de passe actuel est requis.', required) };
+      rules.newPassword = { 
+        required: helpers.withMessage('Le nouveau mot de passe est requis.', required),
+        minLength: helpers.withMessage('Le mot de passe doit contenir au moins 8 caractères.', minLength(8))
+      };
+      rules.confirmPassword = { 
+        required: helpers.withMessage('La confirmation du mot de passe est requise.', required),
+        sameAsPassword: helpers.withMessage('Les mots de passe ne correspondent pas.', sameAs(computed(() => localFormData.value.newPassword)))
+      };
+      break;
+
+    case 'deleteProfile':
+      rules.confirmation = { 
+        required: helpers.withMessage('La confirmation est requise.', required),
+        matchesDeleteText: helpers.withMessage('Veuillez taper "SUPPRIMER" pour confirmer.', (value) => value === 'SUPPRIMER')
+      };
+      rules.password = { required: helpers.withMessage('Le mot de passe est requis.', required) };
+      break;
+  }
+  
+  return rules;
+});
+
+// Initialisation de Vuelidate
+const v$ = useVuelidate(validationRules, localFormData);
 
 // -------------------- CYCLE DE VIE ET HOOKS --------------------
 // Chargement initial des données
@@ -72,15 +134,16 @@ watch(() => props.formFields, (newFields) => {
   }
 }, { immediate: true });
 
-// Réinitialisation des erreurs lors du changement de type de modal
+// Réinitialisation des validations lors du changement de type de modal
 watch(() => props.modalType, () => {
-  errors.value = {};
+  isSubmitted.value = false;
 }, { immediate: true });
 
 // Mise à jour des données lors de l'ouverture du modal
 watch(() => props.isOpen, (isOpen) => {
   if (isOpen) {
     loadFormData();
+    isSubmitted.value = false;
   }
 }, { immediate: true });
 
@@ -142,102 +205,6 @@ function getEyeIconClass(key) {
   return passwordVisibility.value[key] ? 'text-accent1 hover:text-accent1' : 'text-accent2 hover:text-accent2';
 }
 
-// -------------------- VALIDATION --------------------
-/**
- * Valide les données du formulaire en fonction du type de modal
- * @param {Object} data - Données du formulaire
- * @param {String} modalType - Type de modal
- * @returns {Object} Erreurs de validation
- */
-function validateForm(data, modalType) {
-  const errors = {};
-
-  if (!data) {
-    return { general: "Les données du formulaire sont manquantes." };
-  }
-
-  switch (modalType) {
-    case 'personnalInfo':
-      if (!data.prenom) {
-        errors.prenom = "Le prénom est requis.";
-      }
-      if (!data.nom) {
-        errors.nom = "Le nom est requis.";
-      }
-      if (!data.dateNaissance) {
-        errors.dateNaissance = "La date de naissance est requise.";
-      }
-      if (!data.telephone) {
-        errors.telephone = "Le téléphone est requis.";
-      }
-      if (!data.courriel || !/\S+@\S+\.\S+/.test(data.courriel)) {
-        errors.courriel = "Un courriel valide est requis.";
-      }
-      if (!data.adressePersonnelle) {
-        errors.adressePersonnelle = "L'adresse personnelle est requise.";
-      }
-      if (!data.adresseTravail) {
-        errors.adresseTravail = "L'adresse au travail est requise.";
-      }
-      break;
-
-    case 'schoolInfo':
-      if (!data.nom) {
-        errors.nom = "Le nom de l'établissement est requis.";
-      }
-      if (!data.domaine) {
-        errors.domaine = "Le domaine d'études est requis.";
-      }
-      if (!data.debutProgramme) {
-        errors.debutProgramme = "La date de début du programme est requise.";
-      }
-      if (!data.finProgramme) {
-        errors.finProgramme = "La date de fin du programme est requise.";
-      }
-      break;
-
-    case 'bankingInfo':
-      if (!data.institution) {
-        errors.institution = "L'institution bancaire est requise.";
-      }
-      if (!data.numeroCarte) {
-        errors.numeroCarte = "Le numéro de carte est requis.";
-      }
-      if (!data.dateExpiration) {
-        errors.dateExpiration = "La date d'expiration est requise.";
-      }
-      if (!data.codeSecurite) {
-        errors.codeSecurite = "Le code de sécurité est requis.";
-      }
-      break;
-
-    case 'changePassword':
-      if (!data.currentPassword) {
-        errors.currentPassword = "Le mot de passe actuel est requis.";
-      }
-      if (!data.newPassword) {
-        errors.newPassword = "Le nouveau mot de passe est requis.";
-      }
-      if (data.newPassword !== data.confirmPassword) {
-        errors.confirmPassword = "Les mots de passe ne correspondent pas.";
-      }
-      break;
-
-    case 'deleteProfile':
-      if (data.confirmation !== 'SUPPRIMER') {
-        errors.confirmation = 'Veuillez taper "SUPPRIMER" pour confirmer.';
-      }
-      if (!data.password) {
-        errors.password = "Le mot de passe est requis.";
-      }
-      break;
-
-    // Ajoutez d'autres cas si nécessaire
-  }
-
-  return errors;
-}
-
 // -------------------- ACTIONS UTILISATEUR --------------------
 /**
  * Ferme le modal
@@ -249,10 +216,13 @@ function closeModal() {
 /**
  * Sauvegarde les données du formulaire après validation
  */
-function handleSave() {
-  errors.value = validateForm(localFormData.value, props.modalType);
+async function handleSave() {
+  isSubmitted.value = true;
   
-  if (Object.keys(errors.value).length > 0) {
+  // Validation avec Vuelidate
+  const isValid = await v$.value.$validate();
+  
+  if (!isValid) {
     return; // Ne pas continuer si des erreurs existent
   }
 
@@ -275,6 +245,27 @@ function toggleAllPasswordsVisibility() {
   for (const key in passwordVisibility.value) {
     passwordVisibility.value[key] = !passwordVisibility.value[key];
   }
+}
+
+/**
+ * Vérifie si un champ a une erreur et si le formulaire a été soumis
+ * @param {String} fieldName - Nom du champ
+ * @returns {Boolean} Vrai si le champ a une erreur
+ */
+function hasError(fieldName) {
+  return isSubmitted.value && v$.value[fieldName].$error;
+}
+
+/**
+ * Récupère le message d'erreur pour un champ donné
+ * @param {String} fieldName - Nom du champ
+ * @returns {String} Message d'erreur
+ */
+function getErrorMessage(fieldName) {
+  if (!v$.value[fieldName]) return '';
+  
+  const errors = v$.value[fieldName].$errors;
+  return errors.length > 0 ? errors[0].$message : '';
 }
 </script>
 
@@ -309,18 +300,18 @@ function toggleAllPasswordsVisibility() {
           <div class="rounded-lg bg-white p-4 flex w-full items-center flex-col sm:flex-row gap-4">
             <label class="block font-medium w-full sm:w-1/3">{{ field.label }}</label>
 
-            <!-- Affichage des erreurs -->
+            <!-- Affichage des erreurs avec Vuelidate -->
             <div class="relative w-full sm:w-2/3">
-              <div v-if="errors[field.key]" class="text-red-500 mb-1">
-                <small>{{ errors[field.key] }}</small>
+              <div v-if="hasError(field.key)" class="text-red-500 mb-1">
+                <small>{{ getErrorMessage(field.key) }}</small>
               </div>
               <!-- Champ de saisie -->
               <input 
                 v-model="localFormData[field.key]" 
                 :type="getFieldType(field)" 
                 :class="{
-                  'border-accent2': errors[field.key],
-                  'border-accent1': !errors[field.key] && localFormData[field.key]
+                  'border-accent2': hasError(field.key),
+                  'border-accent1': !hasError(field.key) && localFormData[field.key]
                 }"
                 class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
                 :placeholder="field.placeholder || ''"
