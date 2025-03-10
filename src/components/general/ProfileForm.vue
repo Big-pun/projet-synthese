@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits, ref, watch } from 'vue';
+import { defineEmits, ref, watch } from 'vue';
 
 // Définition des props
 const props = defineProps({
@@ -112,7 +112,7 @@ function toggleAllPasswordsVisibility() {
       <!-- Corps du formulaire -->
       <div :class="getGridPersonnalInfo(modalType)" class="px-6 w-full">
         <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
-          <div class="rounded-lg bg-white p-4 flex items-center">
+          <div class="rounded-lg bg-white p-4 flex w-full items-center">
             <label class="block font-medium responsive-margin">{{ field.label }}</label>
             <div class="relative">
               <input 

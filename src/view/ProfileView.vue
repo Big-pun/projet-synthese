@@ -1,6 +1,6 @@
 <script setup>
 import { useModalStore } from '@/stores/modalStore';
-import Modal from '@/components/general/Modal.vue';
+import ProfileForm from '@/components/general/ProfileForm.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
@@ -78,7 +78,7 @@ function handleFormDataUpdate(newData) {
     </div>
     
     <!-- Ajouter le modal ici -->
-    <Modal
+    <ProfileForm
       :title="modalStore.modalTitle"
       :is-open="modalStore.isModalOpen"
       :form-fields="modalStore.formFields"
