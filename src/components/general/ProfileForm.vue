@@ -87,7 +87,7 @@ function toggleAllPasswordsVisibility() {
 <template>
   <div v-if="isOpen" 
        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 font-roboto">
-    <div class="bg-light-gray max-h-screen overflow-y-auto  max-w-screen-lg w-full rounded-lg shadow-xl mx-4 transition-all duration-200">
+    <div class="bg-light-gray max-h-screen overflow-y-auto  max-w-screen-lg rounded-lg shadow-xl mx-4 transition-all duration-200">
       <!-- En-tête du modal avec style cohérent -->
       <div class="flex items-center justify-between p-3 rounded-t-lg bg-gray relative">
         <h3 class="text-white ml-8">{{ title }}</h3>
@@ -102,7 +102,7 @@ function toggleAllPasswordsVisibility() {
       <!-- Bouton pour basculer la visibilité de tous les mots de passe -->
       <div class="flex justify-end p-4">
         <button 
-          v-if="modalType === 'changePassword'"
+          v-if="modalType === 'changePassword' || modalType === 'deleteProfile'"
           @click="toggleAllPasswordsVisibility"
           class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
           mots de passe
@@ -112,9 +112,9 @@ function toggleAllPasswordsVisibility() {
       <!-- Corps du formulaire -->
       <div :class="getGridPersonnalInfo(modalType)" class="px-6 w-full">
         <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
-          <div class="rounded-lg bg-white p-4 flex w-full items-center">
-            <label class="block font-medium responsive-margin">{{ field.label }}</label>
-            <div class="relative">
+          <div class="rounded-lg bg-white p-4 flex w-full items-center flex-col sm:flex-row gap-4">
+            <label class="block font-medium w-full sm:w-1/3">{{ field.label }}</label>
+            <div class="relative w-full sm:w-2/3">
               <input 
                 v-model="localFormData[field.key]" 
                 :type="getFieldType(field)" 
