@@ -46,8 +46,8 @@ function openEditModal() {
       
       <!-- Rectangle coloré à droite -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
-           class="absolute right-5 top-0 rounded-b transition-colors duration-200">
-        <rect width="36" height="75" :fill="hovered ? '#00EC86' : '#F74949'"/>
+           class="absolute svg-rectangle right-5 top-0 rounded-b transition-colors duration-200">
+        <rect width="36" height="75" :class="{'rectangle-fill': !hovered, 'rectangle-fill-hovered': hovered}"/>
       </svg>
     </div>
     
@@ -93,5 +93,15 @@ function openEditModal() {
 <style scoped>
 .responsive-margin {
   margin-right: clamp(1rem, 2vw, 3rem); /* Marge dynamique */
+}
+
+.svg-rectangle .rectangle-fill {
+  fill: #F74949;
+  transition: fill 0.2s ease
+}
+
+.rectangle-fill-hovered {
+  fill: #00EC86;
+  transition: fill 0.2s ease;
 }
 </style>

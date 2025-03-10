@@ -46,10 +46,10 @@ function openEditModal() {
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
       <h3 class="text-white ml-8">Renseignements personnels</h3>
       
-      <!-- Rectangle SVG avec changement de couleur lors du survol -->
+      <!-- Rectangle SVG avec changement de couleur basé sur l'état hovered -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
-           class="absolute right-5 top-0 rounded-b transition-colors duration-200">
-        <rect width="36" height="75" :fill="hovered ? '#00EC86' : '#F74949'"/>
+           class="absolute right-5 top-0 rounded-b svg-rectangle">
+        <rect width="36" height="75" :class="{'rectangle-fill-default': !hovered, 'rectangle-fill-hovered': hovered}"/>
       </svg>
     </div>
     
@@ -116,4 +116,15 @@ function openEditModal() {
 .responsive-margin {
     margin-right: clamp(1rem, 2vw, 3rem); /* Marge dynamique */
   }
+
+/* Définir deux classes distinctes avec leurs propres couleurs */
+.rectangle-fill-default {
+  fill: #F74949;
+  transition: fill 0.2s ease;
+}
+
+.rectangle-fill-hovered {
+  fill: #00EC86;
+  transition: fill 0.2s ease;
+}
 </style>
