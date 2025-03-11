@@ -1,16 +1,9 @@
 <script setup>
-/**
- * Composant ProfileForm - Formulaire générique pour différents types de modals
- * Ce composant gère différents types de formulaires (infos personnelles, bancaires, suppression de profil, etc.)
- */
 
-// -------------------- IMPORTS --------------------
 import { defineEmits, ref, watch, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, helpers, sameAs } from '@vuelidate/validators';
-import { showSuccess, showError, showConfirm } from '@/utils/sweetAlert';
 
-// -------------------- PROPS ET ÉMISSIONS --------------------
 /**
  * Props du composant
  * @param {String} title - Titre du modal
@@ -30,7 +23,6 @@ const props = defineProps({
 // Émissions d'événements
 const emit = defineEmits(['update:isOpen', 'save']);
 
-// -------------------- ÉTAT LOCAL --------------------
 // Données du formulaire
 const localFormData = ref({});
 // État de visibilité des mots de passe
@@ -38,12 +30,11 @@ const passwordVisibility = ref({});
 // Pour suivre si le formulaire a été soumis
 const isSubmitted = ref(false);
 
-// -------------------- RÈGLES DE VALIDATION --------------------
-// Règles de validation selon le type de modal
+// Règles de validation selon le type de modal avec vuelidate
 const validationRules = computed(() => {
   const rules = {};
   
-  switch (props.modalType) {
+  switch (props.modalType) { // switch case pour les différents types de modals
     case 'personnalInfo':
       rules.prenom = { required: helpers.withMessage('Le prénom est requis.', required) };
       rules.nom = { required: helpers.withMessage('Le nom est requis.', required) };
@@ -98,13 +89,11 @@ const validationRules = computed(() => {
 // Initialisation de Vuelidate
 const v$ = useVuelidate(validationRules, localFormData);
 
-// -------------------- CYCLE DE VIE ET HOOKS --------------------
 // Chargement initial des données
 onMounted(() => {
   loadFormData();
 });
 
-// -------------------- WATCHERS --------------------
 // Mise à jour des données locales depuis les props
 watch(() => props.formData, (newVal) => {
   if (newVal) {
@@ -159,7 +148,6 @@ watch([() => props.formFields, () => localFormData.value], ([fields, data]) => {
   }
 }, { immediate: true, deep: true });
 
-// -------------------- FONCTIONS D'AIDE (HELPERS) --------------------
 /**
  * Charge les données du formulaire depuis les props
  * Gère les données encapsulées dans une propriété value (cas des refs)
@@ -206,35 +194,11 @@ function getEyeIconClass(key) {
   return passwordVisibility.value[key] ? 'text-accent1 hover:text-accent1' : 'text-accent2 hover:text-accent2';
 }
 
-// -------------------- ACTIONS UTILISATEUR --------------------
 /**
  * Ferme le modal
  */
 function closeModal() {
-  // Si le formulaire a été modifié, demander confirmation avant de fermer
-  if (isFormDirty() && isSubmitted.value) {
-    showConfirm(
-      'Êtes-vous sûr ?',
-      'Les modifications non enregistrées seront perdues.',
-      'Quitter quand même',
-      'Rester sur le formulaire'
-    ).then((result) => {
-      if (result.isConfirmed) {
-        emit('update:isOpen', false);
-      }
-    });
-  } else {
-    emit('update:isOpen', false);
-  }
-}
-
-/**
- * Vérifie si le formulaire a été modifié
- * @returns {Boolean} Vrai si le formulaire a été modifié
- */
-function isFormDirty() {
-  // Implémentation simple - à adapter selon vos besoins
-  return isSubmitted.value;
+  emit('update:isOpen', false);
 }
 
 /**
@@ -247,39 +211,11 @@ async function handleSave() {
   const isValid = await v$.value.$validate();
   
   if (!isValid) {
-    // Afficher une alerte d'erreur
-    showError(
-      'Erreur de validation',
-      'Veuillez corriger les erreurs dans le formulaire avant de continuer.'
-    );
     return; // Ne pas continuer si des erreurs existent
   }
 
-  // Confirmation pour certains types de formulaires
-  if (props.modalType === 'deleteProfile') {
-    const result = await showConfirm(
-      'Confirmation de suppression',
-      'Êtes-vous sûr de vouloir supprimer votre profil ? Cette action est irréversible.',
-      'Oui, supprimer',
-      'Annuler'
-    );
-    
-    if (!result.isConfirmed) {
-      return; // L'utilisateur a annulé
-    }
-  }
-
-  // Émettre l'événement de sauvegarde
   emit('save', localFormData.value);
-  
-  // Afficher une notification de succès
-  showSuccess(
-    'Sauvegarde réussie',
-    'Vos modifications ont été enregistrées avec succès.'
-  );
-  
-  // Fermer le modal
-  emit('update:isOpen', false);
+  closeModal();
 }
 
 /**
@@ -339,7 +275,7 @@ function getErrorMessage(fieldName) {
       <!-- Bouton pour basculer la visibilité de tous les mots de passe -->
       <div class="flex justify-end p-4">
         <button 
-          v-if="modalType === 'changePassword' || modalType === 'deleteProfile'"
+          v-if="formFields.some(field => field.type === 'password')"
           @click="toggleAllPasswordsVisibility"
           class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors duration-200">
           mots de passe
@@ -411,4 +347,4 @@ function getErrorMessage(fieldName) {
 
 <style scoped>
 /* Styles pour les boutons et les transitions */
-</style> 
+</style>
