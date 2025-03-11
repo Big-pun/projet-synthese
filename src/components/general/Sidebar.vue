@@ -7,6 +7,12 @@ import budgetIcon from '../../assets/icons/budget_icon.svg';
 import profileIcon from '../../assets/icons/profil_icon.svg';
 import signOutIcon from '../../assets/icons/sign_out_icon_alt.svg';
 import SidebarNavLink from './SidebarNavLink.vue';
+import signInIcon from '../../assets/icons/sign_in_icon.svg';
+import signUpIcon from '../../assets/icons/sign_up_icon.svg';
+
+const props = defineProps({
+  userConnected: Boolean
+});
 
 const collapsed = ref(true);
 
@@ -14,7 +20,7 @@ function collapseSidebar() {
   collapsed.value = !collapsed.value;
 }
 
-const navLinks = [
+const userConnectedNavLinks = [
   {
     name: 'Accueil',
     icon: homeIcon,
@@ -23,14 +29,20 @@ const navLinks = [
   {
     name: 'Budget',
     icon: budgetIcon,
-    route: '/espace-client/budget'
+    route: '/budget'
   },
   {
     name: 'Profil',
     icon: profileIcon,
-    route: '/espace-client/profil'
+    route: '/profil'
   }
 ]
+
+const homeLink = {
+  name: 'Accueil',
+  icon: homeIcon,
+  route: '/accueil'
+}
 </script>
 
 <template>
@@ -43,10 +55,28 @@ const navLinks = [
 
     <!-- navlinks -->
     <nav class="nav flex flex-col min-h-full relative grow justify-center w-full min-w-18">
-      <ul>
-        <li v-for="link in navLinks" :key="link.route">
+      <!-- if user is connected -->
+      <ul v-if="userConnected">
+        <li v-for="link in userConnectedNavLinks" :key="link.route">
           <SidebarNavLink :link="link" :collapsed="collapsed"></SidebarNavLink>
         </li>
+      </ul>
+
+      <!-- if user is not connected -->
+      <ul v-else>
+        <SidebarNavLink :link="homeLink" :collapsed="collapsed"></SidebarNavLink>
+
+        <!-- ***** sign up button - @click and its logic to open up Subscription Modal will need to be added -->
+        <div class="nav__link relative bg-transparent px-4 md:px-6 py-3 flex font-medium text-md text-color-dark-gray items-center gap-4 w-full cursor-pointer">
+          <img class="w-12" :src="signUpIcon" alt="S'inscrire">
+          <span v-if="!collapsed" class="hidden md:inline-block pr-4 md:pr-18">S'inscrire</span>
+        </div>
+
+        <!-- ***** sign in button - @click and its logic to open up Connexion Modal will need to be added -->
+        <div class="nav__link relative bg-transparent px-4 md:px-6 py-3 flex font-medium text-md text-color-dark-gray items-center gap-4 w-full cursor-pointer">
+          <img class="w-12" :src="signInIcon" alt="Se connecter">
+          <span v-if="!collapsed" class="hidden md:inline-block pr-4 md:pr-18">Se connecter</span>
+        </div>
       </ul>
     </nav>
 
@@ -59,27 +89,5 @@ const navLinks = [
 </template>
 
 <style scoped>
-
-.nav__link:not(.active):hover {
-  background-color: var(--color-accent1);
-  transition: all 200ms ease;
-}
-
-.nav__link::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  transition: all 150ms ease-in;
-}
-
-.nav__link.active::after {
-  background-color: var(--color-gray);
-  outline: 3px solid var(--color-accent1);
-  width: 108%;
-}
 
 </style>

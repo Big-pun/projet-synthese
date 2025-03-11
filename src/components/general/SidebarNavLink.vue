@@ -14,4 +14,28 @@ const props = defineProps({
   </RouterLink>
 </template>
 
-<style></style>
+<style>
+
+.nav__link:not(.active):hover {
+  background-color: var(--color-accent1);
+  transition: all 200ms ease;
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  transition: all 150ms ease-in;
+}
+
+.nav__link.active::after {
+  background-color: var(--color-gray);
+  outline: 3px solid var(--color-accent1);
+  width: 108%;
+}
+
+</style>
