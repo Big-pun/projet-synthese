@@ -5,14 +5,15 @@ import Header from './components/general/Header.vue';
 import Footer from './components/general/Footer.vue';
 import { ref } from 'vue';
 
-// userIsConnected is hardcoded for now, will need to be replaced with a real check
-const userConnected = ref(false);
+// userIsConnected is hardcoded for now, will need to be replaced with a real check / store variable
+const userConnected = ref(true);
 </script>
 
 <template>
+  <!-- general lyout shared by the entire app + dyncamic content handled by the router -->
   <div class="app-container">
     <div class="flex">
-      <Sidebar :userConnected="userConnected" class="w-max sticky top-0 min-h-[100vh] h-full"></Sidebar>
+      <Sidebar :userConnected="userConnected"></Sidebar>
       <div class="flex flex-col grow p-5 bg-white overflow-y-auto">
         <Header></Header>
         <main class="grow"> <!-- ensures that the footer is pushed to the bottom of the page -->
