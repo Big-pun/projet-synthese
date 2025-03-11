@@ -1,3 +1,13 @@
+* {
+    margin: 0;
+}
+
+main {
+    width: 100vw;
+    min-height: 100vh;
+  }
+  
+
 @import "tailwindcss";
 
 @theme {
@@ -19,7 +29,7 @@
 
 @layer base {
     h1 {
-        @apply text-3xl text-accent2 font-roboto;
+        @apply text-3xl text-black font-roboto uppercase;
     }
     h2 {
         @apply text-2xl text-accent1 font-flex;
@@ -39,4 +49,15 @@
     margin: 0;
     min-height: 100vh;
     width: 100%;
+}
+
+    p {
+        @apply text-base font-roboto;
+    }
+}
+
+
+    button {
+        @apply hover:cursor-pointer;
+    }
 }
