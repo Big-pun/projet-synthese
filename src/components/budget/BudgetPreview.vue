@@ -6,12 +6,12 @@ import pieIcon from '@/assets/img/icons/pie_icon.svg';
 import calendarIcon from '@/assets/img/icons/calendar_icon.svg';
 import logo from '@/assets/img/logo.svg';
 
-// Ces données viendront du backend plus tard
+// This data will come from the backend or store
 const userBudget = ref({
   incomes: [
-    { id: 1, name: 'Salaire', amount: 2000 },
-    { id: 2, name: 'Bourse', amount: 500 },
-    { id: 3, name: 'Aide familiale', amount: 200 },
+    { id: 1, name: 'Salaire', amount: 2000, reccurent: true },
+    { id: 2, name: 'Bourse', amount: 500, reccurent: true },
+    { id: 3, name: 'Aide familiale', amount: 200, reccurent: false },
   ],
   spendings: [
     { id: 1, name: 'Loyer', amount: 500 },
