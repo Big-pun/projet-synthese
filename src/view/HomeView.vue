@@ -10,7 +10,6 @@ import Footer from '@/components/general/Footer.vue'
 </script>
 
 <template>
-  <p class="font-bold">PAGE ACCUEIL</p>
   <Header></Header>
     <main>
       <HomeHero></HomeHero>
