@@ -5,7 +5,6 @@ import SpendingTable from '@/components/budget/SpendingTable.vue';
 </script>
 
 <template>
-  <p class="font-bold">CONTENU PAGE BUDGET</p>
   <BudgetPreview></BudgetPreview>
   <IncomeTable></IncomeTable>
   <SpendingTable></SpendingTable>

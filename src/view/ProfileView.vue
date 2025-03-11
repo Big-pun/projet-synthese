@@ -6,7 +6,6 @@ import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
 </script>
 
 <template>
-    <p class="font-bold">CONTENU PAGE PROFILE</p>
     <ProfilePreview></ProfilePreview>
     <ProfilePersonnalInfos></ProfilePersonnalInfos>
     <ProfileSchoolInfos></ProfileSchoolInfos>
