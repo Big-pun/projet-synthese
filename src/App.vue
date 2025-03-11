@@ -1,10 +1,26 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import Sidebar from './components/general/Sidebar.vue';
+import Header from './components/general/Header.vue';
+import Footer from './components/general/Footer.vue';
+import { ref } from 'vue';
+
+// userIsConnected is hardcoded for now, will need to be replaced with a real check
+const userConnected = ref(false);
 </script>
 
 <template>
   <div class="app-container">
-    <RouterView />
+    <div class="flex">
+      <Sidebar :userConnected="userConnected" class="w-max sticky top-0 min-h-[100vh] h-full"></Sidebar>
+      <div class="flex flex-col grow p-5 bg-white overflow-y-auto">
+        <Header></Header>
+        <main class="grow"> <!-- ensures that the footer is pushed to the bottom of the page -->
+          <RouterView></RouterView>
+        </main>
+        <Footer></Footer>
+      </div>
+    </div>
   </div>
 </template>
 
