@@ -12,8 +12,11 @@ import { RouterLink, RouterView } from 'vue-router'
           <RouterLink to="/accueil" class="inline-block m-4 font-medium text-lg underline">Accueil</RouterLink>
           <RouterLink to="/espace-client/profil" class="inline-block m-4 font-medium text-lg underline">Profile</RouterLink>
           <RouterLink to="/espace-client/budget" class="inline-block m-4 font-medium text-lg underline">Budget</RouterLink>
-          <!-- <h1>test first commit</h1>
-          <h2>test first commit</h2> -->
+
+          <RouterLink to="/espace-client/profil" class="inline-block m-4 font-medium text-lg underline">Profile
+          </RouterLink>
+          <RouterLink to="/espace-client/budget" class="inline-block m-4 font-medium text-lg underline">Budget
+          </RouterLink>
         </nav>
       </div>
     </header>

@@ -29,7 +29,7 @@ main {
 
 @layer base {
     h1 {
-        @apply text-3xl text-accent2 font-roboto;
+        @apply text-3xl text-black font-roboto uppercase;
     }
     h2 {
         @apply text-2xl text-accent1 font-flex;
@@ -48,4 +48,9 @@ main {
     }
 }
 
+
+    button {
+        @apply hover:cursor-pointer;
+    }
+}
 
