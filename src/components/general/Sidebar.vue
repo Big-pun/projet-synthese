@@ -6,10 +6,9 @@ import homeIcon from '../../assets/icons/home_icon.svg';
 import budgetIcon from '../../assets/icons/budget_icon.svg';
 import profileIcon from '../../assets/icons/profil_icon.svg';
 import signOutIcon from '../../assets/icons/sign_out_icon_alt.svg';
-import SidebarRouterLink from './SidebarRouterLink.vue';
 import signInIcon from '../../assets/icons/sign_in_icon.svg';
 import signUpIcon from '../../assets/icons/sign_up_icon.svg';
-import SidebarActionNavLink from './SidebarActionNavLink.vue';
+import SidebarNavLink from './SidebarNavLink.vue';
 
 const props = defineProps({
   userConnected: Boolean
@@ -21,25 +20,23 @@ function toggleSidebar() {
   collapsed.value = !collapsed.value;
 }
 
-const homeLink = {
+const homeRouterLink = {
   name: 'Accueil',
   icon: homeIcon,
   route: '/accueil'
 }
 
-const budgetLink = {
+const budgetRouterLink = {
   name: 'Budget',
   icon: budgetIcon,
   route: '/budget'
 }
 
-const profileLink = {
+const profileRouterLink = {
   name: 'Profil',
   icon: profileIcon,
   route: '/profil'
 }
-
-const userConnectedNavLinks = [homeLink, budgetLink, profileLink];
 
 const openSubscriptionModal = () => {
   // **** logic to open subscription modal to add
@@ -68,27 +65,26 @@ const signOutUser = () => {
 
     <!-- navlinks -->
     <nav class="nav flex flex-col min-h-full relative grow justify-center w-full min-w-18">
-      <!-- if user is connected: Home | Budget | Profile -->
-      <ul v-if="userConnected">
-        <li v-for="link in userConnectedNavLinks" :key="link.name">
-          <SidebarRouterLink :link="link" :collapsed="collapsed"></SidebarRouterLink>
-        </li>
-      </ul>
-
-      <!-- if user is not connected: Home | Sign Up | Sign In -->
-      <ul v-else>
-        <SidebarRouterLink :link="homeLink" :collapsed="collapsed"></SidebarRouterLink>
-
-        <!-- ***** sign up button - logic inside openSubscriptionModal function needs to be added -->
-        <SidebarActionNavLink :iconSrc="signUpIcon" buttonText="S'inscrire" :collapsed="collapsed" @handleClick="openSubscriptionModal"></SidebarActionNavLink>
-
-        <!-- ***** sign in button - logic inside openConnexionModal function needs to be added -->
-        <SidebarActionNavLink :iconSrc="signInIcon" buttonText="Se connecter" :collapsed="collapsed" @handleClick="openConnexionModal"></SidebarActionNavLink>
+      <ul>
+        <!-- Home -->
+        <SidebarNavLink :routerLink="homeRouterLink.route" :iconSrc="homeRouterLink.icon" :text="homeRouterLink.name" :collapsed="collapsed" :isButton="false"></SidebarNavLink>
+        <!-- if user is connected: Budget | Profile -->
+        <template v-if="userConnected">
+          <SidebarNavLink :routerLink="budgetRouterLink.route" :iconSrc="budgetRouterLink.icon" :text="budgetRouterLink.name" :collapsed="collapsed" :isButton="false"></SidebarNavLink>
+          <SidebarNavLink :routerLink="profileRouterLink.route" :iconSrc="profileRouterLink.icon" :text="profileRouterLink.name" :collapsed="collapsed" :isButton="false"></SidebarNavLink>
+        </template>
+        <!-- if user is not connected: Sign Up | Sign In -->
+        <template v-else>
+          <!-- ***** sign up button - logic inside openSubscriptionModal function needs to be added -->
+          <SidebarNavLink :iconSrc="signUpIcon" text="Inscription" :collapsed="collapsed" :isButton="true" @handleClick="openSubscriptionModal"></SidebarNavLink>
+          <!-- ***** sign in button - logic inside openConnexionModal function needs to be added -->
+          <SidebarNavLink :iconSrc="signInIcon" text="Connexion" :collapsed="collapsed" :isButton="true" @handleClick="openConnexionModal"></SidebarNavLink>
+        </template>
       </ul>
     </nav>
 
      <!-- ***** sign out button - logic inside signOutUser function needs to be added -->
-    <SidebarActionNavLink :iconSrc="signOutIcon" buttonText="Deconnexion" :collapsed="collapsed" @handleClick="signOutUser"></SidebarActionNavLink>
+     <SidebarNavLink v-if="userConnected" :iconSrc="signOutIcon" text="Deconnexion" :collapsed="collapsed" :isButton="true" @handleClick="signOutUser"></SidebarNavLink>
   </div>
 </template>
 
