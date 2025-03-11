@@ -13,25 +13,22 @@ const router = createRouter({
       path: '/',
       name: 'app',
       redirect: { name: 'home' },
-     
-      children: [
-        {
-          path: 'accueil',
-          name: 'home',
-          component: HomeView
-        },
-        {
-          path: 'budget',
-          name: 'budget',
-          component: BudgetView
-        },
-        {
-          path: 'profil',
-          name: 'profile',
-          component: ProfileView
-        },
-      ]
-    },    
+    },
+    {
+      path: '//accueil',
+      name: 'home',
+      component: HomeView
+    },
+    {
+      path: '/budget',
+      name: 'budget',
+      component: BudgetView
+    },
+    {
+      path: '/profil',
+      name: 'profile',
+      component: ProfileView
+    },
     {
       path: '/:pathMatch(.*)*',
       name: 'erreur',
