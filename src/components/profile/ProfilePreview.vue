@@ -7,6 +7,7 @@ const userData = ref({
   email: 'brunogautier@gmail.com',
   telephone: '581 - 422 - 5029'
 });
+
 </script>
 
 <template>

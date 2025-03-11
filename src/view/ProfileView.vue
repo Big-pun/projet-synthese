@@ -13,4 +13,5 @@ import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
     <ProfileBankingInfos></ProfileBankingInfos>
   </template>
 
-<style></style>
+<style>
+</style>
