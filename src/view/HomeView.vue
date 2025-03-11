@@ -10,15 +10,11 @@ import Footer from '@/components/general/Footer.vue'
 </script>
 
 <template>
-  <Header></Header>
-    <main>
-      <HomeHero></HomeHero>
-      <HomeScreenShots></HomeScreenShots>
-      <HomeFeatures></HomeFeatures>
-      <HomeReviews></HomeReviews>
-      <HomeCallToAction></HomeCallToAction>
-    </main>
-  <Footer></Footer>
+  <HomeHero></HomeHero>
+  <HomeScreenShots></HomeScreenShots>
+  <HomeFeatures></HomeFeatures>
+  <HomeReviews></HomeReviews>
+  <HomeCallToAction></HomeCallToAction>
 </template>
 
 <style></style>
