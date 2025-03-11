@@ -1,5 +1,5 @@
 <script setup>
-import { useModalStore } from '@/stores/modalStore';
+import { useModalStore } from '@/stores/formStore';
 import ProfileForm from '@/components/general/ProfileForm.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
