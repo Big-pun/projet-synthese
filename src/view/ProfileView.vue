@@ -9,8 +9,12 @@ import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
     <p class="font-bold">CONTENU PAGE PROFILE</p>
     <ProfilePreview></ProfilePreview>
     <ProfilePersonnalInfos></ProfilePersonnalInfos>
-    <ProfileSchoolInfos></ProfileSchoolInfos>
-    <ProfileBankingInfos></ProfileBankingInfos>
+    
+    <!-- Section avec informations scolaires et bancaires côte à côte -->
+    <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
+      <ProfileSchoolInfos></ProfileSchoolInfos>
+      <ProfileBankingInfos></ProfileBankingInfos>
+    </div>
   </template>
 
 <style>
