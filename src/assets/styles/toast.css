@@ -1,0 +1,77 @@
+/**
+ * Styles personnalisés pour Vue Toastification
+ * Ces styles vont remplacer les couleurs par défaut des toasts
+ */
+
+/* Toast de succès - Vert */
+.Vue-Toastification__toast.toast-success {
+  background-color: #00EC86 !important; /* Utilisation de votre couleur d'accent1 */
+  color: #333333 !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Toast d'erreur - Rouge */
+.Vue-Toastification__toast.toast-error {
+  background-color: #F74949 !important; /* Utilisation de votre couleur d'accent2 */
+  color: white !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Toast d'information - Bleu */
+.Vue-Toastification__toast.toast-info {
+  background-color: #3498db !important;
+  color: white !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Toast d'avertissement - Jaune/Orange */
+.Vue-Toastification__toast.toast-warning {
+  background-color: #f39c12 !important;
+  color: #333333 !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Barre de progression - Personnaliser sa couleur pour chaque type */
+.Vue-Toastification__toast.toast-success .Vue-Toastification__progress-bar {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.Vue-Toastification__toast.toast-error .Vue-Toastification__progress-bar {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.Vue-Toastification__toast.toast-info .Vue-Toastification__progress-bar {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.Vue-Toastification__toast.toast-warning .Vue-Toastification__progress-bar {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Style général des toasts */
+.Vue-Toastification__toast {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  padding: 16px !important;
+  min-height: 64px !important;
+  font-weight: 500 !important;
+}
+
+/* Bouton de fermeture */
+.Vue-Toastification__close-button {
+  color: inherit !important;
+  opacity: 0.7 !important;
+}
+
+.Vue-Toastification__close-button:hover {
+  opacity: 1 !important;
+}
+
+/* Icônes des toasts */
+.Vue-Toastification__toast.toast-success .Vue-Toastification__icon {
+  color: #333333 !important;
+}
+
+.Vue-Toastification__toast.toast-error .Vue-Toastification__icon {
+  color: white !important;
+} 

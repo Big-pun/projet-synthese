@@ -5,7 +5,8 @@ import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
-import { showSuccess, showError, showDelete } from '@/utils/sweetAlert';
+import { showDelete } from '@/utils/sweetAlert';
+import { showSuccess, showError } from '@/utils/toast';
 
 // Récupérer le store modal
 const modalStore = useModalStore();

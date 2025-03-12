@@ -8,7 +8,10 @@
 import { defineEmits, ref, watch, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, helpers, sameAs } from '@vuelidate/validators';
-import { showSuccess, showError, showConfirm } from '@/utils/sweetAlert';
+// SweetAlert uniquement pour les confirmations
+import { showConfirm } from '@/utils/sweetAlert';
+// Toast pour les notifications simples
+import { showSuccess, showError } from '@/utils/toast';
 
 // -------------------- PROPS ET ÉMISSIONS --------------------
 /**
@@ -41,8 +44,10 @@ const isSubmitted = ref(false);
 // -------------------- RÈGLES DE VALIDATION --------------------
 // Règles de validation selon le type de modal
 const validationRules = computed(() => {
+  // Initialiser avec un objet vide
   const rules = {};
   
+  // Ajouter les règles spécifiques en fonction du type de modal
   switch (props.modalType) {
     case 'personnalInfo':
       rules.prenom = { required: helpers.withMessage('Le prénom est requis.', required) };
@@ -90,6 +95,16 @@ const validationRules = computed(() => {
       };
       rules.password = { required: helpers.withMessage('Le mot de passe est requis.', required) };
       break;
+  }
+  
+  // S'assurer que tous les champs du formulaire ont au moins une entrée dans les règles
+  // même si c'est un objet vide
+  if (props.formFields) {
+    props.formFields.forEach(field => {
+      if (!rules[field.key]) {
+        rules[field.key] = {};
+      }
+    });
   }
   
   return rules;
@@ -247,15 +262,15 @@ async function handleSave() {
   const isValid = await v$.value.$validate();
   
   if (!isValid) {
-    // Afficher une alerte d'erreur
-    showError(
-      'Erreur de validation',
-      'Veuillez corriger les erreurs dans le formulaire avant de continuer.'
-    );
+    // Utiliser Toast pour l'erreur de validation avec options personnalisées
+    showError('Veuillez corriger les erreurs dans le formulaire avant de continuer.', {
+      timeout: 8000,  // Durée plus longue pour les erreurs
+      closeOnClick: false  // Empêcher la fermeture par clic
+    });
     return; // Ne pas continuer si des erreurs existent
   }
 
-  // Confirmation pour certains types de formulaires
+  // Confirmation pour certains types de formulaires - Utiliser SweetAlert
   if (props.modalType === 'deleteProfile') {
     const result = await showConfirm(
       'Confirmation de suppression',
@@ -272,11 +287,11 @@ async function handleSave() {
   // Émettre l'événement de sauvegarde
   emit('save', localFormData.value);
   
-  // Afficher une notification de succès
-  showSuccess(
-    'Sauvegarde réussie',
-    'Vos modifications ont été enregistrées avec succès.'
-  );
+  // Utiliser Toast pour la notification de succès avec options personnalisées
+  showSuccess('Vos modifications ont été enregistrées avec succès.', {
+    position: 'bottom-right',  // Position différente
+    timeout: 3000  // Durée plus courte pour les succès
+  });
   
   // Fermer le modal
   emit('update:isOpen', false);
@@ -305,7 +320,7 @@ function toggleAllPasswordsVisibility() {
  * @returns {Boolean} Vrai si le champ a une erreur
  */
 function hasError(fieldName) {
-  return isSubmitted.value && v$.value[fieldName].$error;
+  return isSubmitted.value && v$.value[fieldName] && v$.value[fieldName].$error;
 }
 
 /**

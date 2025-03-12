@@ -27,39 +27,39 @@ const baseConfig = {
   }
 };
 
-/**
- * Affiche une alerte de succès
- * @param {string} title - Titre de l'alerte
- * @param {string} text - Texte de l'alerte
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
-export const showSuccess = (title, text, options = {}) => {
-  return Swal.fire({
-    ...baseConfig,
-    title,
-    text,
-    icon: 'success',
-    ...options
-  });
-};
+// /**
+//  * Affiche une alerte de succès
+//  * @param {string} title - Titre de l'alerte
+//  * @param {string} text - Texte de l'alerte
+//  * @param {Object} options - Options supplémentaires
+//  * @returns {Promise} Promesse de SweetAlert2
+//  */
+// export const showSuccess = (title, text, options = {}) => {
+//   return Swal.fire({
+//     ...baseConfig,
+//     title,
+//     text,
+//     icon: 'success',
+//     ...options
+//   });
+// };
 
-/**
- * Affiche une alerte d'erreur
- * @param {string} title - Titre de l'alerte
- * @param {string} text - Texte de l'alerte
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
-export const showError = (title, text, options = {}) => {
-  return Swal.fire({
-    ...baseConfig,
-    title,
-    text,
-    icon: 'error',
-    ...options
-  });
-};
+// /**
+//  * Affiche une alerte d'erreur
+//  * @param {string} title - Titre de l'alerte
+//  * @param {string} text - Texte de l'alerte
+//  * @param {Object} options - Options supplémentaires
+//  * @returns {Promise} Promesse de SweetAlert2
+//  */
+// export const showError = (title, text, options = {}) => {
+//   return Swal.fire({
+//     ...baseConfig,
+//     title,
+//     text,
+//     icon: 'error',
+//     ...options
+//   });
+// };
 
 /**
  * Affiche une alerte d'information
