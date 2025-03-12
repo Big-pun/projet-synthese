@@ -22,6 +22,7 @@ const schoolInfoFields = [
   { key: 'domaine', label: 'Domaine d\'études' },
   { key: 'debutProgramme', label: 'Début du programme' },
   { key: 'finProgramme', label: 'Fin du programme' }
+  
 ];
 
 // Fonction pour ouvrir le modal d'édition

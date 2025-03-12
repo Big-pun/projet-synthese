@@ -171,6 +171,23 @@ export const showToast = (title, icon = 'success', options = {}) => {
 };
 
 /**
+ * Affiche un indicateur de chargement
+ * @param {string} title - Titre du chargement
+ * @param {Object} options - Options supplémentaires
+ * @returns {Promise} Promesse de SweetAlert2
+ */
+export const showLoading = (title = 'Chargement en cours...', options = {}) => {
+  return Swal.fire({
+    title,
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+    ...options
+  });
+};
+
+/**
  * Affiche un formulaire personnalisé
  * @param {string} title - Titre du formulaire
  * @param {string} html - Contenu HTML du formulaire
@@ -189,6 +206,11 @@ export const showForm = (title, html, preConfirm, options = {}) => {
     preConfirm,
     ...options
   });
+};
+
+// Fermer l'indicateur de chargement
+export const closeLoading = () => {
+  Swal.close();
 };
 
 // Exporter l'instance Swal pour les cas personnalisés
