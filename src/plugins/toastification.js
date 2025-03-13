@@ -14,7 +14,7 @@ const toastOptions = {
   hideProgressBar: false,
   closeButton: "button",
   icon: true,
-  rtl: false
+  rtl: false,
 };
 
 // Méthodes utilitaires pour faciliter l'utilisation des toasts

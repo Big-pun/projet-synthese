@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { useModalStore } from '@/stores/formStore';
+import { useModalStore } from '@/stores/modalStore';
 
 // État pour le survol
 const hovered = ref(false);

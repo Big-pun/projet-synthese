@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { useModalStore } from '@/stores/formStore';
+import { useModalStore } from '@/stores/modalStore';
 
 // Store modal
 const modalStore = useModalStore();

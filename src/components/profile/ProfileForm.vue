@@ -52,6 +52,7 @@ const validationRules = computed(() => {
       rules.domaine = { required: helpers.withMessage('Le domaine d\'études est requis.', required) };
       rules.debutProgramme = { required: helpers.withMessage('La date de début du programme est requise.', required) };
       rules.finProgramme = { required: helpers.withMessage('La date de fin du programme est requise.', required) };
+      
       break;
 
     case 'bankingInfo':
