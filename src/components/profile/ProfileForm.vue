@@ -310,9 +310,9 @@ function getErrorMessage(fieldName) {
 </script>
 
 <template>
-  <div class="form-container">
+  <div class="form-container font-roboto">
     <!-- En-tête du formulaire -->
-    <div class="flex items-center justify-between p-3 rounded-t-lg bg-gray relative">
+    <div class="flex items-center justify-between p-3 rounded-t-lg bg-gray relative max-w-full">
       <h3 class="text-white ml-8">{{ title }}</h3>
       
       <!-- Rectangle coloré à droite comme dans les autres composants -->
