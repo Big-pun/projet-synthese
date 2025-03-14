@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { useModalStore } from '@/stores/modalStore';
+import { useProfileFormStore } from '@/stores/profileFormStore';
 
 // État pour le survol
 const hovered = ref(false);
@@ -14,20 +14,20 @@ const schoolData = reactive({
 });
 
 // Store modal
-const modalStore = useModalStore();
+const formStore = useProfileFormStore();
 
 // Configurer les champs du formulaire pour les informations scolaires
 const schoolInfoFields = [
-  { key: 'nom', label: 'Nom de l\'établissement' },
-  { key: 'domaine', label: 'Domaine d\'études' },
-  { key: 'debutProgramme', label: 'Début du programme' },
-  { key: 'finProgramme', label: 'Fin du programme' }
-
-];
+    { key: 'nom', label: 'Nom de l\'établissement' },
+    { key: 'domaine', label: 'Domaine d\'études' },
+    { key: 'debutProgramme', label: 'Début du programme' },
+    { key: 'finProgramme', label: 'Fin du programme' }
+  
+  ];
 
 // Fonction pour ouvrir le modal d'édition
-function openEditModal() {
-  modalStore.openModal(
+function chooseEditForm() {
+  formStore.chooseForm(
     'schoolInfo',
     'Éditer les informations scolaires',
     schoolInfoFields,
@@ -82,7 +82,7 @@ function openEditModal() {
     <!-- Bouton d'édition -->
     <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
-      <button @click="openEditModal"
+      <button @click="chooseEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
         <span class="mr-2">+</span> Editer cette section
       </button>

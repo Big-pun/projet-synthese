@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { useModalStore } from '@/stores/modalStore';
+import { useProfileFormStore } from '@/stores/profileFormStore';
 // État pour le survol
 const hovered = ref(false);
 
@@ -14,7 +14,7 @@ const userData = reactive({
   adresseTravail: '22 rue du Fort, Trois-Rivieres, G3L5M4'
 });
 
-const modalStore = useModalStore();
+const formStore = useProfileFormStore();
 
 const personalInfoFields = [
   { key: 'prenom', label: 'Prénom' },
@@ -27,9 +27,9 @@ const personalInfoFields = [
 ];
 
 // Fonction pour ouvrir le modal d'édition
-function openEditModal() {
+function openEditForm() {
   console.log("Données utilisateur :", userData);
-  modalStore.openModal(
+  formStore.openModal(
     'personnalInfo',
     'Éditer les renseignements personnels',
     personalInfoFields,
@@ -104,7 +104,7 @@ function openEditModal() {
     <!-- Bouton d'édition -->
     <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
-      <button @click="openEditModal"
+      <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
         <span class="mr-2">+</span> Editer cette section
       </button>

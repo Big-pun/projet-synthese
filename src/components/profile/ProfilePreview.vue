@@ -1,10 +1,13 @@
 <script setup>
 import { ref } from 'vue';
+import { useProfileFormStore } from '@/stores/profileFormStore';
 import { useModalStore } from '@/stores/modalStore';
+import Modal from '@/components/general/Modal.vue';
+import ProfileForm from '@/components/profile/ProfileForm.vue';
 
-// Store modal
+// Stores
+const formStore = useProfileFormStore();
 const modalStore = useModalStore();
-
 
 // Fonction pour ouvrir le modal de changement de mot de passe
 function openChangePasswordModal() {
@@ -14,7 +17,8 @@ function openChangePasswordModal() {
     { key: 'confirmPassword', label: 'Confirmer le mot de passe', type: 'password' }
   ];
   
-  modalStore.openModal(
+  // Utilise formStore pour définir le type et les données du formulaire
+  formStore.chooseForm(
     'changePassword',
     'Changer mon mot de passe',
     passwordFields,
@@ -24,6 +28,9 @@ function openChangePasswordModal() {
       confirmPassword: ''
     } 
   );
+  
+  // Utilise modalStore pour ouvrir la modale
+  modalStore.openModal();
 }
 
 // Fonction pour ouvrir le modal de confirmation de suppression du profil
@@ -33,14 +40,24 @@ function openDeleteProfileModal() {
     { key: 'password', label: 'Mot de passe', type: 'password' }
   ];
   
-  modalStore.openModal(
+  // Utilise formStore pour définir le type et les données du formulaire
+  formStore.chooseForm(
     'deleteProfile',
     'Supprimer mon profil',
     confirmationFields,
     {} // Pas de données initiales
   );
+  
+  // Utilise modalStore pour ouvrir la modale
+  modalStore.openModal();
 }
 
+// Fonction appelée lorsque l'utilisateur ferme le modal
+function handleCloseModal() {
+  modalStore.closeModal();
+  // Réinitialiser le formulaire après la fermeture du modal
+  formStore.resetForm();
+}
   
 // Ces données viendront du backend plus tard
 const userData = ref({
@@ -115,6 +132,19 @@ const userData = ref({
         </button>
       </div>
     </div>
+    
+    <!-- Modal avec formulaire -->
+    <Modal 
+      :isOpen="modalStore.isOpen" 
+      @close="handleCloseModal">
+      <ProfileForm
+        :title="formStore.formTitle"
+        :formFields="formStore.formFields"
+        :formData="formStore.formData"
+        :formType="formStore.formType"
+        @close="handleCloseModal"
+      />
+    </Modal>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { useModalStore } from '@/stores/modalStore';
+import { useProfileFormStore } from '@/stores/profileFormStore';
 
 // État pour le survol
 const hovered = ref(false);
@@ -14,7 +14,7 @@ const bankingData = reactive({
 });
 
 // Store modal
-const modalStore = useModalStore();
+const formStore = useProfileFormStore();
 
 // Configurer les champs du formulaire pour les informations bancaires
 const bankingInfoFields = [
@@ -24,13 +24,14 @@ const bankingInfoFields = [
   { key: 'autres', label: 'Autres informations' }
 ];
 
-// Fonction pour ouvrir le modal d'édition
-function openEditModal() {
-  modalStore.openModal(
+// Fonction pour ouvrir le formulaire d'édition
+function chooseEditForm() {
+  formStore.chooseForm(  
     'bankingInfo',
     'Éditer les renseignements bancaires',
     bankingInfoFields,
     { ...bankingData } // Clone pour éviter les modifications directes
+
   );
 }
 </script>
@@ -81,7 +82,7 @@ function openEditModal() {
     <!-- Bouton d'édition -->
     <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden " 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
-      <button @click="openEditModal"
+      <button @click="chooseEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
         <span class="mr-2">+</span> Editer cette section
       </button>

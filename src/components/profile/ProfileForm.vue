@@ -10,13 +10,13 @@ import { showConfirm } from '@/utils/sweetAlert';
  * @param {String} title - Titre du modal
  * @param {Array} formFields - Champs du formulaire (label, key, type, etc.)
  * @param {Object} formData - Données initiales du formulaire
- * @param {String} modalType - Type de modal (personnalInfo, bankingInfo, etc.)
+ * @param {String} formType - Type de modal (personnalInfo, bankingInfo, etc.)
  */
 const props = defineProps({
   title: String,
   formFields: Array,
   formData: Object,
-  modalType: String
+  formType: String
 });
 
 // Émissions d'événements
@@ -33,7 +33,7 @@ const isSubmitted = ref(false);
 const validationRules = computed(() => {
   const rules = {};
   
-  switch (props.modalType) { // switch case pour les différents types de modals
+  switch (props.formType) { // switch case pour les différents types de modals
     case 'personnalInfo':
       rules.prenom = { required: helpers.withMessage('Le prénom est requis.', required) };
       rules.nom = { required: helpers.withMessage('Le nom est requis.', required) };
@@ -134,7 +134,7 @@ watch(() => props.formFields, (newFields) => {
 }, { immediate: true });
 
 // Réinitialisation des validations lors du changement de type de modal
-watch(() => props.modalType, () => {
+watch(() => props.formType, () => {
   isSubmitted.value = false;
 }, { immediate: true });
 
@@ -176,11 +176,11 @@ function getFieldType(field) {
 
 /**
  * Détermine la classe de grille en fonction du type de modal
- * @param {String} modalType - Type de modal
+ * @param {String} formType - Type de modal
  * @returns {String} Classe CSS pour la grille
  */
-function getGridPersonnalInfo(modalType) {
-  if (modalType === 'personnalInfo' && window.innerWidth > 768) {
+function getGridPersonnalInfo(formType) {
+  if (formType === 'personnalInfo' && window.innerWidth > 768) {
     return 'grid md:grid-cols-2 grid-cols-1';
   }
   return 'grid grid-cols-1';
@@ -199,21 +199,8 @@ function getEyeIconClass(key) {
  * Ferme le modal
  */
 function closeForm() {
-  // Vérifier si des modifications ont été faites
-  if (isFormDirty() && isSubmitted.value) {
-    showConfirm(
-      'Êtes-vous sûr ?',
-      'Les modifications non enregistrées seront perdues.',
-      'Quitter quand même',
-      'Rester sur le formulaire'
-    ).then((result) => {
-      if (result.isConfirmed) {
-        emit('close');
-      }
-    });
-  } else {
-    emit('close');
-  }
+  // Émet uniquement l'événement close qui sera capturé par le composant parent
+  emit('close');
 }
 
 /**
@@ -244,7 +231,7 @@ async function handleSave() {
   }
 
   // Confirmation pour certains types de formulaires - Utiliser SweetAlert
-  if (props.modalType === 'deleteProfile') {
+  if (props.formType === 'deleteProfile') {
     const result = await showConfirm(
       'Confirmation de suppression',
       'Êtes-vous sûr de vouloir supprimer votre profil ? Cette action est irréversible.',
@@ -333,7 +320,7 @@ function getErrorMessage(fieldName) {
     </div>
     
     <!-- Corps du formulaire -->
-    <div :class="getGridPersonnalInfo(modalType)" class="px-6 w-full">
+    <div :class="getGridPersonnalInfo(formType)" class="px-6 w-full">
       <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
         <div class="rounded-lg bg-white p-4 flex w-full items-center flex-col sm:flex-row gap-4">
           <label class="block font-medium w-full sm:w-1/3">{{ field.label }}</label>

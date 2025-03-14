@@ -1,5 +1,5 @@
 <script setup>
-import { useModalStore } from '@/stores/modalStore';
+import { useProfileFormStore } from '@/stores/profileFormStore';
 import Modal from '@/components/general/Modal.vue';  // Importer le Modal
 import ProfileForm from '@/components/profile/ProfileForm.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
@@ -10,18 +10,18 @@ import { showLoading, closeLoading } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 
 // Récupérer le store modal
-const modalStore = useModalStore();
+const formStore = useProfileFormStore();
 
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
   try {
     // Validation préalable avant de montrer le chargement
-    if (modalStore.modalType === 'changePassword' && data.newPassword !== data.confirmPassword) {
+    if (formStore.formType === 'changePassword' && data.newPassword !== data.confirmPassword) {
       showError('Les mots de passe ne correspondent pas');
       return;
     }
 
-    if (modalStore.modalType === 'deleteProfile' && data.confirmation !== 'SUPPRIMER') {
+    if (formStore.formType === 'deleteProfile' && data.confirmation !== 'SUPPRIMER') {
       showError('Veuillez taper "SUPPRIMER" pour confirmer la suppression du profil');
       return;
     }
@@ -38,7 +38,7 @@ async function handleSave(data) {
     // Traitement spécifique selon le type de formulaire
     let successMessage = '';
     
-    switch (modalStore.modalType) {
+    switch (formStore.formType) {
       case 'personalInfo':
         console.log('Saving personal info:', data);
         successMessage = 'Vos informations personnelles ont été mises à jour avec succès.';
@@ -72,7 +72,7 @@ async function handleSave(data) {
     showSuccess(successMessage);
     
     // Fermer le modal après traitement
-    modalStore.closeModal();
+    formStore.closeModal();
   } catch (error) {
     // Fermer l'indicateur de chargement en cas d'erreur
     closeLoading();
@@ -85,7 +85,7 @@ async function handleSave(data) {
 
 // Gérer la fermeture du modal
 function handleClose() {
-  modalStore.closeModal();
+  formStore.closeModal();
 }
 </script>
 
@@ -101,12 +101,12 @@ function handleClose() {
     </div>
     
     <!-- Modal et formulaire séparés -->
-    <Modal :isOpen="modalStore.isModalOpen" @close="handleClose">
+    <Modal :isOpen="formStore.isModalOpen" @close="handleClose">
       <ProfileForm
-        :title="modalStore.modalTitle"
-        :form-fields="modalStore.formFields"
-        :form-data="modalStore.formData"
-        :modal-type="modalStore.modalType"
+        :title="formStore.modalTitle"
+        :form-fields="formStore.formFields"
+        :form-data="formStore.formData"
+        :modal-type="formStore.formType"
         @close="handleClose"
         @save="handleSave"
       />
