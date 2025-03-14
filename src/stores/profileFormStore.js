@@ -22,6 +22,7 @@ export const useProfileFormStore = defineStore('profileForm', () => {
    * @param {Object} data - Données initiales du formulaire
    */
   function chooseForm(type, title, fields, data) {
+    // Configure le formulaire
     formType.value = type;
     formTitle.value = title;
     formFields.value = fields;

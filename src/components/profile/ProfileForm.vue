@@ -98,30 +98,6 @@ const validationRules = computed(() => {
 // Initialisation de Vuelidate
 const v$ = useVuelidate(validationRules, localFormData);
 
-// Chargement initial des données
-onMounted(() => {
-  loadFormData();
-});
-
-// Mise à jour des données locales depuis les props
-watch(() => props.formData, (newVal) => {
-  if (newVal) {
-    // Vérifier si les données sont encapsulées dans une propriété value
-    const dataToUse = newVal.value !== undefined ? newVal.value : newVal;
-    
-    // Créer un nouvel objet réactif
-    const newData = {};
-    // Copier toutes les propriétés de dataToUse dans newData
-    Object.keys(dataToUse).forEach(key => {
-      newData[key] = dataToUse[key];
-    });
-    // Assigner le nouvel objet à localFormData.value
-    localFormData.value = newData;
-  } else {
-    localFormData.value = {}; // Initialiser avec un objet vide si nécessaire
-  }
-}, { immediate: true, deep: true });
-
 // Initialisation de la visibilité des mots de passe
 watch(() => props.formFields, (newFields) => {
   if (newFields) {
@@ -162,6 +138,30 @@ function loadFormData() {
   }
 }
 
+// Chargement initial des données
+onMounted(() => {
+  loadFormData();
+});
+
+// Mise à jour des données locales depuis les props
+watch(() => props.formData, (newVal) => {
+  if (newVal) {
+    // Vérifier si les données sont encapsulées dans une propriété value
+    const dataToUse = newVal.value !== undefined ? newVal.value : newVal;
+    
+    // Créer un nouvel objet réactif
+    const newData = {};
+    // Copier toutes les propriétés de dataToUse dans newData
+    Object.keys(dataToUse).forEach(key => {
+      newData[key] = dataToUse[key];
+    });
+    // Assigner le nouvel objet à localFormData.value
+    localFormData.value = newData;
+  } else {
+    localFormData.value = {}; // Initialiser avec un objet vide si nécessaire
+  }
+}, { immediate: true, deep: true });
+
 /**
  * Détermine le type de champ en fonction de la visibilité des mots de passe
  * @param {Object} field - Champ de formulaire
@@ -196,20 +196,12 @@ function getEyeIconClass(key) {
 }
 
 /**
- * Ferme le modal
+ * Ferme le formulaire en coordonnant les deux stores
  */
 function closeForm() {
-  // Émet uniquement l'événement close qui sera capturé par le composant parent
+  // Émet l'événement close qui sera capturé par le composant parent
+  // Le composant parent se chargera de fermer le modal et de réinitialiser le formulaire
   emit('close');
-}
-
-/**
- * Vérifie si le formulaire a été modifié
- * @returns {Boolean} Vrai si le formulaire a été modifié
- */
-function isFormDirty() {
-  // Implémentation simple - à adapter selon vos besoins
-  return isSubmitted.value;
 }
 
 /**
@@ -252,9 +244,6 @@ async function handleSave() {
     position: 'bottom-right',  // Position différente
     timeout: 3000  // Durée plus courte pour les succès
   });
-  
-  // Fermer le formulaire
-  emit('close');
 }
 
 /**
@@ -322,11 +311,11 @@ function getErrorMessage(fieldName) {
     <!-- Corps du formulaire -->
     <div :class="getGridPersonnalInfo(formType)" class="px-6 w-full">
       <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
-        <div class="rounded-lg bg-white p-4 flex w-full items-center flex-col sm:flex-row gap-4">
-          <label class="block font-medium w-full sm:w-1/3">{{ field.label }}</label>
+        <div class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row">
+          <label class="block font-medium  responsive-margin">{{ field.label }}</label>
 
           <!-- Affichage des erreurs avec Vuelidate -->
-          <div class="relative w-full sm:w-2/3">
+          <div class="relative ">
             <div v-if="hasError(field.key)" class="text-red-500 mb-1">
               <small>{{ getErrorMessage(field.key) }}</small>
             </div>
@@ -338,7 +327,7 @@ function getErrorMessage(fieldName) {
                 'border-accent2': hasError(field.key),
                 'border-accent1': !hasError(field.key) && localFormData[field.key]
               }"
-              class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
+              class="border p-2 rounded-md  focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
               :placeholder="field.placeholder || ''"
             >
             <!-- Icône d'œil pour les champs de mot de passe -->

@@ -1,5 +1,6 @@
 <script setup>
 import { useProfileFormStore } from '@/stores/profileFormStore';
+import { useModalStore } from '@/stores/modalStore';
 import Modal from '@/components/general/Modal.vue';  // Importer le Modal
 import ProfileForm from '@/components/profile/ProfileForm.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
@@ -9,8 +10,9 @@ import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
 import { showLoading, closeLoading } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 
-// Récupérer le store modal
+// Récupérer les stores
 const formStore = useProfileFormStore();
+const modalStore = useModalStore();
 
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
@@ -39,7 +41,7 @@ async function handleSave(data) {
     let successMessage = '';
     
     switch (formStore.formType) {
-      case 'personalInfo':
+      case 'personnalInfo':
         console.log('Saving personal info:', data);
         successMessage = 'Vos informations personnelles ont été mises à jour avec succès.';
         break;
@@ -72,7 +74,8 @@ async function handleSave(data) {
     showSuccess(successMessage);
     
     // Fermer le modal après traitement
-    formStore.closeModal();
+    modalStore.closeModal();
+    formStore.resetForm();
   } catch (error) {
     // Fermer l'indicateur de chargement en cas d'erreur
     closeLoading();
@@ -85,7 +88,8 @@ async function handleSave(data) {
 
 // Gérer la fermeture du modal
 function handleClose() {
-  formStore.closeModal();
+  modalStore.closeModal();
+  formStore.resetForm();
 }
 </script>
 
@@ -101,12 +105,12 @@ function handleClose() {
     </div>
     
     <!-- Modal et formulaire séparés -->
-    <Modal :isOpen="formStore.isModalOpen" @close="handleClose">
+    <Modal :isOpen="modalStore.isOpen" @close="handleClose">
       <ProfileForm
-        :title="formStore.modalTitle"
-        :form-fields="formStore.formFields"
-        :form-data="formStore.formData"
-        :modal-type="formStore.formType"
+        :title="formStore.formTitle"
+        :formFields="formStore.formFields"
+        :formData="formStore.formData"
+        :formType="formStore.formType"
         @close="handleClose"
         @save="handleSave"
       />

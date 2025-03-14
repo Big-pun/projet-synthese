@@ -1,6 +1,8 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
+import { useModalStore } from '@/stores/modalStore';
+
 // État pour le survol
 const hovered = ref(false);
 
@@ -14,7 +16,9 @@ const userData = reactive({
   adresseTravail: '22 rue du Fort, Trois-Rivieres, G3L5M4'
 });
 
+// Récupérer les stores
 const formStore = useProfileFormStore();
+const modalStore = useModalStore();
 
 const personalInfoFields = [
   { key: 'prenom', label: 'Prénom' },
@@ -28,13 +32,16 @@ const personalInfoFields = [
 
 // Fonction pour ouvrir le modal d'édition
 function openEditForm() {
-  console.log("Données utilisateur :", userData);
-  formStore.openModal(
+  // Étape 1: Configurer le formulaire
+  formStore.chooseForm(
     'personnalInfo',
     'Éditer les renseignements personnels',
     personalInfoFields,
     { ...userData }
   );
+  
+  // Étape 2: Ouvrir le modal
+  modalStore.openModal();
 }
 </script>
 
@@ -44,7 +51,7 @@ function openEditForm() {
     @mouseenter="hovered = true"
     @mouseleave="hovered = false">
     <!-- En-tête de la section avec pastille de statut -->
-    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
+    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
       <h3 class="text-white ml-8">Renseignements personnels</h3>
 
       <!-- Rectangle SVG avec changement de couleur basé sur l'état hovered -->
@@ -58,12 +65,12 @@ function openEditForm() {
     <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2 px-6 pt-4">
       <!-- Première colonne -->
       <div>
-        <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
+        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center">
           <p class="font-medium responsive-margin ">Prenom</p>
           <p class="">{{ userData.prenom || 'Non spécifié' }}</p>
         </div>
 
-        <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col sm:flex-row items-center">
           <p class="font-medium responsive-margin  ">Date de naissance</p>
           <p class="">{{ userData.dateNaissance || 'Non spécifié' }}</p>
         </div>
@@ -71,12 +78,12 @@ function openEditForm() {
 
       <!-- Deuxième colonne -->
       <div>
-        <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
+        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center">
           <p class="font-medium responsive-margin  ">Nom</p>
           <p class="">{{ userData.nom || 'Non spécifié' }}</p>
         </div>
 
-        <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
+        <div class="rounded-lg bg-white p-4 flex flex-col sm:flex-row items-center ">
           <p class="font-medium responsive-margin  ">Telephone</p>
           <p class="">{{ userData.telephone || 'Non spécifié' }}</p>
         </div>
@@ -85,17 +92,17 @@ function openEditForm() {
 
     <!-- Adresses -->
     <div class="mt-2 px-6">
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center">
         <p class="font-medium responsive-margin  ">Courriel</p>
         <p class="">{{ userData.courriel || 'Non spécifié' }}</p>
       </div>
 
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center ">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center ">
         <p class="font-medium responsive-margin">Adresse personnelle</p>
         <p class="">{{ userData.adressePersonnelle || 'Non spécifié' }}</p>
       </div>
 
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
+      <div class="rounded-lg bg-white p-4 flex flex-col sm:flex-row items-center ">
         <p class="font-medium responsive-margin">Adresse au travail</p>
         <p class="">{{ userData.adresseTravail || 'Non spécifié' }}</p>
       </div>

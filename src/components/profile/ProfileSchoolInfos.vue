@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
+import { useModalStore } from '@/stores/modalStore';
 
 // État pour le survol
 const hovered = ref(false);
@@ -13,8 +14,9 @@ const schoolData = reactive({
   finProgramme: '06/06/2025'
 });
 
-// Store modal
+// Récupérer les stores
 const formStore = useProfileFormStore();
+const modalStore = useModalStore();
 
 // Configurer les champs du formulaire pour les informations scolaires
 const schoolInfoFields = [
@@ -26,13 +28,17 @@ const schoolInfoFields = [
   ];
 
 // Fonction pour ouvrir le modal d'édition
-function chooseEditForm() {
+function openEditForm() {
+  // Étape 1: Configurer le formulaire
   formStore.chooseForm(
     'schoolInfo',
     'Éditer les informations scolaires',
     schoolInfoFields,
     { ...schoolData } // Clone pour éviter les modifications directes
   );
+  
+  // Étape 2: Ouvrir le modal
+  modalStore.openModal();
 }
 </script>
 
@@ -82,7 +88,7 @@ function chooseEditForm() {
     <!-- Bouton d'édition -->
     <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
-      <button @click="chooseEditForm"
+      <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
         <span class="mr-2">+</span> Editer cette section
       </button>
@@ -94,5 +100,16 @@ function chooseEditForm() {
 .responsive-margin {
   margin-right: clamp(1rem, 2vw, 3rem);
   /* Marge dynamique */
+}
+
+/* Définir deux classes distinctes avec leurs propres couleurs */
+.rectangle-fill-default {
+  fill: #F74949;
+  transition: fill 0.2s ease;
+}
+
+.rectangle-fill-hovered {
+  fill: #00EC86;
+  transition: fill 0.2s ease;
 }
 </style>
