@@ -40,8 +40,9 @@ function openEditModal() {
 
 <template>
   <div
-    class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200">
-
+    class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200"
+    @mouseenter="hovered = true"
+    @mouseleave="hovered = false">
     <!-- En-tête de la section avec pastille de statut -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
       <h3 class="text-white ml-8">Renseignements personnels</h3>
@@ -101,11 +102,10 @@ function openEditModal() {
     </div>
 
     <!-- Bouton d'édition -->
-    <div class="mx-6 mt-2 mb-4 border-2 border-accent1 rounded-lg overflow-hidden" @mouseenter="hovered = true"
-      @mouseleave="hovered = false">
+    <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden" 
+    :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditModal"
-        class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray"
-        :class="hovered ? 'text-white bg-hover' : 'bg-white'">
+        class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
         <span class="mr-2">+</span> Editer cette section
       </button>
     </div>
