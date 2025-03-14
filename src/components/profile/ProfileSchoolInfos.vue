@@ -97,10 +97,6 @@ function openEditForm() {
 </template>
 
 <style scoped>
-.responsive-margin {
-  margin-right: clamp(1rem, 2vw, 3rem);
-  /* Marge dynamique */
-}
 
 /* Définir deux classes distinctes avec leurs propres couleurs */
 .rectangle-fill-default {

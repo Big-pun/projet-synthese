@@ -65,12 +65,12 @@ function openEditForm() {
     <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2 px-6 pt-4">
       <!-- Première colonne -->
       <div>
-        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center">
+        <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin ">Prenom</p>
           <p class="">{{ userData.prenom || 'Non spécifié' }}</p>
         </div>
 
-        <div class="rounded-lg bg-white p-4 flex flex-col sm:flex-row items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin  ">Date de naissance</p>
           <p class="">{{ userData.dateNaissance || 'Non spécifié' }}</p>
         </div>
@@ -78,12 +78,12 @@ function openEditForm() {
 
       <!-- Deuxième colonne -->
       <div>
-        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center">
+        <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin  ">Nom</p>
           <p class="">{{ userData.nom || 'Non spécifié' }}</p>
         </div>
 
-        <div class="rounded-lg bg-white p-4 flex flex-col sm:flex-row items-center ">
+        <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
           <p class="font-medium responsive-margin  ">Telephone</p>
           <p class="">{{ userData.telephone || 'Non spécifié' }}</p>
         </div>
@@ -92,17 +92,17 @@ function openEditForm() {
 
     <!-- Adresses -->
     <div class="mt-2 px-6">
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin  ">Courriel</p>
         <p class="">{{ userData.courriel || 'Non spécifié' }}</p>
       </div>
 
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col sm:flex-row items-center ">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center ">
         <p class="font-medium responsive-margin">Adresse personnelle</p>
         <p class="">{{ userData.adressePersonnelle || 'Non spécifié' }}</p>
       </div>
 
-      <div class="rounded-lg bg-white p-4 flex flex-col sm:flex-row items-center ">
+        <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
         <p class="font-medium responsive-margin">Adresse au travail</p>
         <p class="">{{ userData.adresseTravail || 'Non spécifié' }}</p>
       </div>
@@ -120,19 +120,5 @@ function openEditForm() {
 </template>
 
 <style>
-.responsive-margin {
-  margin-right: clamp(1rem, 2vw, 3rem);
-  /* Marge dynamique */
-}
 
-/* Définir deux classes distinctes avec leurs propres couleurs */
-.rectangle-fill-default {
-  fill: #F74949;
-  transition: fill 0.2s ease;
-}
-
-.rectangle-fill-hovered {
-  fill: #00EC86;
-  transition: fill 0.2s ease;
-}
 </style>

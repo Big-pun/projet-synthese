@@ -96,10 +96,7 @@ function openEditForm() {
 </template>
 
 <style scoped>
-.responsive-margin {
-  margin-right: clamp(1rem, 2vw, 3rem);
-  /* Marge dynamique */
-}
+
 
 .svg-rectangle .rectangle-fill {
   fill: #F74949;

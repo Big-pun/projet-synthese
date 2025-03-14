@@ -311,11 +311,11 @@ function getErrorMessage(fieldName) {
     <!-- Corps du formulaire -->
     <div :class="getGridPersonnalInfo(formType)" class="px-6 w-full">
       <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
-        <div class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row">
-          <label class="block font-medium  responsive-margin">{{ field.label }}</label>
+        <div class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row w-full">
+          <label class="block font-medium sm:w-1/3 mb-2 sm:mb-0">{{ field.label }}</label>
 
           <!-- Affichage des erreurs avec Vuelidate -->
-          <div class="relative ">
+          <div class="relative w-full sm:w-2/3">
             <div v-if="hasError(field.key)" class="text-red-500 mb-1">
               <small>{{ getErrorMessage(field.key) }}</small>
             </div>
@@ -327,7 +327,7 @@ function getErrorMessage(fieldName) {
                 'border-accent2': hasError(field.key),
                 'border-accent1': !hasError(field.key) && localFormData[field.key]
               }"
-              class="border p-2 rounded-md  focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
+              class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
               :placeholder="field.placeholder || ''"
             >
             <!-- Icône d'œil pour les champs de mot de passe -->
@@ -370,12 +370,29 @@ function getErrorMessage(fieldName) {
   </div>
 </template>
 
-<style scoped>
+<style>
 .form-container {
   width: 100%;
   background-color: var(--light-gray, #f5f5f5);
   border-radius: 0.5rem;
   max-height: 80vh;
   overflow-y: auto;
+}
+
+.responsive-margin {
+  margin-right: clamp(1rem, 2vw, 3rem);
+  /* Marge dynamique */
+}
+
+
+/* Définir deux classes distinctes avec leurs propres couleurs */
+.rectangle-fill-default {
+  fill: #F74949;
+  transition: fill 0.2s ease;
+}
+
+.rectangle-fill-hovered {
+  fill: #00EC86;
+  transition: fill 0.2s ease;
 }
 </style>
