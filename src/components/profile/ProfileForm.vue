@@ -1,7 +1,7 @@
 <script setup>
 import { defineEmits, ref, watch, onMounted, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, email, minLength, helpers, sameAs } from '@vuelidate/validators';
+import { generateValidationRules } from '@/utils/formValidation';
 import { showSuccess, showError } from '@/utils/toast';
 import { showConfirm } from '@/utils/sweetAlert';
 
@@ -31,68 +31,7 @@ const isSubmitted = ref(false);
 
 // Règles de validation selon le type de modal avec vuelidate
 const validationRules = computed(() => {
-  const rules = {};
-  
-  switch (props.formType) { // switch case pour les différents types de modals
-    case 'personnalInfo':
-      rules.prenom = { required: helpers.withMessage('Le prénom est requis.', required) };
-      rules.nom = { required: helpers.withMessage('Le nom est requis.', required) };
-      rules.dateNaissance = { required: helpers.withMessage('La date de naissance est requise.', required) };
-      rules.telephone = { required: helpers.withMessage('Le téléphone est requis.', required) };
-      rules.courriel = { 
-        required: helpers.withMessage('Le courriel est requis.', required),
-        email: helpers.withMessage('Veuillez entrer un courriel valide.', email)
-      };
-      rules.adressePersonnelle = { required: helpers.withMessage('L\'adresse personnelle est requise.', required) };
-      rules.adresseTravail = { required: helpers.withMessage('L\'adresse au travail est requise.', required) };
-      break;
-
-    case 'schoolInfo':
-      rules.nom = { required: helpers.withMessage('Le nom de l\'établissement est requis.', required) };
-      rules.domaine = { required: helpers.withMessage('Le domaine d\'études est requis.', required) };
-      rules.debutProgramme = { required: helpers.withMessage('La date de début du programme est requise.', required) };
-      rules.finProgramme = { required: helpers.withMessage('La date de fin du programme est requise.', required) };
-      
-      break;
-
-    case 'bankingInfo':
-      rules.institution = { required: helpers.withMessage('L\'institution bancaire est requise.', required) };
-      rules.numeroCarte = { required: helpers.withMessage('Le numéro de carte est requis.', required) };
-      rules.dateExpiration = { required: helpers.withMessage('La date d\'expiration est requise.', required) };
-      rules.codeSecurite = { required: helpers.withMessage('Le code de sécurité est requis.', required) };
-      break;
-
-    case 'changePassword':
-      rules.currentPassword = { required: helpers.withMessage('Le mot de passe actuel est requis.', required) };
-      rules.newPassword = { 
-        required: helpers.withMessage('Le nouveau mot de passe est requis.', required),
-        minLength: helpers.withMessage('Le mot de passe doit contenir au moins 8 caractères.', minLength(8))
-      };
-      rules.confirmPassword = { 
-        required: helpers.withMessage('La confirmation du mot de passe est requise.', required),
-        sameAsPassword: helpers.withMessage('Les mots de passe ne correspondent pas.', sameAs(computed(() => localFormData.value.newPassword)))
-      };
-      break;
-
-    case 'deleteProfile':
-      rules.confirmation = { 
-        required: helpers.withMessage('La confirmation est requise.', required),
-        matchesDeleteText: helpers.withMessage('Veuillez taper "SUPPRIMER" pour confirmer.', (value) => value === 'SUPPRIMER')
-      };
-      rules.password = { required: helpers.withMessage('Le mot de passe est requis.', required) };
-      break;
-  }
-  
-  // S'assurer que tous les champs du formulaire ont au moins une entrée dans les règles
-  if (props.formFields) {
-    props.formFields.forEach(field => {
-      if (!rules[field.key]) {
-        rules[field.key] = {};
-      }
-    });
-  }
-  
-  return rules;
+  return generateValidationRules(props.formType, localFormData.value);
 });
 
 // Initialisation de Vuelidate

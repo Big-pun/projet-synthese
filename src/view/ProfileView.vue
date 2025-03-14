@@ -7,7 +7,7 @@ import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
-import { showLoading, closeLoading } from '@/utils/sweetAlert';
+import { showLoading, closeLoading, showConfirm } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 
 // Récupérer les stores
@@ -17,17 +17,6 @@ const modalStore = useModalStore();
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
   try {
-    // Validation préalable avant de montrer le chargement
-    if (formStore.formType === 'changePassword' && data.newPassword !== data.confirmPassword) {
-      showError('Les mots de passe ne correspondent pas');
-      return;
-    }
-
-    if (formStore.formType === 'deleteProfile' && data.confirmation !== 'SUPPRIMER') {
-      showError('Veuillez taper "SUPPRIMER" pour confirmer la suppression du profil');
-      return;
-    }
-
     // Afficher l'indicateur de chargement
     showLoading('Traitement en cours...');
     
@@ -36,6 +25,20 @@ async function handleSave(data) {
     
     // Fermer l'indicateur de chargement
     closeLoading();
+    
+    // Demander confirmation pour la suppression de profil
+    if (formStore.formType === 'deleteProfile') {
+      const result = await showConfirm(
+        'Confirmation de suppression',
+        'Êtes-vous sûr de vouloir supprimer votre profil ? Cette action est irréversible.',
+        'Oui, supprimer',
+        'Annuler'
+      );
+      
+      if (!result.isConfirmed) {
+        return; // L'utilisateur a annulé
+      }
+    }
     
     // Traitement spécifique selon le type de formulaire
     let successMessage = '';
@@ -68,6 +71,9 @@ async function handleSave(data) {
         console.log('Deleting profile with password verification:', data.password);
         successMessage = 'Votre profil a été supprimé avec succès';
         break;
+        
+      default:
+        successMessage = 'Vos modifications ont été enregistrées avec succès.';
     }
     
     // Afficher le toast de succès standardisé

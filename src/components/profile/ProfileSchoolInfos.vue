@@ -18,26 +18,12 @@ const schoolData = reactive({
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
 
-// Configurer les champs du formulaire pour les informations scolaires
-const schoolInfoFields = [
-    { key: 'nom', label: 'Nom de l\'établissement' },
-    { key: 'domaine', label: 'Domaine d\'études' },
-    { key: 'debutProgramme', label: 'Début du programme' },
-    { key: 'finProgramme', label: 'Fin du programme' }
-  
-  ];
-
 // Fonction pour ouvrir le modal d'édition
 function openEditForm() {
-  // Étape 1: Configurer le formulaire
-  formStore.chooseForm(
-    'schoolInfo',
-    'Éditer les informations scolaires',
-    schoolInfoFields,
-    { ...schoolData } // Clone pour éviter les modifications directes
-  );
+  // Utiliser la fonction simplifiée setupForm du store
+  formStore.setupForm('schoolInfo', { ...schoolData });
   
-  // Étape 2: Ouvrir le modal
+  // Ouvrir le modal
   modalStore.openModal();
 }
 </script>
