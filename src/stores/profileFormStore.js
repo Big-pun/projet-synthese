@@ -26,6 +26,39 @@ export const useProfileFormStore = defineStore('profileForm', () => {
     Object.keys(formData).forEach(key => delete formData[key]);
   }
 
+  function setupAddressForm(addressType, userAddresses) {
+    let title = '';
+    switch (addressType) {
+      case 'PERSONAL':
+        title = 'Éditer l\'adresse personnelle';
+        break;
+      case 'WORK':
+        title = 'Éditer l\'adresse professionnelle';
+        break;
+      default:
+        title = 'Éditer l\'adresse';
+    }
+    
+    const existingAddress = userAddresses?.find(addr => addr.type === addressType);
+    
+    if (existingAddress) {
+      chooseForm('addressInfo', title, getFormFields('addressInfo'), {
+        id: existingAddress.id,
+        type: addressType,
+        streetNumber: existingAddress.streetNumber,
+        streetName: existingAddress.streetName,
+        city: existingAddress.city,
+        province: existingAddress.province,
+        country: existingAddress.country
+      });
+    } else {
+      chooseForm('addressInfo', title, getFormFields('addressInfo'), {
+        type: addressType,
+        country: 'CA'
+      });
+    }
+  }
+
   return {
     formType,
     formTitle,
@@ -33,6 +66,7 @@ export const useProfileFormStore = defineStore('profileForm', () => {
     formData,
     chooseForm,
     setupForm,
+    setupAddressForm,
     resetForm
   };
 }); 

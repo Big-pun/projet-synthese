@@ -2,16 +2,12 @@
 import { ref, reactive } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
 import { useModalStore } from '@/stores/modalStore';
+import { mockUser, formatDate } from '@/mock/userData';
 
 const hovered = ref(false);
 
-// Données scolaires a remplacer par l'API
-const schoolData = reactive({
-  nom: 'Cegep de Trois-Rivieres',
-  domaine: 'Developpement Web',
-  debutProgramme: '10/10/2023',
-  finProgramme: '06/06/2025'
-});
+// Données scolaires provenant du mock
+const schoolData = reactive({...mockUser.schoolDetails});
 
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
@@ -29,7 +25,7 @@ function openEditForm() {
 
     <!-- En-tête de la section avec barre de couleur -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
-      <h3 class="text-white ml-8">Etablissement scolaire</h3>
+      <h3 class="text-white ml-8">Établissement scolaire</h3>
 
       <!-- Rectangle coloré à droite -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -43,25 +39,25 @@ function openEditForm() {
       <!-- Nom de l'établissement -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Nom</p>
-        <p>{{ schoolData.nom || 'Non spécifié' }}</p>
+        <p>{{ schoolData.schoolName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Domaine d'études -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Domaine</p>
-        <p>{{ schoolData.domaine || 'Non spécifié' }}</p>
+        <p>{{ schoolData.fieldOfStudy || 'Non spécifié' }}</p>
       </div>
 
       <!-- Début du programme -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
-        <p class="font-medium responsive-margin">Debut du programme</p>
-        <p>{{ schoolData.debutProgramme || 'Non spécifié' }}</p>
+        <p class="font-medium responsive-margin">Début du programme</p>
+        <p>{{ formatDate(schoolData.startDate) }}</p>
       </div>
 
       <!-- Fin du programme -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Fin du programme</p>
-        <p>{{ schoolData.finProgramme || 'Non spécifié' }}</p>
+        <p>{{ formatDate(schoolData.projectedEndDate) }}</p>
       </div>
     </div>
 
@@ -70,14 +66,13 @@ function openEditForm() {
     :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
-        <span class="mr-2">+</span> Editer cette section
+        <span class="mr-2">+</span> Éditer cette section
       </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .rectangle-fill-default {
   fill: #F74949;
   transition: fill 0.2s ease;

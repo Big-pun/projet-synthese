@@ -20,8 +20,8 @@ async function handleSave(data) {
     // Afficher l'indicateur de chargement
     showLoading('Traitement en cours...');
     
-    // Simuler un délai de traitement côté serveur (3 secondes)
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // Simuler un délai de traitement côté serveur (1 seconde)
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Fermer l'indicateur de chargement
     closeLoading();
@@ -49,6 +49,11 @@ async function handleSave(data) {
         successMessage = 'Vos informations personnelles ont été mises à jour avec succès.';
         break;
         
+      case 'addressInfo':
+        console.log('Saving address info:', data);
+        successMessage = 'Votre adresse a été mise à jour avec succès.';
+        break;
+        
       case 'schoolInfo':
         console.log('Saving school info:', data);
         successMessage = 'Vos informations scolaires ont été mises à jour avec succès.';
@@ -57,6 +62,11 @@ async function handleSave(data) {
       case 'bankingInfo':
         console.log('Saving banking info:', data);
         successMessage = 'Vos informations bancaires ont été mises à jour avec succès.';
+        break;
+        
+      case 'transactionInfo':
+        console.log('Saving transaction:', data);
+        successMessage = data.id ? 'Transaction mise à jour avec succès.' : 'Transaction ajoutée avec succès.';
         break;
         
       case 'changePassword':
@@ -100,28 +110,31 @@ function handleClose() {
 </script>
 
 <template>
-    <p class="font-bold">CONTENU PAGE PROFILE</p>
-    <ProfilePreview></ProfilePreview>
-    <ProfilePersonnalInfos></ProfilePersonnalInfos>
-    
-    <!-- Section avec informations scolaires et bancaires côte à côte -->
-    <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
-      <ProfileSchoolInfos></ProfileSchoolInfos>
-      <ProfileBankingInfos></ProfileBankingInfos>
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Mon profil</h1>
+      
+      <ProfilePreview></ProfilePreview>
+      <ProfilePersonnalInfos></ProfilePersonnalInfos>
+      
+      <!-- Section avec informations scolaires et bancaires côte à côte -->
+      <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
+        <ProfileSchoolInfos></ProfileSchoolInfos>
+        <ProfileBankingInfos></ProfileBankingInfos>
+      </div>
+      
+      <!-- Modal et formulaire séparés -->
+      <Modal :isOpen="modalStore.isOpen" @close="handleClose">
+        <ProfileForm
+          :title="formStore.formTitle"
+          :formFields="formStore.formFields"
+          :formData="formStore.formData"
+          :formType="formStore.formType"
+          @close="handleClose"
+          @save="handleSave"
+        />
+      </Modal>
     </div>
-    
-    <!-- Modal et formulaire séparés -->
-    <Modal :isOpen="modalStore.isOpen" @close="handleClose">
-      <ProfileForm
-        :title="formStore.formTitle"
-        :formFields="formStore.formFields"
-        :formData="formStore.formData"
-        :formType="formStore.formType"
-        @close="handleClose"
-        @save="handleSave"
-      />
-    </Modal>
-  </template>
+</template>
 
 <style>
 </style>

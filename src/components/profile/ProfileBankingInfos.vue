@@ -2,41 +2,24 @@
 import { ref, reactive } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
 import { useModalStore } from '@/stores/modalStore';
+import { mockUser } from '@/mock/userData';
 
 // État pour le survol
 const hovered = ref(false);
 
-// Données bancaires (à remplacer par une API plus tard)
-const bankingData = reactive({
-  institution: 'Desjardins',
-  compte: '815-999-5666',
-  prets: 'Aucun',
-  autres: '-'
-});
+// Données bancaires (provenant du mock)
+const bankingData = reactive({...mockUser.bankingDetails});
 
 // Récupérer les stores
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
 
-// Configurer les champs du formulaire pour les informations bancaires
-const bankingInfoFields = [
-  { key: 'institution', label: 'Institution' },
-  { key: 'compte', label: 'Numéro de compte' },
-  { key: 'prets', label: 'Prêts' },
-  { key: 'autres', label: 'Autres informations' }
-];
-
 // Fonction pour ouvrir le formulaire d'édition
 function openEditForm() {
-  // Étape 1: Configurer le formulaire
-  formStore.chooseForm(  
-    'bankingInfo',
-    'Éditer les renseignements bancaires',
-    bankingInfoFields,
-    { ...bankingData } // Clone pour éviter les modifications directes
-  );
+  // Utiliser directement les champs définis dans formValidation.js
+  formStore.setupForm('bankingInfo', { ...bankingData });
   
-  // Étape 2: Ouvrir le modal
+  // Ouvrir le modal
   modalStore.openModal();
 }
 </script>
@@ -53,7 +36,7 @@ function openEditForm() {
       <!-- Rectangle coloré à droite -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
         class="absolute svg-rectangle right-5 top-0 rounded-b transition-colors duration-200">
-        <rect width="36" height="75" :class="{ 'rectangle-fill': !hovered, 'rectangle-fill-hovered': hovered }" />
+        <rect width="36" height="75" :class="{ 'rectangle-fill-default': !hovered, 'rectangle-fill-hovered': hovered }" />
       </svg>
     </div>
 
@@ -62,25 +45,25 @@ function openEditForm() {
       <!-- Institution -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Institution</p>
-        <p>{{ bankingData.institution || 'Non spécifié' }}</p>
+        <p>{{ bankingData.institutionName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Numéro de compte -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Compte</p>
-        <p>{{ bankingData.compte || 'Non spécifié' }}</p>
+        <p>{{ bankingData.accountInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Prêts -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
-        <p class="font-medium responsive-margin">Prets</p>
-        <p>{{ bankingData.prets || 'Non spécifié' }}</p>
+        <p class="font-medium responsive-margin">Prêts</p>
+        <p>{{ bankingData.loanInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Autres informations -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Autres</p>
-        <p>{{ bankingData.autres || 'Non spécifié' }}</p>
+        <p>{{ bankingData.other || 'Non spécifié' }}</p>
       </div>
     </div>
 
@@ -89,18 +72,16 @@ function openEditForm() {
     :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
-        <span class="mr-2">+</span> Editer cette section
+        <span class="mr-2">+</span> Éditer cette section
       </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-
-
-.svg-rectangle .rectangle-fill {
+.rectangle-fill-default {
   fill: #F74949;
-  transition: fill 0.2s ease
+  transition: fill 0.2s ease;
 }
 
 .rectangle-fill-hovered {

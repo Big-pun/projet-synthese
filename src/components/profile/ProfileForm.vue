@@ -157,6 +157,28 @@ function getErrorMessage(fieldName) {
   const errors = v$.value[fieldName].$errors;
   return errors.length > 0 ? errors[0].$message : '';
 }
+
+function formatDateForInput(date) {
+  if (!date) return '';
+  
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return date;
+  }
+  
+  try {
+    const dateObj = new Date(date);
+    if (isNaN(dateObj)) return '';
+    
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  } catch (error) {
+    console.error("Erreur lors du formatage de la date:", error);
+    return '';
+  }
+}
 </script>
 
 <template>
@@ -179,15 +201,47 @@ function getErrorMessage(fieldName) {
     </div>
     
     <div :class="getGridPersonnalInfo(formType)" class="px-6 w-full">
-      <div v-for="field in formFields" :key="field.key" class="py-1 px-2" >
+      <!-- Champs cachés - ils n'apparaissent pas dans l'UI mais conservent leur valeur -->
+      <input 
+        v-for="field in formFields.filter(f => f.type === 'hidden')" 
+        :key="field.key" 
+        type="hidden" 
+        v-model="localFormData[field.key]"
+      >
+      
+      <!-- Champs visibles -->
+      <div v-for="field in formFields.filter(f => f.type !== 'hidden')" :key="field.key" class="py-1 px-2" >
         <div class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row w-full">
           <label class="block font-medium sm:w-1/3 mb-2 sm:mb-0">{{ field.label }}</label>
           <div class="relative w-full sm:w-2/3">
             <div v-if="hasError(field.key)" class="text-red-500 mb-1">
               <small>{{ getErrorMessage(field.key) }}</small>
             </div>
+            
+            <!-- Champ select avec options -->
+            <select 
+              v-if="field.type === 'select' && field.options"
+              v-model="localFormData[field.key]"
+              :class="{
+                'border-accent2': hasError(field.key),
+                'border-accent1': !hasError(field.key) && localFormData[field.key]
+              }"
+              class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none">
+              <option value="" disabled>Sélectionnez une option</option>
+              <option 
+                v-for="option in field.options" 
+                :key="option.value" 
+                :value="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+
+            
+            <!-- Champs texte, password, email, etc. -->
             <input 
-              v-model="localFormData[field.key]" 
+              v-else
+              :value="field.type === 'date' ? formatDateForInput(localFormData[field.key]) : localFormData[field.key]"
+              @input="e => field.type === 'date' ? localFormData[field.key] = e.target.value : localFormData[field.key] = e.target.value"
               :type="getFieldType(field)" 
               :class="{
                 'border-accent2': hasError(field.key),

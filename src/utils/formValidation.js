@@ -3,25 +3,61 @@ import { computed } from 'vue';
 
 export const formFields = {
   personnalInfo: [
-    { key: 'prenom', label: 'Prénom', type: 'text' },
-    { key: 'nom', label: 'Nom', type: 'text' },
-    { key: 'dateNaissance', label: 'Date de naissance', type: 'date' },
-    { key: 'telephone', label: 'Téléphone', type: 'tel' },
-    { key: 'courriel', label: 'Courriel', type: 'email' },
-    { key: 'adressePersonnelle', label: 'Adresse personnelle', type: 'text' },
-    { key: 'adresseTravail', label: 'Adresse au travail', type: 'text' }
+    { key: 'firstName', label: 'Prénom', type: 'text' },
+    { key: 'lastName', label: 'Nom', type: 'text' },
+    { key: 'birthDate', label: 'Date de naissance', type: 'date' },
+    { key: 'phone', label: 'Téléphone', type: 'tel' },
+    { key: 'email', label: 'Courriel', type: 'email' },
+    { key: 'password', label: 'Mot de passe', type: 'password' }
+  ],
+  addressInfo: [
+    { key: 'streetNumber', label: 'Numéro de rue', type: 'text' },
+    { key: 'streetName', label: 'Nom de rue', type: 'text' },
+    { key: 'city', label: 'Ville', type: 'text' },
+    { key: 'province', label: 'Province', type: 'select', options: [
+      { value: 'QC', label: 'Québec' },
+      { value: 'ON', label: 'Ontario' },
+      { value: 'BC', label: 'Colombie-Britannique' },
+      { value: 'AB', label: 'Alberta' },
+      { value: 'MB', label: 'Manitoba' },
+      { value: 'SK', label: 'Saskatchewan' },
+      { value: 'NB', label: 'Nouveau-Brunswick' },
+      { value: 'NS', label: 'Nouvelle-Écosse' },
+      { value: 'PE', label: 'Île-du-Prince-Édouard' },
+      { value: 'NL', label: 'Terre-Neuve-et-Labrador' },
+      { value: 'YT', label: 'Yukon' },
+      { value: 'NT', label: 'Territoires du Nord-Ouest' },
+      { value: 'NU', label: 'Nunavut' }
+    ]},
+    { key: 'country', label: 'Pays', type: 'select', options: [
+      { value: 'CA', label: 'Canada' }
+    ]},
+    { key: 'type', label: 'Type d\'adresse', type: 'hidden' }
   ],
   schoolInfo: [
-    { key: 'nom', label: 'Nom de l\'établissement', type: 'text' },
-    { key: 'domaine', label: 'Domaine d\'études', type: 'text' },
-    { key: 'debutProgramme', label: 'Début du programme', type: 'date' },
-    { key: 'finProgramme', label: 'Fin du programme', type: 'date' }
+    { key: 'schoolName', label: 'Nom de l\'établissement', type: 'text' },
+    { key: 'fieldOfStudy', label: 'Domaine d\'études', type: 'text' },
+    { key: 'startDate', label: 'Début du programme', type: 'date' },
+    { key: 'projectedEndDate', label: 'Fin prévue du programme', type: 'date' }
   ],
   bankingInfo: [
-    { key: 'institution', label: 'Institution bancaire', type: 'text' },
-    { key: 'numeroCarte', label: 'Numéro de carte', type: 'text' },
-    { key: 'dateExpiration', label: 'Date d\'expiration', type: 'date' },
-    { key: 'codeSecurite', label: 'Code de sécurité', type: 'password' }
+    { key: 'institutionName', label: 'Institution bancaire', type: 'text' },
+    { key: 'accountInfo', label: 'Informations du compte', type: 'text' },
+    { key: 'loanInfo', label: 'Informations de prêt', type: 'text' },
+    { key: 'other', label: 'Autres informations', type: 'text' }
+  ],
+  transactionInfo: [
+    { key: 'description', label: 'Description', type: 'text' },
+    { key: 'category', label: 'Catégorie', type: 'text' },
+    { key: 'amount', label: 'Montant', type: 'number' },
+    { key: 'type', label: 'Type', type: 'select', options: [
+      { value: 'Revenue', label: 'Revenu' },
+      { value: 'Expense', label: 'Dépense' }
+    ]},
+    { key: 'isDone', label: 'Terminé', type: 'checkbox' },
+    { key: 'startDate', label: 'Date de début', type: 'date' },
+    { key: 'endDate', label: 'Date de fin', type: 'date' },
+    { key: 'frequency', label: 'Fréquence (jours)', type: 'number' }
   ],
   changePassword: [
     { key: 'currentPassword', label: 'Mot de passe actuel', type: 'password' },
@@ -39,30 +75,47 @@ export function generateValidationRules(formType, formData = {}) {
   
   switch (formType) {
     case 'personnalInfo':
-      rules.prenom = { required: helpers.withMessage('Le prénom est requis.', required) };
-      rules.nom = { required: helpers.withMessage('Le nom est requis.', required) };
-      rules.dateNaissance = { required: helpers.withMessage('La date de naissance est requise.', required) };
-      rules.telephone = { required: helpers.withMessage('Le téléphone est requis.', required) };
-      rules.courriel = { 
+      rules.firstName = { required: helpers.withMessage('Le prénom est requis.', required) };
+      rules.lastName = { required: helpers.withMessage('Le nom est requis.', required) };
+      rules.birthDate = { required: helpers.withMessage('La date de naissance est requise.', required) };
+      rules.phone = { required: helpers.withMessage('Le téléphone est requis.', required) };
+      rules.email = { 
         required: helpers.withMessage('Le courriel est requis.', required),
         email: helpers.withMessage('Veuillez entrer un courriel valide.', email)
       };
-      rules.adressePersonnelle = { required: helpers.withMessage('L\'adresse personnelle est requise.', required) };
-      rules.adresseTravail = { required: helpers.withMessage('L\'adresse au travail est requise.', required) };
+      rules.password = { 
+        required: helpers.withMessage('Le mot de passe est requis.', required),
+        minLength: helpers.withMessage('Le mot de passe doit contenir au moins 8 caractères.', minLength(8))
+      };
+      break;
+
+    case 'addressInfo':
+      rules.streetNumber = { required: helpers.withMessage('Le numéro de rue est requis.', required) };
+      rules.streetName = { required: helpers.withMessage('Le nom de rue est requis.', required) };
+      rules.city = { required: helpers.withMessage('La ville est requise.', required) };
+      rules.province = { required: helpers.withMessage('La province est requise.', required) };
+      rules.country = { required: helpers.withMessage('Le pays est requis.', required) };
+      rules.type = { required: helpers.withMessage('Le type d\'adresse est requis.', required) };
       break;
 
     case 'schoolInfo':
-      rules.nom = { required: helpers.withMessage('Le nom de l\'établissement est requis.', required) };
-      rules.domaine = { required: helpers.withMessage('Le domaine d\'études est requis.', required) };
-      rules.debutProgramme = { required: helpers.withMessage('La date de début du programme est requise.', required) };
-      rules.finProgramme = { required: helpers.withMessage('La date de fin du programme est requise.', required) };
+      rules.schoolName = { required: helpers.withMessage('Le nom de l\'établissement est requis.', required) };
+      rules.fieldOfStudy = { required: helpers.withMessage('Le domaine d\'études est requis.', required) };
+      rules.startDate = { required: helpers.withMessage('La date de début du programme est requise.', required) };
+      rules.projectedEndDate = { required: helpers.withMessage('La date de fin prévue du programme est requise.', required) };
       break;
 
     case 'bankingInfo':
-      rules.institution = { required: helpers.withMessage('L\'institution bancaire est requise.', required) };
-      rules.numeroCarte = { required: helpers.withMessage('Le numéro de carte est requis.', required) };
-      rules.dateExpiration = { required: helpers.withMessage('La date d\'expiration est requise.', required) };
-      rules.codeSecurite = { required: helpers.withMessage('Le code de sécurité est requis.', required) };
+      rules.institutionName = { required: helpers.withMessage('L\'institution bancaire est requise.', required) };
+      rules.accountInfo = { required: helpers.withMessage('Les informations du compte sont requises.', required) };
+      break;
+
+    case 'transactionInfo':
+      rules.description = { required: helpers.withMessage('La description est requise.', required) };
+      rules.category = { required: helpers.withMessage('La catégorie est requise.', required) };
+      rules.amount = { required: helpers.withMessage('Le montant est requis.', required) };
+      rules.type = { required: helpers.withMessage('Le type est requis.', required) };
+      rules.startDate = { required: helpers.withMessage('La date de début est requise.', required) };
       break;
 
     case 'changePassword':
@@ -104,8 +157,10 @@ export function getFormFields(formType) {
 export function getFormTitle(formType) {
   const titles = {
     personnalInfo: 'Éditer les informations personnelles',
+    addressInfo: 'Éditer les adresses',
     schoolInfo: 'Éditer les informations scolaires',
     bankingInfo: 'Éditer les informations bancaires',
+    transactionInfo: 'Éditer les transactions',
     changePassword: 'Changer le mot de passe',
     deleteProfile: 'Supprimer le profil'
   };
