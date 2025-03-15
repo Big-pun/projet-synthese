@@ -1,60 +1,19 @@
 <script setup>
 import { ref } from 'vue';
-import { useProfileFormStore } from '@/stores/profileFormStore';
-import { useModalStore } from '@/stores/modalStore';
-import Modal from '@/components/general/Modal.vue';
-import ProfileForm from '@/components/profile/ProfileForm.vue';
+import { mockUser } from '@/mock/userData';
 
-const formStore = useProfileFormStore();
-const modalStore = useModalStore();
+const userData = ref({...mockUser});
+
+// Définir les événements
+const emit = defineEmits(['change-password', 'delete-profile']);
 
 function openChangePasswordForm() {
-  const passwordFields = [
-    { key: 'currentPassword', label: 'Mot de passe actuel', type: 'password' },
-    { key: 'newPassword', label: 'Nouveau mot de passe', type: 'password' },
-    { key: 'confirmPassword', label: 'Confirmer le mot de passe', type: 'password' }
-  ];
-  
-  formStore.chooseForm(
-    'changePassword',
-    'Changer mon mot de passe',
-    passwordFields,
-    {
-      currentPassword: '123456',
-      newPassword: '',
-      confirmPassword: ''
-    } 
-  );
-  
-  modalStore.openModal();
+  emit('change-password');
 }
 
 function openDeleteProfileForm() {
-  const confirmationFields = [
-    { key: 'confirmation', label: 'Tapez "SUPPRIMER" pour confirmer', type: 'text' },
-    { key: 'password', label: 'Mot de passe', type: 'password' }
-  ];
-  
-  formStore.chooseForm(
-    'deleteProfile',
-    'Supprimer mon profil',
-    confirmationFields,
-    {}
-  );
-  modalStore.openModal();
+  emit('delete-profile');
 }
-
-function handleCloseModal() {
-  modalStore.closeModal();
-  formStore.resetForm();
-}
-  
-const userData = ref({
-  nom: 'Bruno Gautier',
-  email: 'brunogautier@gmail.com',
-  telephone: '581-422-5029'
-});
-
 </script>
 
 <template>
@@ -80,9 +39,9 @@ const userData = ref({
           </div>
 
           <div class="flex flex-col text-gray text-left space-y-1 font-medium ">
-            <p class="">{{ userData.nom }}</p>
+            <p class="">{{ userData.firstName }} {{ userData.lastName }}</p>
             <p class="">{{ userData.email }}</p>
-            <p class="">{{ userData.telephone }}</p>
+            <p class="">{{ userData.phone }}</p>
           </div>
         </div>
       </div>
@@ -121,20 +80,6 @@ const userData = ref({
         </button>
       </div>
     </div>
-    
-    <!-- Modal avec formulaire -->
-    <Modal 
-      :isOpen="modalStore.isOpen" 
-      @close="handleCloseModal">
-      <ProfileForm
-        :title="formStore.formTitle"
-        :formFields="formStore.formFields"
-        :formData="formStore.formData"
-        :formType="formStore.formType"
-        @close="handleCloseModal"
-        @save="handleCloseModal"
-      />
-    </Modal>
   </div>
 </template>
 

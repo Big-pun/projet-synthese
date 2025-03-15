@@ -1,7 +1,5 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { useProfileFormStore } from '@/stores/profileFormStore';
-import { useModalStore } from '@/stores/modalStore';
 import { mockUser } from '@/mock/userData';
 
 // État pour le survol
@@ -10,17 +8,12 @@ const hovered = ref(false);
 // Données bancaires (provenant du mock)
 const bankingData = reactive({...mockUser.bankingDetails});
 
-// Récupérer les stores
-const formStore = useProfileFormStore();
-const modalStore = useModalStore();
+// Définir l'événement pour l'édition
+const emit = defineEmits(['edit']);
 
 // Fonction pour ouvrir le formulaire d'édition
 function openEditForm() {
-  // Utiliser directement les champs définis dans formValidation.js
-  formStore.setupForm('bankingInfo', { ...bankingData });
-  
-  // Ouvrir le modal
-  modalStore.openModal();
+  emit('edit');
 }
 </script>
 

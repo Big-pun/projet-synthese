@@ -1,7 +1,5 @@
 <script setup>
 import { ref, reactive } from 'vue';
-import { useProfileFormStore } from '@/stores/profileFormStore';
-import { useModalStore } from '@/stores/modalStore';
 import { mockUser, formatDate } from '@/mock/userData';
 
 const hovered = ref(false);
@@ -9,12 +7,11 @@ const hovered = ref(false);
 // Données scolaires provenant du mock
 const schoolData = reactive({...mockUser.schoolDetails});
 
-const formStore = useProfileFormStore();
-const modalStore = useModalStore();
+// Définir l'événement pour l'édition
+const emit = defineEmits(['edit']);
 
 function openEditForm() {
-  formStore.setupForm('schoolInfo', { ...schoolData });
-  modalStore.openModal();
+  emit('edit');
 }
 </script>
 

@@ -1,93 +1,108 @@
 <template>
-  <div class="p-6 max-w-xl mx-auto">
-    <h2 class="text-xl font-semibold mb-4">{{ title }}</h2>
+  <div class="font-roboto bg-light-gray rounded-lg mx-auto">
+    <!-- En-tête du formulaire -->
+    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
+      <h2 class="text-xl font-semibold text-white ml-4">{{ title }}</h2>
+      
+      <!-- Rectangle SVG avec couleur d'accent -->
+      <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
+        class="absolute right-5 top-0 rounded-b">
+        <rect width="36" height="75" class="rectangle-fill-hovered" />
+      </svg>
+    </div>
     
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+    <form @submit.prevent="handleSubmit" class="space-y-4 px-4">
       <!-- Informations personnelles -->
       <div class="mb-6">
-        <h3 class="text-lg font-medium mb-3 text-gray-800">Informations personnelles</h3>
+        <h3 class="text-lg font-medium mb-3 text-gray">Informations personnelles</h3>
         
-        <!-- Prénom -->
-        <div class="mb-4">
-          <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">
-            Prénom
-          </label>
-          <input 
-            type="text" 
-            id="firstName" 
-            v-model="formData.firstName"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.firstName.$error }"
-          />
-          <div v-if="v$.firstName.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.firstName.$errors[0].$message }}
+        <!-- Grille pour prénom et nom -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <!-- Prénom -->
+          <div class="rounded-lg bg-white p-4">
+            <label for="firstName" class="block text-sm font-medium text-gray mb-2">
+              Prénom
+            </label>
+            <input 
+              type="text" 
+              id="firstName" 
+              v-model="formData.firstName"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.firstName.$error }"
+            />
+            <div v-if="v$.firstName.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.firstName.$errors[0].$message }}
+            </div>
+          </div>
+          
+          <!-- Nom -->
+          <div class="rounded-lg bg-white p-4">
+            <label for="lastName" class="block text-sm font-medium text-gray mb-2">
+              Nom
+            </label>
+            <input 
+              type="text" 
+              id="lastName" 
+              v-model="formData.lastName"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.lastName.$error }"
+            />
+            <div v-if="v$.lastName.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.lastName.$errors[0].$message }}
+            </div>
           </div>
         </div>
         
-        <!-- Nom -->
-        <div class="mb-4">
-          <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">
-            Nom
-          </label>
-          <input 
-            type="text" 
-            id="lastName" 
-            v-model="formData.lastName"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.lastName.$error }"
-          />
-          <div v-if="v$.lastName.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.lastName.$errors[0].$message }}
+        <!-- Grille pour date de naissance et téléphone -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <!-- Date de naissance -->
+          <div class="rounded-lg bg-white p-4">
+            <label for="birthDate" class="block text-sm font-medium text-gray mb-2">
+              Date de naissance
+            </label>
+            <input 
+              type="date" 
+              id="birthDate" 
+              v-model="formData.birthDate"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.birthDate.$error }"
+            />
+            <div v-if="v$.birthDate.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.birthDate.$errors[0].$message }}
+            </div>
           </div>
-        </div>
-        
-        <!-- Date de naissance -->
-        <div class="mb-4">
-          <label for="birthDate" class="block text-sm font-medium text-gray-700 mb-1">
-            Date de naissance
-          </label>
-          <input 
-            type="date" 
-            id="birthDate" 
-            v-model="formData.birthDate"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.birthDate.$error }"
-          />
-          <div v-if="v$.birthDate.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.birthDate.$errors[0].$message }}
-          </div>
-        </div>
-        
-        <!-- Téléphone -->
-        <div class="mb-4">
-          <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
-            Téléphone
-          </label>
-          <input 
-            type="tel" 
-            id="phone" 
-            v-model="formData.phone"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.phone.$error }"
-          />
-          <div v-if="v$.phone.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.phone.$errors[0].$message }}
+          
+          <!-- Téléphone -->
+          <div class="rounded-lg bg-white p-4">
+            <label for="phone" class="block text-sm font-medium text-gray mb-2">
+              Téléphone
+            </label>
+            <input 
+              type="tel" 
+              id="phone" 
+              v-model="formData.phone"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.phone.$error }"
+            />
+            <div v-if="v$.phone.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.phone.$errors[0].$message }}
+            </div>
           </div>
         </div>
         
         <!-- Email -->
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+        <div class="rounded-lg bg-white p-4 mb-4">
+          <label for="email" class="block text-sm font-medium text-gray mb-2">
             Courriel
           </label>
           <input 
             type="email" 
             id="email" 
             v-model="formData.email"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.email.$error }"
+            class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+            :class="{ 'border-accent2': v$.email.$error }"
           />
-          <div v-if="v$.email.$error" class="text-red-500 text-sm mt-1">
+          <div v-if="v$.email.$error" class="text-accent2 text-sm mt-1">
             {{ v$.email.$errors[0].$message }}
           </div>
         </div>
@@ -95,133 +110,135 @@
       
       <!-- Informations d'adresse -->
       <div class="mb-6">
-        <h3 class="text-lg font-medium mb-3 text-gray-800">Adresse</h3>
-        
-        <!-- Type d'adresse -->
-        <div class="mb-4">
-          <label for="addressType" class="block text-sm font-medium text-gray-700 mb-1">
-            Type d'adresse
-          </label>
-          <select 
-            id="addressType" 
-            v-model="formData.addressType"
-            @change="handleAddressTypeChange"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.addressType.$error }"
-          >
-            <option value="PERSONAL">Personnelle</option>
-            <option value="WORK">Professionnelle</option>
-          </select>
-          <div v-if="v$.addressType.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.addressType.$errors[0].$message }}
+        <!-- En-tête de section avec type d'adresse intégré -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <h3 class="text-lg font-medium text-gray">ADRESSE</h3>
+          </div>
+          <div class="relative">
+            <select 
+              id="addressType" 
+              v-model="formData.addressType"
+              @change="handleAddressTypeChange"
+              class="w-48 px-3 py-2 border border-accent1 rounded-md focus:border-accent1 outline-none bg-white text-gray"
+              :class="{ 'border-accent2': v$.addressType.$error }"
+            >
+              <option value="PERSONAL">Personnel</option>
+              <option value="WORK">Professionnel</option>
+            </select>
+            <div v-if="v$.addressType.$error" class="absolute text-accent2 text-sm mt-1">
+              {{ v$.addressType.$errors[0].$message }}
+            </div>
           </div>
         </div>
+        <div class="h-1 w-full bg-accent1 mb-6"></div>
         
-        <!-- Numéro de rue -->
-        <div class="mb-4">
-          <label for="streetNumber" class="block text-sm font-medium text-gray-700 mb-1">
-            Numéro de rue
-          </label>
-          <input 
-            type="text" 
-            id="streetNumber" 
-            v-model="formData.streetNumber"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.streetNumber.$error }"
-          />
-          <div v-if="v$.streetNumber.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.streetNumber.$errors[0].$message }}
+        <!-- Grille pour les informations d'adresse -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          <!-- Numéro de rue -->
+          <div>
+            <label for="streetNumber" class="block text-sm font-medium text-gray mb-2">
+              Numéro de rue
+            </label>
+            <input 
+              type="text" 
+              id="streetNumber" 
+              v-model="formData.streetNumber"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.streetNumber.$error }"
+            />
+            <div v-if="v$.streetNumber.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.streetNumber.$errors[0].$message }}
+            </div>
           </div>
-        </div>
-        
-        <!-- Nom de rue -->
-        <div class="mb-4">
-          <label for="streetName" class="block text-sm font-medium text-gray-700 mb-1">
-            Nom de rue
-          </label>
-          <input 
-            type="text" 
-            id="streetName" 
-            v-model="formData.streetName"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.streetName.$error }"
-          />
-          <div v-if="v$.streetName.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.streetName.$errors[0].$message }}
+          
+          <!-- Nom de rue -->
+          <div>
+            <label for="streetName" class="block text-sm font-medium text-gray mb-2">
+              Nom de rue
+            </label>
+            <input 
+              type="text" 
+              id="streetName" 
+              v-model="formData.streetName"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.streetName.$error }"
+            />
+            <div v-if="v$.streetName.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.streetName.$errors[0].$message }}
+            </div>
           </div>
-        </div>
-        
-        <!-- Ville -->
-        <div class="mb-4">
-          <label for="city" class="block text-sm font-medium text-gray-700 mb-1">
-            Ville
-          </label>
-          <input 
-            type="text" 
-            id="city" 
-            v-model="formData.city"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.city.$error }"
-          />
-          <div v-if="v$.city.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.city.$errors[0].$message }}
+          
+          <!-- Ville -->
+          <div>
+            <label for="city" class="block text-sm font-medium text-gray mb-2">
+              Ville
+            </label>
+            <input 
+              type="text" 
+              id="city" 
+              v-model="formData.city"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.city.$error }"
+            />
+            <div v-if="v$.city.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.city.$errors[0].$message }}
+            </div>
           </div>
-        </div>
-        
-        <!-- Province -->
-        <div class="mb-4">
-          <label for="province" class="block text-sm font-medium text-gray-700 mb-1">
-            Province
-          </label>
-          <select 
-            id="province" 
-            v-model="formData.province"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.province.$error }"
-          >
-            <option v-for="province in provinces" :key="province.value" :value="province.value">
-              {{ province.label }}
-            </option>
-          </select>
-          <div v-if="v$.province.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.province.$errors[0].$message }}
+          
+          <!-- Province -->
+          <div>
+            <label for="province" class="block text-sm font-medium text-gray mb-2">
+              Province
+            </label>
+            <select 
+              id="province" 
+              v-model="formData.province"
+              class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.province.$error }"
+            >
+              <option value="">Sélectionnez une option</option>
+              <option v-for="province in provinces" :key="province.value" :value="province.value">
+                {{ province.label }}
+              </option>
+            </select>
+            <div v-if="v$.province.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.province.$errors[0].$message }}
+            </div>
           </div>
-        </div>
-        
-        <!-- Pays -->
-        <div class="mb-4">
-          <label for="country" class="block text-sm font-medium text-gray-700 mb-1">
-            Pays
-          </label>
-          <select 
-            id="country" 
-            v-model="formData.country"
-            class="w-full px-3 py-2 border rounded-md"
-            :class="{ 'border-red-500': v$.country.$error }"
-          >
-            <option value="CA">Canada</option>
-          </select>
-          <div v-if="v$.country.$error" class="text-red-500 text-sm mt-1">
-            {{ v$.country.$errors[0].$message }}
+          
+          <!-- Pays -->
+          <div>
+            <label for="country" class="block text-sm font-medium text-gray mb-2">
+              Pays
+            </label>
+            <select 
+              id="country" 
+              v-model="formData.country"
+              class="w-full px-3 py-2 border border-accent1 rounded-md focus:border-accent1 outline-none"
+              :class="{ 'border-accent2': v$.country.$error }"
+            >
+              <option value="CA">Canada</option>
+            </select>
+            <div v-if="v$.country.$error" class="text-accent2 text-sm mt-1">
+              {{ v$.country.$errors[0].$message }}
+            </div>
           </div>
         </div>
       </div>
       
-      <!-- Boutons -->
-      <div class="flex justify-end space-x-2 mt-6">
+      <!-- Boutons d'action -->
+      <div class="flex justify-end space-x-4 mt-8">
         <button 
           type="button" 
           @click="$emit('cancel')" 
-          class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50"
-        >
+          class="px-8 py-3 border border-accent2 text-accent2 rounded-md hover:bg-accent2 hover:text-white transition-colors">
           Annuler
         </button>
         <button 
           type="submit" 
-          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          :disabled="isSubmitting"
-        >
-          {{ isSubmitting ? 'En cours...' : 'Enregistrer' }}
+          class="px-8 py-3 border border-accent1 bg-white text-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors">
+          Enregistrer
         </button>
       </div>
     </form>
@@ -411,4 +428,9 @@ async function handleSubmit() {
     isSubmitting.value = false;
   }
 }
-</script> 
+</script>
+
+<style scoped>
+
+
+</style> 

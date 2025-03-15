@@ -1,26 +1,15 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
-import { useProfileFormStore } from '@/stores/profileFormStore';
-import { useModalStore } from '@/stores/modalStore';
+import { ref, reactive } from 'vue';
 import { mockUser, formatDate, getAddressByType, formatAddress } from '@/mock/userData';
 
 const hovered = ref(false);
 const userData = reactive({...mockUser});
 
-const formStore = useProfileFormStore();
-const modalStore = useModalStore();
+// Définir l'événement pour l'édition
+const emit = defineEmits(['edit']);
 
 function openEditForm() {
-  formStore.setupForm('personnalInfo', { 
-    firstName: userData.firstName, 
-    lastName: userData.lastName,
-    birthDate: userData.birthDate,
-    phone: userData.phone,
-    email: userData.email,
-    password: '' // Champ vide pour le mot de passe par mesure de sécurité
-  });
-  
-  modalStore.openModal();
+  emit('edit');
 }
 </script>
 
@@ -109,5 +98,8 @@ function openEditForm() {
 .rectangle-fill-hovered {
   fill: #00EC86;
   transition: fill 0.2s ease;
+}
+.responsive-margin {
+  margin-right: clamp(1rem, 2vw, 2rem);
 }
 </style>
