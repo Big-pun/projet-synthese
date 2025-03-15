@@ -1,31 +1,85 @@
 <script setup>
-import { defineEmits, ref, watch, onMounted, computed } from 'vue';
-import { useVuelidate } from '@vuelidate/core';
-import { generateValidationRules } from '@/utils/formValidation';
+import { ref, watch, onMounted } from 'vue';
+import { 
+  useFormValidation, 
+} from '@/utils/formValidation';
 import { showSuccess, showError } from '@/utils/toast';
-import { showConfirm } from '@/utils/sweetAlert';
 
+// configuration et propriétés
 const props = defineProps({
-  title: String,
-  formFields: Array,
-  formData: Object,
-  formType: String
+  title: String,        // Titre du formulaire
+  formFields: Array,    // Champs du formulaire
+  formData: Object,     // Données initiales
+  formType: String      // Type de formulaire (personnalInfo, addressInfo, etc.)
 });
-
 const emit = defineEmits(['close', 'save']);
-
+// État réactif
 const localFormData = ref({});
-const passwordVisibility = ref({});
+const formTypeRef = ref(props.formType);
+// États UI
 const isSubmitted = ref(false);
+// Visibilité des champs de mot de passe
+const passwordVisibility = ref({});
+// Suivi de la correspondance des mots de passe (pour le changement de mot de passe)
 const passwordsMatch = ref(true);
 const shouldCheckPasswordMatch = ref(false);
-
-const validationRules = computed(() => {
-  return generateValidationRules(props.formType, localFormData.value);
+// Utilisation de notre hook personnalisé pour la validation
+const { 
+  v$, 
+  validateForm, 
+  resetValidation, 
+  hasError, 
+  getErrorMessage,
+  onPasswordFieldChange 
+} = useFormValidation(formTypeRef, localFormData);
+// Initialisation et chargement des données
+function loadFormData() {
+  if (props.formData) {
+    console.log("🔄 Chargement des données du formulaire:", props.formData);
+    resetValidation();
+    
+    const dataToUse = props.formData.value !== undefined ? props.formData.value : props.formData;
+    
+    // Créer une copie profonde pour éviter les problèmes de référence
+    const newData = JSON.parse(JSON.stringify(dataToUse));
+    
+    // Traiter les données d'adresse si elles existent
+    if (props.formType === 'personnalInfo' && newData.address) {
+      console.log("📍 Chargement des données d'adresse:", newData.address);
+      
+      // Définir le type d'adresse
+      newData.addressType = newData.address.type || 'PERSONAL';
+      selectedAddressType.value = newData.addressType;
+      
+      // Copier les champs d'adresse dans les champs du formulaire
+      newData.streetNumber = newData.address.streetNumber || '';
+      newData.streetName = newData.address.streetName || '';
+      newData.city = newData.address.city || '';
+      newData.province = newData.address.province || '';
+      newData.country = newData.address.country || 'CA';
+      
+      // Supprimer l'objet address pour éviter la duplication
+      delete newData.address;
+    } else if (props.formType === 'personnalInfo') {
+      // Initialiser avec des valeurs par défaut si aucune adresse n'existe
+      newData.addressType = 'PERSONAL';
+      newData.streetNumber = '';
+      newData.streetName = '';
+      newData.city = '';
+      newData.province = '';
+      newData.country = 'CA';
+    }
+    
+    console.log("📋 Nouvelle copie des données:", newData);
+    localFormData.value = newData;
+  }
+}
+// Initialisation au montage du composant
+onMounted(() => {
+  console.log("🚀 Composant ProfileForm monté. Type:", props.formType);
+  loadFormData();
 });
-
-const v$ = useVuelidate(validationRules, localFormData);
-
+// Observer les changements dans les champs du formulaire
 watch(() => props.formFields, (newFields) => {
   if (newFields) {
     newFields.forEach(field => {
@@ -35,22 +89,16 @@ watch(() => props.formFields, (newFields) => {
     });
   }
 }, { immediate: true });
-
+// Observer les changements de type de formulaire
 watch(() => props.formType, (newType) => {
   console.log("📝 Changement de type de formulaire:", newType);
-  isSubmitted.value = false;
-  resetValidation();
+  formTypeRef.value = newType;
   
-  // Réinitialiser les états de correspondance des mots de passe
-  passwordsMatch.value = true;
-  shouldCheckPasswordMatch.value = false;
-  
-  // Réinitialisation des données locales si le type change
   if (newType && props.formData) {
     loadFormData();
   }
-}, { immediate: true });
-
+});
+// Observer les changements de données pour s'assurer que les valeurs par défaut sont définies
 watch([() => props.formFields, () => localFormData.value], ([fields, data]) => {
   if (fields && fields.length > 0 && data) {
     fields.forEach(field => {
@@ -60,130 +108,17 @@ watch([() => props.formFields, () => localFormData.value], ([fields, data]) => {
     });
   }
 }, { immediate: true, deep: true });
-
-function resetValidation() {
-  if (v$.value.$reset) {
-    console.log("🔄 Réinitialisation des validations");
-    v$.value.$reset();
-  }
-}
-
-function loadFormData() {
-  if (props.formData) {
-    console.log("🔄 Chargement des données du formulaire:", props.formData);
-    resetValidation();
-    
-    const dataToUse = props.formData.value !== undefined ? props.formData.value : props.formData;
-    
-    const newData = JSON.parse(JSON.stringify(dataToUse));
-    console.log("📋 Nouvelle copie des données:", newData);
-    
-    localFormData.value = newData;
-  }
-}
-
-onMounted(() => {
-  console.log("🚀 Composant ProfileForm monté. Type:", props.formType);
-  loadFormData();
-});
-
+// Observer les changements de données externes
 watch(() => props.formData, (newVal) => {
   console.log("➡️ Données reçues du parent (changement):", newVal);
   loadFormData();
 }, { immediate: true });
-
-watch(() => localFormData.value, (newVal) => {
-  console.log("🔄 localFormData mise à jour:", newVal);
-}, { deep: true, immediate: true });
-
-watch(() => validationRules.value, (rules) => {
-  console.log("📏 Règles de validation:", rules);
-}, { immediate: true });
-
-function getFieldType(field) {
-  if (field.type === 'password') {
-    return passwordVisibility.value[field.key] ? 'text' : 'password';
-  }
-  return field.type || 'text';
+// Gestion du changement des champs de mot de passe
+function handlePasswordInput(key, event) {
+  localFormData.value[key] = event.target.value;
+  onPasswordFieldChange(key, event.target.value);
 }
-
-function getGridPersonnalInfo(formType) {
-  if (formType === 'personnalInfo' && window.innerWidth > 768) {
-    return 'grid md:grid-cols-2 grid-cols-1';
-  }
-  return 'grid grid-cols-1';
-}
-
-function getEyeIconClass(key) {
-  return passwordVisibility.value[key] ? 'text-accent1 hover:text-accent1' : 'text-accent2 hover:text-accent2';
-}
-
-function closeForm() {
-  emit('close');
-}
-
-async function handleSave() {
-  isSubmitted.value = true;
-  console.log("🔍 Tentative de validation avec données:", localFormData.value);
-  
-  // Première étape : vérifier si tous les champs requis sont remplis
-  const isValid = await v$.value.$validate();
-  console.log("✅ Résultat de validation de base:", isValid, "Erreurs:", v$.value.$errors);
-  
-  if (!isValid) {
-    v$.value.$errors.forEach(error => {
-      console.error(`❌ Erreur dans le champ ${error.$property}:`, error.$message);
-    });
-    
-    showError('Veuillez corriger les erreurs dans le formulaire avant de continuer.', {
-      timeout: 8000,
-      closeOnClick: false
-    });
-    return;
-  }
-  
-  // Deuxième étape : vérification spécifique pour les mots de passe
-  if (props.formType === 'changePassword') {
-    console.log("🔐 Vérification finale des mots de passe avant soumission");
-    console.log("   - Nouveau mot de passe:", localFormData.value.newPassword);
-    console.log("   - Confirmation:", localFormData.value.confirmPassword);
-    
-    const passwordsMatch = localFormData.value.newPassword === localFormData.value.confirmPassword;
-    console.log("   - Correspondent:", passwordsMatch);
-    
-    if (!passwordsMatch) {
-      console.error("❌ Les mots de passe ne correspondent pas lors de la vérification finale");
-      showError('Les mots de passe ne correspondent pas.', {
-        timeout: 8000,
-        closeOnClick: false
-      });
-      return;
-    }
-  }
-  
-  // Troisième étape : confirmation pour la suppression du profil
-  if (props.formType === 'deleteProfile') {
-    const result = await showConfirm(
-      'Confirmation de suppression',
-      'Êtes-vous sûr de vouloir supprimer votre profil ? Cette action est irréversible.',
-      'Oui, supprimer',
-      'Annuler'
-    );
-    
-    if (!result.isConfirmed) {
-      return;
-    }
-  }
-
-  // Quatrième étape : sauvegarde des données
-  emit('save', localFormData.value);
-  
-  showSuccess('Vos modifications ont été enregistrées avec succès.', {
-    position: 'bottom-right',
-    timeout: 3000
-  });
-}
-
+// Basculer la visibilité d'un champ de mot de passe spécifique
 function togglePasswordVisibility(key) {
   console.log("👁️ Changement de visibilité du mot de passe pour:", key);
   Object.keys(passwordVisibility.value).forEach(fieldKey => {
@@ -192,7 +127,7 @@ function togglePasswordVisibility(key) {
   
   passwordVisibility.value[key] = true;
 }
-
+// Basculer la visibilité de tous les champs de mot de passe
 function toggleAllPasswordsVisibility() {
   const isAnyVisible = Object.values(passwordVisibility.value).some(value => value === true);
   
@@ -202,32 +137,128 @@ function toggleAllPasswordsVisibility() {
   for (const key in passwordVisibility.value) {
     passwordVisibility.value[key] = newState;
   }
+}
+// Classe CSS pour l'indicateur de correspondance des mots de passe
+function getPasswordMatchClass(fieldKey) {
+  if (props.formType !== 'changePassword' || fieldKey !== 'confirmPassword' || 
+      !shouldCheckPasswordMatch.value || !localFormData.value.confirmPassword) {
+    return '';
+  }
   
-  // Si nous sommes dans le formulaire de changement de mot de passe,
-  // réinitialisons les validations liées aux mots de passe
-  if (props.formType === 'changePassword' && isSubmitted.value) {
-    console.log("🔄 Réinitialisation des validations de mot de passe après changement de visibilité");
+  return passwordsMatch.value ? 'border-green-500' : 'border-red-500';
+}
+
+// ========================================
+// 8. ACTIONS DU FORMULAIRE
+// ========================================
+
+// Fermer le formulaire
+function closeForm() {
+  emit('close');
+}
+
+// Ajouter après les déclarations d'état existantes
+const selectedAddressType = ref('PERSONAL'); // Valeur par défaut: Personnel
+
+// Surveiller les changements de type d'adresse
+watch(() => localFormData.value.addressType, (newType) => {
+  if (newType) {
+    console.log("📍 Type d'adresse sélectionné:", newType);
+    selectedAddressType.value = newType;
+  }
+}, { immediate: true });
+
+// Fonction pour préparer les données avant l'envoi
+function prepareDataForSubmission() {
+  const formattedData = { ...localFormData.value };
+  
+  // Si nous sommes dans le formulaire d'informations personnelles avec adresse
+  if (props.formType === 'personnalInfo' && formattedData.addressType) {
+    console.log("🔄 Préparation des données d'adresse pour la soumission");
     
-    // Réinitialiser uniquement les validations des champs de mot de passe
-    if (v$.value.newPassword) v$.value.newPassword.$reset();
-    if (v$.value.confirmPassword) v$.value.confirmPassword.$reset();
+    // Créer un objet d'adresse distincte
+    const addressData = {
+      streetNumber: formattedData.streetNumber,
+      streetName: formattedData.streetName,
+      city: formattedData.city,
+      province: formattedData.province,
+      country: formattedData.country,
+      type: formattedData.addressType
+    };
     
-    // Pour éviter les messages d'erreur qui pourraient perturber l'utilisateur
-    isSubmitted.value = false;
+    // Stocker l'adresse dans une propriété séparée et nettoyer les champs individuels
+    formattedData.address = addressData;
+    
+    // Supprimer les champs d'adresse individuels de l'objet principal
+    delete formattedData.streetNumber;
+    delete formattedData.streetName;
+    delete formattedData.city;
+    delete formattedData.province;
+    delete formattedData.country;
+    delete formattedData.addressType;
+  }
+  
+  return formattedData;
+}
+
+// Modifier la fonction handleSave pour utiliser prepareDataForSubmission
+async function handleSave() {
+  const isValid = await validateForm();
+  
+  if (!isValid) {
+    showError('Veuillez corriger les erreurs dans le formulaire avant de continuer.', {
+      timeout: 8000,
+      closeOnClick: false
+    });
+    return;
+  }
+  
+  // Préparer les données avant l'envoi
+  const formattedData = prepareDataForSubmission();
+  
+  // Sauvegarde des données
+  emit('save', formattedData);
+  
+  // Message de succès adapté au type de formulaire
+  if (props.formType === 'deleteProfile') {
+    showSuccess('Votre profil a été supprimé avec succès.', {
+      position: 'bottom-right',
+      timeout: 3000
+    });
+  } else {
+    showSuccess('Vos modifications ont été enregistrées avec succès.', {
+      position: 'bottom-right',
+      timeout: 3000
+    });
   }
 }
 
-function hasError(fieldName) {
-  return isSubmitted.value && v$.value[fieldName] && v$.value[fieldName].$error;
+// ========================================
+// 9. UTILITAIRES UI
+// ========================================
+
+// Obtenir le type de champ (pour gérer l'affichage des mots de passe)
+function getFieldType(field) {
+  if (field.type === 'password') {
+    return passwordVisibility.value[field.key] ? 'text' : 'password';
+  }
+  return field.type || 'text';
 }
 
-function getErrorMessage(fieldName) {
-  if (!v$.value[fieldName]) return '';
-  
-  const errors = v$.value[fieldName].$errors;
-  return errors.length > 0 ? errors[0].$message : '';
+// Obtenir les classes de grille pour le formulaire d'informations personnelles
+function getGridPersonnalInfo(formType) {
+  if (formType === 'personnalInfo' && window.innerWidth > 768) {
+    return 'md:grid-cols-2 grid-cols-1';
+  }
+  return 'grid-cols-1';
 }
 
+// Obtenir la classe pour l'icône de visibilité du mot de passe
+function getEyeIconClass(key) {
+  return passwordVisibility.value[key] ? 'text-accent1 hover:text-accent1' : 'text-accent2 hover:text-accent2';
+}
+
+// Formater les dates pour l'affichage dans les champs de type date
 function formatDateForInput(date) {
   if (!date) return '';
   
@@ -248,41 +279,6 @@ function formatDateForInput(date) {
     console.error("Erreur lors du formatage de la date:", error);
     return '';
   }
-}
-
-function onPasswordFieldChange(key, event) {
-  console.log(`🔑 Champ de mot de passe '${key}' modifié:`, event.target.value);
-  localFormData.value[key] = event.target.value;
-  
-  // Vérifier la correspondance des mots de passe pour le formulaire de changement de mot de passe
-  if (props.formType === 'changePassword' && 
-      (key === 'newPassword' || key === 'confirmPassword')) {
-    
-    // Activer la vérification seulement après que l'utilisateur a commencé à remplir 
-    // le champ de confirmation
-    if (key === 'confirmPassword' && event.target.value.length > 0) {
-      shouldCheckPasswordMatch.value = true;
-    }
-    
-    // Si les deux champs sont remplis, vérifier la correspondance
-    if (localFormData.value.newPassword && localFormData.value.confirmPassword) {
-      console.log("🔄 Vérification immédiate des mots de passe");
-      console.log("   - Nouveau mot de passe:", localFormData.value.newPassword);
-      console.log("   - Confirmation:", localFormData.value.confirmPassword);
-      
-      passwordsMatch.value = localFormData.value.newPassword === localFormData.value.confirmPassword;
-      console.log("   - Correspondent:", passwordsMatch.value);
-    }
-  }
-}
-
-function getPasswordMatchClass(fieldKey) {
-  if (props.formType !== 'changePassword' || fieldKey !== 'confirmPassword' || 
-      !shouldCheckPasswordMatch.value || !localFormData.value.confirmPassword) {
-    return '';
-  }
-  
-  return passwordsMatch.value ? 'border-green-500' : 'border-red-500';
 }
 </script>
 
@@ -305,7 +301,10 @@ function getPasswordMatchClass(fieldKey) {
       </button>
     </div>
     
-    <div :class="getGridPersonnalInfo(formType)" class="px-6 w-full">
+    <div :class="[
+      getGridPersonnalInfo(formType),
+      'px-6 w-full grid'
+    ]">
       <!-- Champs cachés - ils n'apparaissent pas dans l'UI mais conservent leur valeur -->
       <input 
         v-for="field in formFields.filter(f => f.type === 'hidden')" 
@@ -315,21 +314,65 @@ function getPasswordMatchClass(fieldKey) {
       >
       
       <!-- Champs visibles -->
-      <div v-for="field in formFields.filter(f => f.type !== 'hidden')" :key="field.key" class="py-1 px-2" >
-        <div class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row w-full">
+      <div 
+        v-for="field in formFields.filter(f => f.type !== 'hidden')" 
+        :key="field.key" 
+        :class="[
+          'py-1 px-2',
+          { 'md:col-span-2': field.type === 'separator' }
+        ]"
+      >
+        <!-- Séparateur pour la section adresse -->
+        <div v-if="field.type === 'separator'" class="my-4 w-full">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold text-gray-700 border-b-2 border-accent1 pb-2 flex-grow">{{ field.label }}</h3>
+            
+            <!-- Sélecteur de type d'adresse intégré dans le séparateur -->
+            <div v-if="field.key === 'addressSeparator' && formType === 'personnalInfo'" class="ml-4 w-48">
+              <select 
+                v-model="localFormData.addressType"
+                class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none border-accent1"
+              >
+                <option value="PERSONAL">Personnel</option>
+                <option value="WORK">Travail</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Champs normaux -->
+        <div v-else class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row w-full">
           <label class="block font-medium sm:w-1/3 mb-2 sm:mb-0">{{ field.label }}</label>
           <div class="relative w-full sm:w-2/3">
-            <!-- Message d'erreur standard -->
-            <div v-if="hasError(field.key)" class="text-red-500 mb-1">
-              <small>{{ getErrorMessage(field.key) }}</small>
-            </div>
             
-            <!-- Message de correspondance des mots de passe -->
-            <div v-if="props.formType === 'changePassword' && field.key === 'confirmPassword' && shouldCheckPasswordMatch && localFormData.confirmPassword" 
-                 :class="passwordsMatch ? 'text-green-500' : 'text-red-500'" 
-                 class="mb-1">
-              <small v-if="passwordsMatch">✓ Les mots de passe correspondent</small>
-              <small v-else>✗ Les mots de passe ne correspondent pas</small>
+            <!-- Zone de messages -->
+            <div class="mb-2 min-h-[24px]">
+              <!-- Message d'erreur standard -->
+              <div v-if="hasError(field.key)" class="text-red-500 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <small>{{ getErrorMessage(field.key) }}</small>
+              </div>
+              
+              <!-- Message de correspondance des mots de passe -->
+              <div v-if="props.formType === 'changePassword' && field.key === 'confirmPassword' && shouldCheckPasswordMatch && localFormData.confirmPassword" 
+                  :class="passwordsMatch ? 'text-green-500' : 'text-red-500'" 
+                  class="flex items-center">
+                <svg v-if="passwordsMatch" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                <small v-if="passwordsMatch">Les mots de passe correspondent</small>
+                <small v-else>Les mots de passe ne correspondent pas</small>
+              </div>
+              
+              <!-- Message spécifique pour la suppression du profil -->
+              <div v-if="props.formType === 'deleteProfile' && field.key === 'confirmation'" class="text-red-500">
+                <small class="font-semibold">⚠️ Cette action est irréversible</small>
+              </div>
             </div>
             
             <!-- Champ select avec options -->
@@ -349,14 +392,13 @@ function getPasswordMatchClass(fieldKey) {
                 {{ option.label }}
               </option>
             </select>
-
             
             <!-- Champs texte, password, email, etc. -->
             <input 
               v-else
               :value="field.type === 'date' ? formatDateForInput(localFormData[field.key]) : localFormData[field.key]"
               @input="e => field.type === 'password' 
-                ? onPasswordFieldChange(field.key, e) 
+                ? handlePasswordInput(field.key, e) 
                 : (field.type === 'date' 
                     ? localFormData[field.key] = e.target.value 
                     : localFormData[field.key] = e.target.value)"
@@ -400,10 +442,26 @@ function getPasswordMatchClass(fieldKey) {
         class="px-6 py-3 text-gray rounded-md border-2 border-accent2 hover:bg-accent2 hover:text-white transition-colors duration-200">
         Annuler
       </button>
+      
+      <!-- Bouton d'action principal avec style adapté au contexte -->
       <button 
         @click="handleSave" 
-        class="px-6 py-3 bg-white text-gray border-2 border-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors duration-200">
-        Enregistrer
+        :class="{
+          'bg-white text-gray border-accent1 hover:bg-accent1': props.formType !== 'deleteProfile',
+          'bg-red-500 text-white border-red-500 hover:bg-red-700': props.formType === 'deleteProfile'
+        }"
+        class="px-6 py-3 border-2 rounded-md transition-colors duration-200 flex items-center">
+        
+        <!-- Icône d'avertissement pour la suppression -->
+        <svg v-if="props.formType === 'deleteProfile'" 
+             xmlns="http://www.w3.org/2000/svg" 
+             class="h-5 w-5 mr-2" 
+             viewBox="0 0 20 20" 
+             fill="currentColor">
+          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        
+        {{ props.formType === 'deleteProfile' ? 'Supprimer définitivement' : 'Enregistrer' }}
       </button>
     </div>
   </div>
@@ -430,5 +488,29 @@ function getPasswordMatchClass(fieldKey) {
 .rectangle-fill-hovered {
   fill: #00EC86;
   transition: fill 0.2s ease;
+}
+
+/* Style pour les champs d'adresse */
+.address-field .rounded-lg {
+  border-left: 3px solid var(--accent1, #00EC86);
+  background-color: rgba(0, 236, 134, 0.03);
+}
+
+/* Style pour le sélecteur dans le séparateur */
+.flex-grow {
+  flex-grow: 1;
+}
+
+/* Style pour la bordure du séparateur qui s'étend sur toute la largeur disponible */
+.flex-grow.border-b-2 {
+  min-width: 150px;
+  margin-right: 10px;
+}
+
+/* Style pour le séparateur afin qu'il occupe toute la largeur */
+@media (min-width: 768px) {
+  .md\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
 }
 </style>

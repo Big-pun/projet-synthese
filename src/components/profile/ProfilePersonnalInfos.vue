@@ -6,7 +6,6 @@ import { mockUser, formatDate, getAddressByType, formatAddress } from '@/mock/us
 
 const hovered = ref(false);
 const userData = reactive({...mockUser});
-const selectedAddressType = ref('PERSONAL'); // Type d'adresse par défaut
 
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
@@ -22,18 +21,6 @@ function openEditForm() {
   });
   
   modalStore.openModal();
-}
-
-function openAddressForm(addressType = 'PERSONAL') {
-  selectedAddressType.value = addressType;
-  formStore.setupAddressForm(addressType, userData.addresses);
-  modalStore.openModal();
-}
-
-// Pour gérer le changement de type d'adresse
-function handleAddressTypeChange(event) {
-  const newType = event.target.value;
-  selectedAddressType.value = newType;
 }
 </script>
 
@@ -108,24 +95,6 @@ function handleAddressTypeChange(event) {
           class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
           <span class="mr-2">+</span> Éditer les informations personnelles
         </button>
-      </div>
-      
-      <!-- Sélection du type d'adresse à modifier -->
-      <div class="border-2 rounded-lg overflow-hidden" 
-        :class="hovered ? 'border-accent1' : 'border-accent2'">
-        <div class="w-full p-2 flex items-center justify-between">
-          <select 
-            v-model="selectedAddressType"
-            @change="handleAddressTypeChange"
-            class="w-full bg-transparent text-gray py-2 px-3 rounded focus:outline-none">
-            <option value="PERSONAL">Adresse personnelle</option>
-            <option value="WORK">Adresse au travail</option>
-          </select>
-          <button @click="openAddressForm(selectedAddressType.value)"
-            class="ml-2 px-4 py-2 bg-accent2 text-white rounded hover:bg-accent1 transition-colors">
-            Éditer
-          </button>
-        </div>
       </div>
     </div>
   </div>

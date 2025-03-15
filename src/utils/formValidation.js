@@ -1,5 +1,6 @@
 import { required, email, minLength, helpers, sameAs } from '@vuelidate/validators';
-import { computed } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { computed, watch, ref } from 'vue';
 
 export const formFields = {
   personnalInfo: [
@@ -8,7 +9,35 @@ export const formFields = {
     { key: 'birthDate', label: 'Date de naissance', type: 'date' },
     { key: 'phone', label: 'Téléphone', type: 'tel' },
     { key: 'email', label: 'Courriel', type: 'email' },
-    { key: 'password', label: 'Mot de passe', type: 'password' }
+    
+    { key: 'addressSeparator', type: 'separator', label: 'Adresse' },
+    
+    { key: 'addressType', label: 'Type d\'adresse', type: 'select', options: [
+      { value: 'PERSONAL', label: 'Personnel' },
+      { value: 'WORK', label: 'Travail' }
+    ]},
+    
+    { key: 'streetNumber', label: 'Numéro de rue', type: 'text', addressField: true },
+    { key: 'streetName', label: 'Nom de rue', type: 'text', addressField: true },
+    { key: 'city', label: 'Ville', type: 'text', addressField: true },
+    { key: 'province', label: 'Province', type: 'select', addressField: true, options: [
+      { value: 'QC', label: 'Québec' },
+      { value: 'ON', label: 'Ontario' },
+      { value: 'BC', label: 'Colombie-Britannique' },
+      { value: 'AB', label: 'Alberta' },
+      { value: 'MB', label: 'Manitoba' },
+      { value: 'SK', label: 'Saskatchewan' },
+      { value: 'NB', label: 'Nouveau-Brunswick' },
+      { value: 'NS', label: 'Nouvelle-Écosse' },
+      { value: 'PE', label: 'Île-du-Prince-Édouard' },
+      { value: 'NL', label: 'Terre-Neuve-et-Labrador' },
+      { value: 'YT', label: 'Yukon' },
+      { value: 'NT', label: 'Territoires du Nord-Ouest' },
+      { value: 'NU', label: 'Nunavut' }
+    ]},
+    { key: 'country', label: 'Pays', type: 'select', addressField: true, options: [
+      { value: 'CA', label: 'Canada' }
+    ]}
   ],
   addressInfo: [
     { key: 'streetNumber', label: 'Numéro de rue', type: 'text' },
@@ -46,19 +75,6 @@ export const formFields = {
     { key: 'loanInfo', label: 'Informations de prêt', type: 'text' },
     { key: 'other', label: 'Autres informations', type: 'text' }
   ],
-  transactionInfo: [
-    { key: 'description', label: 'Description', type: 'text' },
-    { key: 'category', label: 'Catégorie', type: 'text' },
-    { key: 'amount', label: 'Montant', type: 'number' },
-    { key: 'type', label: 'Type', type: 'select', options: [
-      { value: 'Revenue', label: 'Revenu' },
-      { value: 'Expense', label: 'Dépense' }
-    ]},
-    { key: 'isDone', label: 'Terminé', type: 'checkbox' },
-    { key: 'startDate', label: 'Date de début', type: 'date' },
-    { key: 'endDate', label: 'Date de fin', type: 'date' },
-    { key: 'frequency', label: 'Fréquence (jours)', type: 'number' }
-  ],
   changePassword: [
     { key: 'currentPassword', label: 'Mot de passe actuel', type: 'password' },
     { key: 'newPassword', label: 'Nouveau mot de passe', type: 'password' },
@@ -70,6 +86,107 @@ export const formFields = {
   ]
 };
 
+// Fonction qui configure et initialise Vuelidate
+export function useFormValidation(formType, formData) {
+  // État de validation
+  const isSubmitted = ref(false);
+  const passwordsMatch = ref(true);
+  const shouldCheckPasswordMatch = ref(false);
+  
+  // Règles de validation
+  const validationRules = computed(() => {
+    return generateValidationRules(formType.value, formData.value);
+  });
+  
+  // Initialisation de Vuelidate
+  const v$ = useVuelidate(validationRules, formData);
+  
+  // Surveiller les changements de type de formulaire pour réinitialiser
+  watch(() => formType.value, () => {
+    resetValidation();
+    isSubmitted.value = false;
+    passwordsMatch.value = true;
+    shouldCheckPasswordMatch.value = false;
+  });
+  
+  // Méthodes pour la validation
+  function resetValidation() {
+    console.log("🔄 Réinitialisation des validations");
+    if (v$.value.$reset) {
+      v$.value.$reset();
+    }
+  }
+  
+  async function validateForm() {
+    isSubmitted.value = true;
+    
+    const isValid = await v$.value.$validate();
+    console.log("✅ Résultat de validation de base:", isValid, "Erreurs:", v$.value.$errors);
+    
+    if (!isValid) {
+      v$.value.$errors.forEach(error => {
+        console.error(`❌ Erreur dans le champ ${error.$property}:`, error.$message);
+      });
+      return false;
+    }
+    
+    // Vérifications spécifiques selon le type de formulaire
+    if (formType.value === 'changePassword') {
+      const match = formData.value.newPassword === formData.value.confirmPassword;
+      if (!match) {
+        console.error("❌ Les mots de passe ne correspondent pas");
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  function hasError(fieldName) {
+    return isSubmitted.value && v$.value[fieldName] && v$.value[fieldName].$error;
+  }
+  
+  function getErrorMessage(fieldName) {
+    if (!v$.value[fieldName]) return '';
+    const errors = v$.value[fieldName].$errors;
+    return errors.length > 0 ? errors[0].$message : '';
+  }
+  
+  function checkPasswordMatch(newValue, confirmValue) {
+    return newValue === confirmValue;
+  }
+  
+  function onPasswordFieldChange(key, value) {
+    if (formType.value === 'changePassword' &&
+        (key === 'newPassword' || key === 'confirmPassword')) {
+      
+      if (key === 'confirmPassword' && value.length > 0) {
+        shouldCheckPasswordMatch.value = true;
+      }
+      
+      if (formData.value.newPassword && formData.value.confirmPassword) {
+        passwordsMatch.value = checkPasswordMatch(
+          formData.value.newPassword,
+          formData.value.confirmPassword
+        );
+      }
+    }
+  }
+  
+  return {
+    v$,
+    isSubmitted,
+    passwordsMatch,
+    shouldCheckPasswordMatch,
+    validateForm,
+    resetValidation,
+    hasError,
+    getErrorMessage,
+    onPasswordFieldChange
+  };
+}
+
+// Fonction pour générer les règles de validation
 export function generateValidationRules(formType, formData = {}) {
   console.log("🔧 Génération des règles pour:", formType, "avec données:", formData);
   const rules = {};
@@ -84,10 +201,14 @@ export function generateValidationRules(formType, formData = {}) {
         required: helpers.withMessage('Le courriel est requis.', required),
         email: helpers.withMessage('Veuillez entrer un courriel valide.', email)
       };
-      rules.password = { 
-        required: helpers.withMessage('Le mot de passe est requis.', required),
-        minLength: helpers.withMessage('Le mot de passe doit contenir au moins 8 caractères.', minLength(8))
-      };
+      
+      // Règles pour les champs d'adresse intégrés
+      rules.addressType = { required: helpers.withMessage('Le type d\'adresse est requis.', required) };
+      rules.streetNumber = { required: helpers.withMessage('Le numéro de rue est requis.', required) };
+      rules.streetName = { required: helpers.withMessage('Le nom de rue est requis.', required) };
+      rules.city = { required: helpers.withMessage('La ville est requise.', required) };
+      rules.province = { required: helpers.withMessage('La province est requise.', required) };
+      rules.country = { required: helpers.withMessage('Le pays est requis.', required) };
       break;
 
     case 'addressInfo':
@@ -111,14 +232,6 @@ export function generateValidationRules(formType, formData = {}) {
       rules.accountInfo = { required: helpers.withMessage('Les informations du compte sont requises.', required) };
       break;
 
-    case 'transactionInfo':
-      rules.description = { required: helpers.withMessage('La description est requise.', required) };
-      rules.category = { required: helpers.withMessage('La catégorie est requise.', required) };
-      rules.amount = { required: helpers.withMessage('Le montant est requis.', required) };
-      rules.type = { required: helpers.withMessage('Le type est requis.', required) };
-      rules.startDate = { required: helpers.withMessage('La date de début est requise.', required) };
-      break;
-
     case 'changePassword':
       rules.currentPassword = { required: helpers.withMessage('Le mot de passe actuel est requis.', required) };
       rules.newPassword = { 
@@ -129,8 +242,6 @@ export function generateValidationRules(formType, formData = {}) {
       rules.confirmPassword = { 
         required: helpers.withMessage('La confirmation du mot de passe est requise.', required)
       };
-      
-      console.log("🔐 Règles de validation pour les mots de passe créées:", rules);
       break;
 
     case 'deleteProfile':
@@ -142,6 +253,7 @@ export function generateValidationRules(formType, formData = {}) {
       break;
   }
   
+  // Ajout des règles pour tous les champs définis
   if (formFields[formType]) {
     formFields[formType].forEach(field => {
       if (!rules[field.key]) {
@@ -163,7 +275,6 @@ export function getFormTitle(formType) {
     addressInfo: 'Éditer les adresses',
     schoolInfo: 'Éditer les informations scolaires',
     bankingInfo: 'Éditer les informations bancaires',
-    transactionInfo: 'Éditer les transactions',
     changePassword: 'Changer le mot de passe',
     deleteProfile: 'Supprimer le profil'
   };
