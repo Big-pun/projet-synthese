@@ -71,6 +71,7 @@ export const formFields = {
 };
 
 export function generateValidationRules(formType, formData = {}) {
+  console.log("🔧 Génération des règles pour:", formType, "avec données:", formData);
   const rules = {};
   
   switch (formType) {
@@ -124,10 +125,12 @@ export function generateValidationRules(formType, formData = {}) {
         required: helpers.withMessage('Le nouveau mot de passe est requis.', required),
         minLength: helpers.withMessage('Le mot de passe doit contenir au moins 8 caractères.', minLength(8))
       };
+      
       rules.confirmPassword = { 
-        required: helpers.withMessage('La confirmation du mot de passe est requise.', required),
-        sameAsPassword: helpers.withMessage('Les mots de passe ne correspondent pas.', sameAs(computed(() => formData.newPassword)))
+        required: helpers.withMessage('La confirmation du mot de passe est requise.', required)
       };
+      
+      console.log("🔐 Règles de validation pour les mots de passe créées:", rules);
       break;
 
     case 'deleteProfile':

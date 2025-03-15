@@ -17,6 +17,8 @@ const emit = defineEmits(['close', 'save']);
 const localFormData = ref({});
 const passwordVisibility = ref({});
 const isSubmitted = ref(false);
+const passwordsMatch = ref(true);
+const shouldCheckPasswordMatch = ref(false);
 
 const validationRules = computed(() => {
   return generateValidationRules(props.formType, localFormData.value);
@@ -34,8 +36,19 @@ watch(() => props.formFields, (newFields) => {
   }
 }, { immediate: true });
 
-watch(() => props.formType, () => {
+watch(() => props.formType, (newType) => {
+  console.log("📝 Changement de type de formulaire:", newType);
   isSubmitted.value = false;
+  resetValidation();
+  
+  // Réinitialiser les états de correspondance des mots de passe
+  passwordsMatch.value = true;
+  shouldCheckPasswordMatch.value = false;
+  
+  // Réinitialisation des données locales si le type change
+  if (newType && props.formData) {
+    loadFormData();
+  }
 }, { immediate: true });
 
 watch([() => props.formFields, () => localFormData.value], ([fields, data]) => {
@@ -48,30 +61,44 @@ watch([() => props.formFields, () => localFormData.value], ([fields, data]) => {
   }
 }, { immediate: true, deep: true });
 
+function resetValidation() {
+  if (v$.value.$reset) {
+    console.log("🔄 Réinitialisation des validations");
+    v$.value.$reset();
+  }
+}
+
 function loadFormData() {
   if (props.formData) {
+    console.log("🔄 Chargement des données du formulaire:", props.formData);
+    resetValidation();
+    
     const dataToUse = props.formData.value !== undefined ? props.formData.value : props.formData;
-    const newData = { ...dataToUse };
+    
+    const newData = JSON.parse(JSON.stringify(dataToUse));
+    console.log("📋 Nouvelle copie des données:", newData);
+    
     localFormData.value = newData;
   }
 }
 
 onMounted(() => {
+  console.log("🚀 Composant ProfileForm monté. Type:", props.formType);
   loadFormData();
 });
 
 watch(() => props.formData, (newVal) => {
-  if (newVal) {
-    const dataToUse = newVal.value !== undefined ? newVal.value : newVal;
-    const newData = {};
-    Object.keys(dataToUse).forEach(key => {
-      newData[key] = dataToUse[key];
-    });
-    localFormData.value = newData;
-  } else {
-    localFormData.value = {};
-  }
-}, { immediate: true, deep: true });
+  console.log("➡️ Données reçues du parent (changement):", newVal);
+  loadFormData();
+}, { immediate: true });
+
+watch(() => localFormData.value, (newVal) => {
+  console.log("🔄 localFormData mise à jour:", newVal);
+}, { deep: true, immediate: true });
+
+watch(() => validationRules.value, (rules) => {
+  console.log("📏 Règles de validation:", rules);
+}, { immediate: true });
 
 function getFieldType(field) {
   if (field.type === 'password') {
@@ -97,17 +124,44 @@ function closeForm() {
 
 async function handleSave() {
   isSubmitted.value = true;
+  console.log("🔍 Tentative de validation avec données:", localFormData.value);
   
+  // Première étape : vérifier si tous les champs requis sont remplis
   const isValid = await v$.value.$validate();
+  console.log("✅ Résultat de validation de base:", isValid, "Erreurs:", v$.value.$errors);
   
   if (!isValid) {
+    v$.value.$errors.forEach(error => {
+      console.error(`❌ Erreur dans le champ ${error.$property}:`, error.$message);
+    });
+    
     showError('Veuillez corriger les erreurs dans le formulaire avant de continuer.', {
       timeout: 8000,
       closeOnClick: false
     });
     return;
   }
-
+  
+  // Deuxième étape : vérification spécifique pour les mots de passe
+  if (props.formType === 'changePassword') {
+    console.log("🔐 Vérification finale des mots de passe avant soumission");
+    console.log("   - Nouveau mot de passe:", localFormData.value.newPassword);
+    console.log("   - Confirmation:", localFormData.value.confirmPassword);
+    
+    const passwordsMatch = localFormData.value.newPassword === localFormData.value.confirmPassword;
+    console.log("   - Correspondent:", passwordsMatch);
+    
+    if (!passwordsMatch) {
+      console.error("❌ Les mots de passe ne correspondent pas lors de la vérification finale");
+      showError('Les mots de passe ne correspondent pas.', {
+        timeout: 8000,
+        closeOnClick: false
+      });
+      return;
+    }
+  }
+  
+  // Troisième étape : confirmation pour la suppression du profil
   if (props.formType === 'deleteProfile') {
     const result = await showConfirm(
       'Confirmation de suppression',
@@ -121,6 +175,7 @@ async function handleSave() {
     }
   }
 
+  // Quatrième étape : sauvegarde des données
   emit('save', localFormData.value);
   
   showSuccess('Vos modifications ont été enregistrées avec succès.', {
@@ -130,7 +185,7 @@ async function handleSave() {
 }
 
 function togglePasswordVisibility(key) {
-
+  console.log("👁️ Changement de visibilité du mot de passe pour:", key);
   Object.keys(passwordVisibility.value).forEach(fieldKey => {
     passwordVisibility.value[fieldKey] = false;
   });
@@ -142,8 +197,23 @@ function toggleAllPasswordsVisibility() {
   const isAnyVisible = Object.values(passwordVisibility.value).some(value => value === true);
   
   const newState = !isAnyVisible;
+  console.log("👁️ Changement de visibilité pour tous les mots de passe:", newState);
+  
   for (const key in passwordVisibility.value) {
     passwordVisibility.value[key] = newState;
+  }
+  
+  // Si nous sommes dans le formulaire de changement de mot de passe,
+  // réinitialisons les validations liées aux mots de passe
+  if (props.formType === 'changePassword' && isSubmitted.value) {
+    console.log("🔄 Réinitialisation des validations de mot de passe après changement de visibilité");
+    
+    // Réinitialiser uniquement les validations des champs de mot de passe
+    if (v$.value.newPassword) v$.value.newPassword.$reset();
+    if (v$.value.confirmPassword) v$.value.confirmPassword.$reset();
+    
+    // Pour éviter les messages d'erreur qui pourraient perturber l'utilisateur
+    isSubmitted.value = false;
   }
 }
 
@@ -178,6 +248,41 @@ function formatDateForInput(date) {
     console.error("Erreur lors du formatage de la date:", error);
     return '';
   }
+}
+
+function onPasswordFieldChange(key, event) {
+  console.log(`🔑 Champ de mot de passe '${key}' modifié:`, event.target.value);
+  localFormData.value[key] = event.target.value;
+  
+  // Vérifier la correspondance des mots de passe pour le formulaire de changement de mot de passe
+  if (props.formType === 'changePassword' && 
+      (key === 'newPassword' || key === 'confirmPassword')) {
+    
+    // Activer la vérification seulement après que l'utilisateur a commencé à remplir 
+    // le champ de confirmation
+    if (key === 'confirmPassword' && event.target.value.length > 0) {
+      shouldCheckPasswordMatch.value = true;
+    }
+    
+    // Si les deux champs sont remplis, vérifier la correspondance
+    if (localFormData.value.newPassword && localFormData.value.confirmPassword) {
+      console.log("🔄 Vérification immédiate des mots de passe");
+      console.log("   - Nouveau mot de passe:", localFormData.value.newPassword);
+      console.log("   - Confirmation:", localFormData.value.confirmPassword);
+      
+      passwordsMatch.value = localFormData.value.newPassword === localFormData.value.confirmPassword;
+      console.log("   - Correspondent:", passwordsMatch.value);
+    }
+  }
+}
+
+function getPasswordMatchClass(fieldKey) {
+  if (props.formType !== 'changePassword' || fieldKey !== 'confirmPassword' || 
+      !shouldCheckPasswordMatch.value || !localFormData.value.confirmPassword) {
+    return '';
+  }
+  
+  return passwordsMatch.value ? 'border-green-500' : 'border-red-500';
 }
 </script>
 
@@ -214,8 +319,17 @@ function formatDateForInput(date) {
         <div class="rounded-lg bg-white p-4 flex items-center flex-col sm:flex-row w-full">
           <label class="block font-medium sm:w-1/3 mb-2 sm:mb-0">{{ field.label }}</label>
           <div class="relative w-full sm:w-2/3">
+            <!-- Message d'erreur standard -->
             <div v-if="hasError(field.key)" class="text-red-500 mb-1">
               <small>{{ getErrorMessage(field.key) }}</small>
+            </div>
+            
+            <!-- Message de correspondance des mots de passe -->
+            <div v-if="props.formType === 'changePassword' && field.key === 'confirmPassword' && shouldCheckPasswordMatch && localFormData.confirmPassword" 
+                 :class="passwordsMatch ? 'text-green-500' : 'text-red-500'" 
+                 class="mb-1">
+              <small v-if="passwordsMatch">✓ Les mots de passe correspondent</small>
+              <small v-else>✗ Les mots de passe ne correspondent pas</small>
             </div>
             
             <!-- Champ select avec options -->
@@ -241,11 +355,20 @@ function formatDateForInput(date) {
             <input 
               v-else
               :value="field.type === 'date' ? formatDateForInput(localFormData[field.key]) : localFormData[field.key]"
-              @input="e => field.type === 'date' ? localFormData[field.key] = e.target.value : localFormData[field.key] = e.target.value"
+              @input="e => field.type === 'password' 
+                ? onPasswordFieldChange(field.key, e) 
+                : (field.type === 'date' 
+                    ? localFormData[field.key] = e.target.value 
+                    : localFormData[field.key] = e.target.value)"
               :type="getFieldType(field)" 
               :class="{
                 'border-accent2': hasError(field.key),
-                'border-accent1': !hasError(field.key) && localFormData[field.key]
+                'border-accent1': !hasError(field.key) && localFormData[field.key] && 
+                                 !(props.formType === 'changePassword' && field.key === 'confirmPassword' && shouldCheckPasswordMatch),
+                'border-green-500': props.formType === 'changePassword' && field.key === 'confirmPassword' && 
+                                  shouldCheckPasswordMatch && passwordsMatch && localFormData.confirmPassword,
+                'border-red-500': props.formType === 'changePassword' && field.key === 'confirmPassword' && 
+                                shouldCheckPasswordMatch && !passwordsMatch && localFormData.confirmPassword
               }"
               class="border p-2 rounded-md w-full focus:border-accent1 focus:ring-1 focus:ring-accent1 outline-none"
               :placeholder="field.placeholder || ''"
