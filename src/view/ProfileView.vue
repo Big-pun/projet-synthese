@@ -1,18 +1,53 @@
 <script setup>
+import { computed } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
 import { useModalStore } from '@/stores/modalStore';
-import Modal from '@/components/general/Modal.vue';  // Importer le Modal
-import ProfileForm from '@/components/profile/ProfileForm.vue';
-import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
-import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
+import Modal from '@/components/general/Modal.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
+import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
 import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
+import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
+
+// Importer les nouveaux composants de formulaire
+import ChangePasswordForm from '@/components/profile/forms/ChangePasswordForm.vue';
+import PasswordForm from '@/components/profile/forms/PasswordForm.vue';
+import PersonalInfoForm from '@/components/profile/forms/PersonalInfoForm.vue';
+import SchoolInfoForm from '@/components/profile/forms/SchoolInfoForm.vue';
+import BankingInfoForm from '@/components/profile/forms/BankingInfoForm.vue';
+
 import { showLoading, closeLoading, showConfirm } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 
 // Récupérer les stores
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
+
+// Sélectionner le composant de formulaire approprié en fonction du type
+const activeFormComponent = computed(() => {
+  const formType = formStore.formType;
+  
+  switch (formType) {
+    case 'changePassword':
+      return ChangePasswordForm;
+      
+    case 'deleteProfile':
+      return PasswordForm;
+      
+    case 'personnalInfo':
+    case 'addressInfo':
+      return PersonalInfoForm;
+      
+    case 'schoolInfo':
+      return SchoolInfoForm;
+      
+    case 'bankingInfo':
+      return BankingInfoForm;
+      
+    default:
+      console.error('Type de formulaire non reconnu:', formType);
+      return null;
+  }
+});
 
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
@@ -122,15 +157,18 @@ function handleClose() {
         <ProfileBankingInfos></ProfileBankingInfos>
       </div>
       
-      <!-- Modal et formulaire séparés -->
+      <!-- Modal avec les formulaires spécifiques -->
       <Modal :isOpen="modalStore.isOpen" @close="handleClose">
-        <ProfileForm
+        <!-- Sélection du formulaire approprié en fonction du type -->
+        <component 
+          :is="activeFormComponent" 
           :title="formStore.formTitle"
-          :formFields="formStore.formFields"
-          :formData="formStore.formData"
-          :formType="formStore.formType"
-          @close="handleClose"
+          :userData="formStore.formType === 'personnalInfo' ? formStore.formData : null" 
+          :userAddresses="formStore.formType === 'personnalInfo' ? formStore.userAddresses : null"
+          :schoolData="formStore.formType === 'schoolInfo' ? formStore.formData : null"
+          :bankingData="formStore.formType === 'bankingInfo' ? formStore.formData : null"
           @save="handleSave"
+          @cancel="handleClose"
         />
       </Modal>
     </div>

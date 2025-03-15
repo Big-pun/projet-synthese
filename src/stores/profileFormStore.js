@@ -7,6 +7,7 @@ export const useProfileFormStore = defineStore('profileForm', () => {
   const formTitle = ref('');
   const formFields = ref([]);
   const formData = reactive({});
+  const userAddresses = ref([]);
 
   function chooseForm(type, title, fields, data) {
     formType.value = type;
@@ -24,9 +25,10 @@ export const useProfileFormStore = defineStore('profileForm', () => {
     formTitle.value = '';
     formFields.value = [];
     Object.keys(formData).forEach(key => delete formData[key]);
+    userAddresses.value = [];
   }
 
-  function setupAddressForm(addressType, userAddresses) {
+  function setupAddressForm(addressType, addresses) {
     let title = '';
     switch (addressType) {
       case 'PERSONAL':
@@ -39,7 +41,9 @@ export const useProfileFormStore = defineStore('profileForm', () => {
         title = 'Éditer l\'adresse';
     }
     
-    const existingAddress = userAddresses?.find(addr => addr.type === addressType);
+    userAddresses.value = [...addresses];
+    
+    const existingAddress = addresses?.find(addr => addr.type === addressType);
     
     if (existingAddress) {
       chooseForm('addressInfo', title, getFormFields('addressInfo'), {
@@ -59,14 +63,21 @@ export const useProfileFormStore = defineStore('profileForm', () => {
     }
   }
 
+  function setupPersonalInfoForm(userData, addresses) {
+    userAddresses.value = [...addresses];
+    chooseForm('personnalInfo', 'Éditer mes informations personnelles', null, userData);
+  }
+
   return {
     formType,
     formTitle,
     formFields,
     formData,
+    userAddresses,
     chooseForm,
     setupForm,
     setupAddressForm,
+    setupPersonalInfoForm,
     resetForm
   };
 }); 
