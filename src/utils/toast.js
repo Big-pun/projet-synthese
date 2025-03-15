@@ -1,10 +1,4 @@
 import { useToast } from '../plugins/toastification';
-
-/**
- * Utilitaire pour afficher des notifications toast dans toute l'application
- * Centralise les appels et permet de maintenir un style cohérent
- */
-
 // Fonction pour afficher un toast de succès
 export const showSuccess = (message, options = {}) => {
   const { success } = useToast();
@@ -37,12 +31,6 @@ export const showWarning = (message, options = {}) => {
   });
 };
 
-/**
- * Fonction avancée pour créer un toast complètement personnalisé
- * @param {string} message - Le message à afficher
- * @param {object} options - Options de personnalisation (timeout, position, etc.)
- * @param {string} type - Type du toast (success, error, info, warning)
- */
 export const showCustomToast = (message, options = {}, type = 'success') => {
   const toast = useToast();
   

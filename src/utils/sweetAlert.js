@@ -1,8 +1,3 @@
-/**
- * Utilitaire pour SweetAlert2
- * Fournit des fonctions prédéfinies pour différents types d'alertes
- */
-
 import Swal from 'sweetalert2';
 
 // Couleurs personnalisées pour correspondre à votre thème
@@ -27,7 +22,7 @@ const baseConfig = {
   }
 };
 
-// /**
+// /** Desactivé 
 //  * Affiche une alerte de succès
 //  * @param {string} title - Titre de l'alerte
 //  * @param {string} text - Texte de l'alerte
@@ -61,13 +56,6 @@ const baseConfig = {
 //   });
 // };
 
-/**
- * Affiche une alerte d'information
- * @param {string} title - Titre de l'alerte
- * @param {string} text - Texte de l'alerte
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
 export const showInfo = (title, text, options = {}) => {
   return Swal.fire({
     ...baseConfig,
@@ -78,13 +66,6 @@ export const showInfo = (title, text, options = {}) => {
   });
 };
 
-/**
- * Affiche une alerte d'avertissement
- * @param {string} title - Titre de l'alerte
- * @param {string} text - Texte de l'alerte
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
 export const showWarning = (title, text, options = {}) => {
   return Swal.fire({
     ...baseConfig,
@@ -95,15 +76,7 @@ export const showWarning = (title, text, options = {}) => {
   });
 };
 
-/**
- * Affiche une boîte de dialogue de confirmation
- * @param {string} title - Titre de la confirmation
- * @param {string} text - Texte de la confirmation
- * @param {string} confirmButtonText - Texte du bouton de confirmation
- * @param {string} cancelButtonText - Texte du bouton d'annulation
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
+
 export const showConfirm = (
   title, 
   text, 
@@ -123,14 +96,6 @@ export const showConfirm = (
   });
 };
 
-/**
- * Affiche une boîte de dialogue pour la suppression
- * @param {string} title - Titre de la confirmation
- * @param {string} text - Texte de la confirmation
- * @param {string} confirmButtonText - Texte du bouton de confirmation
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
 export const showDelete = (
   title = 'Êtes-vous sûr ?', 
   text = 'Cette action est irréversible !', 
@@ -149,13 +114,7 @@ export const showDelete = (
   });
 };
 
-/**
- * Affiche un toast de notification
- * @param {string} title - Titre du toast
- * @param {string} icon - Icône du toast (success, error, warning, info)
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
+
 export const showToast = (title, icon = 'success', options = {}) => {
   return Swal.fire({
     ...baseConfig,
@@ -170,12 +129,6 @@ export const showToast = (title, icon = 'success', options = {}) => {
   });
 };
 
-/**
- * Affiche un indicateur de chargement
- * @param {string} title - Titre du chargement
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
 export const showLoading = (title = 'Chargement en cours...', options = {}) => {
   return Swal.fire({
     title,
@@ -187,14 +140,6 @@ export const showLoading = (title = 'Chargement en cours...', options = {}) => {
   });
 };
 
-/**
- * Affiche un formulaire personnalisé
- * @param {string} title - Titre du formulaire
- * @param {string} html - Contenu HTML du formulaire
- * @param {Function} preConfirm - Fonction de validation avant confirmation
- * @param {Object} options - Options supplémentaires
- * @returns {Promise} Promesse de SweetAlert2
- */
 export const showForm = (title, html, preConfirm, options = {}) => {
   return Swal.fire({
     ...baseConfig,

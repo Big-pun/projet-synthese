@@ -1,8 +1,3 @@
-/**
- * Plugin Vue pour SweetAlert2
- * Permet d'utiliser SweetAlert2 via this.$swal dans les composants
- */
-
 import * as SwalUtils from '@/utils/sweetAlert';
 
 export default {

@@ -3,10 +3,9 @@ import { ref, reactive } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
 import { useModalStore } from '@/stores/modalStore';
 
-// État pour le survol
 const hovered = ref(false);
 
-// Données scolaires (à remplacer par une API plus tard)
+// Données scolaires a remplacer par l'API
 const schoolData = reactive({
   nom: 'Cegep de Trois-Rivieres',
   domaine: 'Developpement Web',
@@ -14,16 +13,11 @@ const schoolData = reactive({
   finProgramme: '06/06/2025'
 });
 
-// Récupérer les stores
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
 
-// Fonction pour ouvrir le modal d'édition
 function openEditForm() {
-  // Utiliser la fonction simplifiée setupForm du store
   formStore.setupForm('schoolInfo', { ...schoolData });
-  
-  // Ouvrir le modal
   modalStore.openModal();
 }
 </script>
@@ -84,7 +78,6 @@ function openEditForm() {
 
 <style scoped>
 
-/* Définir deux classes distinctes avec leurs propres couleurs */
 .rectangle-fill-default {
   fill: #F74949;
   transition: fill 0.2s ease;

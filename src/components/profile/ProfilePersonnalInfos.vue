@@ -3,7 +3,6 @@ import { ref, reactive } from 'vue';
 import { useProfileFormStore } from '@/stores/profileFormStore';
 import { useModalStore } from '@/stores/modalStore';
 
-// État pour le survol
 const hovered = ref(false);
 
 const userData = reactive({
@@ -16,7 +15,6 @@ const userData = reactive({
   adresseTravail: '22 rue du Fort, Trois-Rivieres, G3L5M4'
 });
 
-// Récupérer les stores
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
 
@@ -30,9 +28,7 @@ const personalInfoFields = [
   { key: 'adresseTravail', label: 'Adresse au travail' }
 ];
 
-// Fonction pour ouvrir le modal d'édition
 function openEditForm() {
-  // Étape 1: Configurer le formulaire
   formStore.chooseForm(
     'personnalInfo',
     'Éditer les renseignements personnels',
@@ -40,7 +36,6 @@ function openEditForm() {
     { ...userData }
   );
   
-  // Étape 2: Ouvrir le modal
   modalStore.openModal();
 }
 </script>

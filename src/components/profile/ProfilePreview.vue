@@ -5,11 +5,9 @@ import { useModalStore } from '@/stores/modalStore';
 import Modal from '@/components/general/Modal.vue';
 import ProfileForm from '@/components/profile/ProfileForm.vue';
 
-// Stores
 const formStore = useProfileFormStore();
 const modalStore = useModalStore();
 
-// Fonction pour ouvrir le modal de changement de mot de passe
 function openChangePasswordForm() {
   const passwordFields = [
     { key: 'currentPassword', label: 'Mot de passe actuel', type: 'password' },
@@ -17,7 +15,6 @@ function openChangePasswordForm() {
     { key: 'confirmPassword', label: 'Confirmer le mot de passe', type: 'password' }
   ];
   
-  // Étape 1: Configurer le formulaire
   formStore.chooseForm(
     'changePassword',
     'Changer mon mot de passe',
@@ -29,39 +26,29 @@ function openChangePasswordForm() {
     } 
   );
   
-  // Étape 2: Ouvrir le modal
   modalStore.openModal();
 }
 
-// Fonction pour ouvrir le modal de confirmation de suppression du profil
 function openDeleteProfileForm() {
   const confirmationFields = [
     { key: 'confirmation', label: 'Tapez "SUPPRIMER" pour confirmer', type: 'text' },
     { key: 'password', label: 'Mot de passe', type: 'password' }
   ];
   
-  // Étape 1: Configurer le formulaire
   formStore.chooseForm(
     'deleteProfile',
     'Supprimer mon profil',
     confirmationFields,
-    {} // Pas de données initiales
+    {}
   );
-  
-  // Étape 2: Ouvrir le modal
   modalStore.openModal();
 }
 
-// Fonction appelée lorsque l'utilisateur ferme le modal
 function handleCloseModal() {
-  // Étape 1: Fermer le modal
   modalStore.closeModal();
-  
-  // Étape 2: Réinitialiser le formulaire
   formStore.resetForm();
 }
   
-// Ces données viendront du backend plus tard
 const userData = ref({
   nom: 'Bruno Gautier',
   email: 'brunogautier@gmail.com',

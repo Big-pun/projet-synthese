@@ -1,16 +1,7 @@
-/**
- * Utilitaire de centralisation de la validation des formulaires
- * Contient la définition des champs et les règles de validation pour tous les formulaires de l'application
- */
 import { required, email, minLength, helpers, sameAs } from '@vuelidate/validators';
 import { computed } from 'vue';
 
-/**
- * Définition de tous les champs de formulaire de l'application
- * Centralise les propriétés comme le label, le type, et les valeurs par défaut
- */
 export const formFields = {
-  // Champs du formulaire d'informations personnelles
   personnalInfo: [
     { key: 'prenom', label: 'Prénom', type: 'text' },
     { key: 'nom', label: 'Nom', type: 'text' },
@@ -20,43 +11,29 @@ export const formFields = {
     { key: 'adressePersonnelle', label: 'Adresse personnelle', type: 'text' },
     { key: 'adresseTravail', label: 'Adresse au travail', type: 'text' }
   ],
-
-  // Champs du formulaire d'informations scolaires
   schoolInfo: [
     { key: 'nom', label: 'Nom de l\'établissement', type: 'text' },
     { key: 'domaine', label: 'Domaine d\'études', type: 'text' },
     { key: 'debutProgramme', label: 'Début du programme', type: 'date' },
     { key: 'finProgramme', label: 'Fin du programme', type: 'date' }
   ],
-
-  // Champs du formulaire d'informations bancaires
   bankingInfo: [
     { key: 'institution', label: 'Institution bancaire', type: 'text' },
     { key: 'numeroCarte', label: 'Numéro de carte', type: 'text' },
     { key: 'dateExpiration', label: 'Date d\'expiration', type: 'date' },
     { key: 'codeSecurite', label: 'Code de sécurité', type: 'password' }
   ],
-
-  // Champs du formulaire de changement de mot de passe
   changePassword: [
     { key: 'currentPassword', label: 'Mot de passe actuel', type: 'password' },
     { key: 'newPassword', label: 'Nouveau mot de passe', type: 'password' },
     { key: 'confirmPassword', label: 'Confirmer le mot de passe', type: 'password' }
   ],
-
-  // Champs du formulaire de suppression de profil
   deleteProfile: [
     { key: 'confirmation', label: 'Tapez "SUPPRIMER" pour confirmer', type: 'text' },
     { key: 'password', label: 'Mot de passe', type: 'password' }
   ]
 };
 
-/**
- * Génère les règles de validation Vuelidate pour un type de formulaire et des données spécifiques
- * @param {String} formType - Type de formulaire
- * @param {Object} formData - Données du formulaire (pour les validations qui dépendent des valeurs)
- * @returns {Object} Règles de validation Vuelidate
- */
 export function generateValidationRules(formType, formData = {}) {
   const rules = {};
   
@@ -109,7 +86,6 @@ export function generateValidationRules(formType, formData = {}) {
       break;
   }
   
-  // S'assurer que tous les champs configurés ont une règle par défaut
   if (formFields[formType]) {
     formFields[formType].forEach(field => {
       if (!rules[field.key]) {
@@ -121,20 +97,10 @@ export function generateValidationRules(formType, formData = {}) {
   return rules;
 }
 
-/**
- * Obtient la configuration des champs pour un type de formulaire spécifique
- * @param {String} formType - Type de formulaire
- * @returns {Array} Configuration des champs du formulaire
- */
 export function getFormFields(formType) {
   return formFields[formType] || [];
 }
 
-/**
- * Obtient le titre par défaut pour un type de formulaire spécifique
- * @param {String} formType - Type de formulaire
- * @returns {String} Titre du formulaire
- */
 export function getFormTitle(formType) {
   const titles = {
     personnalInfo: 'Éditer les informations personnelles',
