@@ -45,7 +45,7 @@ function openForm(formType, data = null, addresses = null) {
       
     case 'schoolInfo':
       activeForm.value = SchoolInfoForm;
-      formTitle.value = 'Modifier vos informations scolaires';
+      formTitle.value = 'Établissement scolaire';
       break;
       
     case 'bankingInfo':
@@ -162,6 +162,7 @@ function handleClose() {
           :bankingData="activeForm === BankingInfoForm ? formData : null"
           @save="handleSave"
           @cancel="handleClose"
+          class="w-full"
         />
       </Modal>
     </div>

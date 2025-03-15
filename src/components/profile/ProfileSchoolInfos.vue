@@ -59,7 +59,7 @@ function openEditForm() {
     </div>
 
     <!-- Bouton d'édition -->
-    <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden" 
+    <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden bg-white" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">

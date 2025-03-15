@@ -1,8 +1,8 @@
 <template>
-  <div class="font-roboto bg-light-gray rounded-lg mx-auto">
+  <div class="bg-light-gray font-roboto rounded-lg mx-auto">
     <!-- En-tête du formulaire -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
-      <h2 class="text-xl font-semibold text-white ml-4">{{ title }}</h2>
+      <h2 class="text-xl font-main font-semibold text-white ml-4">{{ title }}</h2>
       
       <!-- Rectangle SVG avec couleur d'accent -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -17,10 +17,10 @@
         <h3 class="text-lg font-medium mb-3 text-gray">Informations personnelles</h3>
         
         <!-- Grille pour prénom et nom -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <!-- Prénom -->
-          <div class="rounded-lg bg-white p-4">
-            <label for="firstName" class="block text-sm font-medium text-gray mb-2">
+          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+            <label for="firstName" class="block text-sm font-medium text-gray responsive-margin">
               Prénom
             </label>
             <input 
@@ -36,8 +36,8 @@
           </div>
           
           <!-- Nom -->
-          <div class="rounded-lg bg-white p-4">
-            <label for="lastName" class="block text-sm font-medium text-gray mb-2">
+          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+            <label for="lastName" class="block text-sm font-medium text-gray responsive-margin">
               Nom
             </label>
             <input 
@@ -54,10 +54,10 @@
         </div>
         
         <!-- Grille pour date de naissance et téléphone -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
           <!-- Date de naissance -->
-          <div class="rounded-lg bg-white p-4">
-            <label for="birthDate" class="block text-sm font-medium text-gray mb-2">
+          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+            <label for="birthDate" class="block text-sm font-medium text-gray responsive-margin">
               Date de naissance
             </label>
             <input 
@@ -73,8 +73,8 @@
           </div>
           
           <!-- Téléphone -->
-          <div class="rounded-lg bg-white p-4">
-            <label for="phone" class="block text-sm font-medium text-gray mb-2">
+          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+            <label for="phone" class="block text-sm font-medium text-gray responsive-margin">
               Téléphone
             </label>
             <input 
@@ -91,8 +91,8 @@
         </div>
         
         <!-- Email -->
-        <div class="rounded-lg bg-white p-4 mb-4">
-          <label for="email" class="block text-sm font-medium text-gray mb-2">
+        <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <label for="email" class="block text-sm font-medium text-gray responsive-margin">
             Courriel
           </label>
           <input 
@@ -123,21 +123,20 @@
               class="w-48 px-3 py-2 border border-accent1 rounded-md focus:border-accent1 outline-none bg-white text-gray"
               :class="{ 'border-accent2': v$.addressType.$error }"
             >
-              <option value="PERSONAL">Personnel</option>
-              <option value="WORK">Professionnel</option>
+              <option value="PERSONAL">Personnelle</option>
+              <option value="WORK">Professionnelle</option>
             </select>
             <div v-if="v$.addressType.$error" class="absolute text-accent2 text-sm mt-1">
               {{ v$.addressType.$errors[0].$message }}
             </div>
           </div>
         </div>
-        <div class="h-1 w-full bg-accent1 mb-6"></div>
         
         <!-- Grille pour les informations d'adresse -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 pb-2">
           <!-- Numéro de rue -->
-          <div>
-            <label for="streetNumber" class="block text-sm font-medium text-gray mb-2">
+          <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+            <label for="streetNumber" class="block text-sm font-medium text-gray responsive-margin">
               Numéro de rue
             </label>
             <input 
@@ -153,8 +152,8 @@
           </div>
           
           <!-- Nom de rue -->
-          <div>
-            <label for="streetName" class="block text-sm font-medium text-gray mb-2">
+          <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+            <label for="streetName" class="block text-sm font-medium text-gray responsive-margin">
               Nom de rue
             </label>
             <input 
@@ -170,8 +169,8 @@
           </div>
           
           <!-- Ville -->
-          <div>
-            <label for="city" class="block text-sm font-medium text-gray mb-2">
+          <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+            <label for="city" class="block text-sm font-medium text-gray responsive-margin">
               Ville
             </label>
             <input 
@@ -187,8 +186,8 @@
           </div>
           
           <!-- Province -->
-          <div>
-            <label for="province" class="block text-sm font-medium text-gray mb-2">
+          <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+            <label for="province" class="block text-sm font-medium text-gray responsive-margin">
               Province
             </label>
             <select 
@@ -206,10 +205,11 @@
               {{ v$.province.$errors[0].$message }}
             </div>
           </div>
+        </div>
           
           <!-- Pays -->
-          <div>
-            <label for="country" class="block text-sm font-medium text-gray mb-2">
+          <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+            <label for="country" class="block text-sm font-medium text-gray responsive-margin">
               Pays
             </label>
             <select 
@@ -224,20 +224,19 @@
               {{ v$.country.$errors[0].$message }}
             </div>
           </div>
-        </div>
       </div>
       
       <!-- Boutons d'action -->
-      <div class="flex justify-end space-x-4 mt-8">
+      <div class="flex justify-end space-x-4 p-4">
         <button 
           type="button" 
           @click="$emit('cancel')" 
-          class="px-8 py-3 border border-accent2 text-accent2 rounded-md hover:bg-accent2 hover:text-white transition-colors">
+          class="px-8 py-3 border-2 border-accent2 text-accent2 rounded-md hover:bg-accent2 hover:text-white transition-colors">
           Annuler
         </button>
         <button 
           type="submit" 
-          class="px-8 py-3 border border-accent1 bg-white text-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors">
+          class="px-8 py-3 border-2 border-accent1 text-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors">
           Enregistrer
         </button>
       </div>
