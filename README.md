@@ -1,21 +1,7 @@
 ***********************************
-Notes sur le Routing, à lire pour y voir plus clair d'un coup d'oeil et continuer votre développement !
+CHANGEMENTS AU NIVEAU DU ROUTING
 
-J'ai ajouté le routes dans le fichier routes/index.js.
-
-Les views BudgetView et ProfileView ayant le même layout (sidebar + header + footer + contenu variable), c'est le composant layout/ClientInterface qui gère l'affichage des éléments communs. La structure des routes est la suivante:
-
-📌 /accueil => composant HomeView
-
-📌/espace-client => composant ClientInterface (inclue une balise RouterView qui injecte dynamiquement le contenu principal en fonction de la route (voir children)
-
-- children: 
-
-                📌 /espace-client/budget  => la  balise RouterView est remplacé par le composant BudgetView
-
-                📌 /espace-client/profil => la  balise RouterView est remplacé par le composant ProfileView
-
-J'ai mis les liens des pages Accueil, Budget et Profil dans App.vue pour y avoir accès facilement à toutes nos pages / que vous puissiez tester en attendant que le header soit fonctionnel, on pourra les effacer ensuite ! 
+Comme l'a suggere Adrien, j'ai ajoute la Sidebar meme sur la page d'accueil (avec des contenus differents selon si le user est connecte ou non). Le composant CleintInterface n'a donc plus d'utilite (supprime) et le routing a ete largement simplifie ! La structure generale est maintenant partagee par l'ensemble du site, et le layout (Sidebar / Header / Contenu dynmaique gere par le router / Footer) a ete mis dans App.vue.
 
 ***********************************
 
@@ -39,3 +25,7 @@ Plugins :
     - TailwindCSS => libraire de CSS
     - Pinia => Store et gestion de state
     - VueRouter => Navigation
+    - SweetAlert2 => librairie d'animations pour les alertes
+    - vuelidate => librairie de regles de validation de formulaire
+    - vue-toastification => pastilles de confimations
+    
