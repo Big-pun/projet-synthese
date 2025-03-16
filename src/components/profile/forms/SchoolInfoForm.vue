@@ -2,7 +2,7 @@
   <div class="font-roboto bg-light-gray rounded-lg mx-auto">
     <!-- En-tête du formulaire -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
-      <h2 class="text-xl font-roboto font-semibold text-white ml-4">INFORMATIONS SCOLAIRES</h2>
+      <h2 class="text-xl font-main font-semibold text-white ml-4">{{ title }}</h2>
       
       <!-- Rectangle SVG avec couleur d'accent -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 mb-6">
           <!-- Nom de l'établissement -->
           <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg">
-            <label for="schoolName" class="block text-sm font-medium text-gray mb-2 responsive-margin">
+            <label for="schoolName" class="block text-sm font-medium text-gray mb-2">
               Nom de l'établissement
             </label>
             <input 
@@ -33,7 +33,7 @@
           
           <!-- Domaine d'études -->
           <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg">
-            <label for="fieldOfStudy" class="block text-sm font-medium text-gray mb-2 responsive-margin">
+            <label for="fieldOfStudy" class="block text-sm font-medium text-gray mb-2">
               Domaine d'études
             </label>
             <input 
@@ -53,7 +53,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <!-- Date de début -->
           <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg">
-            <label for="startDate" class="block text-sm font-medium text-gray mb-2 responsive-margin">
+            <label for="startDate" class="block text-sm font-medium text-gray mb-2">
               Début du programme
             </label>
             <input 
@@ -113,13 +113,13 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, helpers } from '@vuelidate/validators';
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: 'Éditer mes informations scolaires'
-  },
   schoolData: {
     type: Object,
     default: () => ({})
+  },
+  title: {
+    type: String,
+    default: 'Modifier vos informations scolaires'
   }
 });
 
@@ -141,8 +141,27 @@ function loadSchoolData() {
   if (props.schoolData) {
     formData.schoolName = props.schoolData.schoolName || '';
     formData.fieldOfStudy = props.schoolData.fieldOfStudy || '';
-    formData.startDate = props.schoolData.startDate || '';
-    formData.projectedEndDate = props.schoolData.projectedEndDate || '';
+    
+    // Convertir les dates au format YYYY-MM-DD
+    if (props.schoolData.startDate) {
+      const startDate = new Date(props.schoolData.startDate);
+      const startYear = startDate.getFullYear();
+      const startMonth = String(startDate.getMonth() + 1).padStart(2, '0');
+      const startDay = String(startDate.getDate()).padStart(2, '0');
+      formData.startDate = `${startYear}-${startMonth}-${startDay}`;
+    } else {
+      formData.startDate = '';
+    }
+    
+    if (props.schoolData.projectedEndDate) {
+      const endDate = new Date(props.schoolData.projectedEndDate);
+      const endYear = endDate.getFullYear();
+      const endMonth = String(endDate.getMonth() + 1).padStart(2, '0');
+      const endDay = String(endDate.getDate()).padStart(2, '0');
+      formData.projectedEndDate = `${endYear}-${endMonth}-${endDay}`;
+    } else {
+      formData.projectedEndDate = '';
+    }
   }
 }
 

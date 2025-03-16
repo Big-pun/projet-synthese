@@ -45,12 +45,12 @@ function openForm(formType, data = null, addresses = null) {
       
     case 'schoolInfo':
       activeForm.value = SchoolInfoForm;
-      formTitle.value = 'Établissement scolaire';
+      formTitle.value = 'Modifier votre établissement scolaire';
       break;
       
     case 'bankingInfo':
       activeForm.value = BankingInfoForm;
-      formTitle.value = 'Modifier vos informations bancaires';
+      formTitle.value = 'Modifier vos renseignements bancaires';
       break;
       
     default:

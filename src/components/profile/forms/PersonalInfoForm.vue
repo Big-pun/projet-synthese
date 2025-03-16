@@ -231,12 +231,12 @@
         <button 
           type="button" 
           @click="$emit('cancel')" 
-          class="px-8 py-3 border-2 border-accent2 text-accent2 rounded-md hover:bg-accent2 hover:text-white transition-colors">
+          class="px-8 py-3 border-2 border-accent2 text-gray rounded-md hover:bg-accent2 transition-colors">
           Annuler
         </button>
         <button 
           type="submit" 
-          class="px-8 py-3 border-2 border-accent1 text-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors">
+          class="px-8 py-3 border-2 border-accent1 text-gray rounded-md hover:bg-accent1 transition-colors">
           Enregistrer
         </button>
       </div>
@@ -250,10 +250,6 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers } from '@vuelidate/validators';
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: 'Éditer mes informations personnelles'
-  },
   userData: {
     type: Object,
     default: () => ({})
@@ -261,6 +257,10 @@ const props = defineProps({
   userAddresses: {
     type: Array,
     default: () => []
+  },
+  title: {
+    type: String,
+    default: 'Informations personnelles'
   }
 });
 
@@ -305,7 +305,18 @@ function loadUserData() {
   if (props.userData) {
     formData.firstName = props.userData.firstName || '';
     formData.lastName = props.userData.lastName || '';
-    formData.birthDate = props.userData.birthDate || '';
+    
+    // Convertir la date de naissance au format YYYY-MM-DD pour le champ date
+    if (props.userData.birthDate) {
+      const date = new Date(props.userData.birthDate);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      formData.birthDate = `${year}-${month}-${day}`;
+    } else {
+      formData.birthDate = '';
+    }
+    
     formData.phone = props.userData.phone || '';
     formData.email = props.userData.email || '';
     

@@ -3,6 +3,7 @@ import './assets/styles/toast.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 import App from './App.vue'
 import router from './router'

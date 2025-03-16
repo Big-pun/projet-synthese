@@ -34,12 +34,12 @@ function openEditForm() {
       <!-- Première colonne -->
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
-          <p class="font-medium responsive-margin ">Prénom</p>
+          <p class="font-medium responsive-margin">Prénom</p>
           <p class="">{{ userData.firstName || 'Non spécifié' }}</p>
         </div>
 
         <div class="rounded-lg bg-white p-4 flex flex-row items-center">
-          <p class="font-medium responsive-margin  ">Date de naissance</p>
+          <p class="font-medium responsive-margin">Date de naissance</p>
           <p class="">{{ formatDate(userData.birthDate) }}</p>
         </div>
       </div>
@@ -47,12 +47,12 @@ function openEditForm() {
       <!-- Deuxième colonne -->
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
-          <p class="font-medium responsive-margin  ">Nom</p>
+          <p class="font-medium responsive-margin">Nom</p>
           <p class="">{{ userData.lastName || 'Non spécifié' }}</p>
         </div>
 
         <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
-          <p class="font-medium responsive-margin  ">Téléphone</p>
+          <p class="font-medium responsive-margin">Téléphone</p>
           <p class="">{{ userData.phone || 'Non spécifié' }}</p>
         </div>
       </div>
@@ -61,7 +61,7 @@ function openEditForm() {
     <!-- Adresses -->
     <div class="mt-2 px-6">
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
-        <p class="font-medium responsive-margin  ">Courriel</p>
+        <p class="font-medium responsive-margin">Courriel</p>
         <p class="">{{ userData.email || 'Non spécifié' }}</p>
       </div>
 
@@ -81,7 +81,7 @@ function openEditForm() {
       <div class="border-2 rounded-lg bg-white overflow-hidden mb-2" 
         :class="hovered ? 'border-accent1' : 'border-accent2'">
         <button @click="openEditForm"
-          class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1 hover:text-white">
+          class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1">
           <span class="mr-2">+</span> Éditer les informations personnelles
         </button>
       </div>
@@ -100,6 +100,6 @@ function openEditForm() {
   transition: fill 0.2s ease;
 }
 .responsive-margin {
-  margin-right: clamp(1rem, 2vw, 2rem);
+  margin-right: clamp(2rem, 2vw, 4rem);
 }
 </style>

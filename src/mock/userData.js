@@ -130,4 +130,4 @@ export function formatAmount(amount) {
     style: 'currency',
     currency: 'EUR'
   }).format(amount);
-} 
+}
