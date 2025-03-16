@@ -14,3 +14,6 @@ yarn-error.log*
 
 # Build directory
 /dist 
+
+#error 
+.DS_Store

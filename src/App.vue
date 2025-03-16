@@ -10,6 +10,7 @@ const userConnected = ref(true);
 </script>
 
 <template>
+
   <!-- general lyout shared by the entire app + dyncamic content handled by the router -->
   <div class="app-container">
     <div class="flex">

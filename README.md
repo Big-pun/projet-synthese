@@ -25,3 +25,7 @@ Plugins :
     - TailwindCSS => libraire de CSS
     - Pinia => Store et gestion de state
     - VueRouter => Navigation
+    - SweetAlert2 => librairie d'animations pour les alertes
+    - vuelidate => librairie de regles de validation de formulaire
+    - vue-toastification => pastilles de confimations
+    

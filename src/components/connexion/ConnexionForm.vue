@@ -1,7 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <h2>Connexion</h2>
-
     <!-- mail -->
     <input v-model="email" type="email" placeholder="Email" required />
 
@@ -80,6 +79,11 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+
+button:hover {
+  background-color: #0056b3;
 }
 
 button:disabled {

@@ -1,12 +1,19 @@
 <script setup>
 import { ref } from 'vue';
+import { mockUser } from '@/mock/userData';
 
-// Ces données viendront du backend plus tard
-const userData = ref({
-  nom: 'Bruno Gautier',
-  email: 'brunogautier@gmail.com',
-  telephone: '581 - 422 - 5029'
-});
+const userData = ref({...mockUser});
+
+// Définir les événements
+const emit = defineEmits(['change-password', 'delete-profile']);
+
+function openChangePasswordForm() {
+  emit('change-password');
+}
+
+function openDeleteProfileForm() {
+  emit('delete-profile');
+}
 
 </script>
 
@@ -33,9 +40,9 @@ const userData = ref({
           </div>
 
           <div class="flex flex-col text-gray text-left space-y-1 font-medium ">
-            <p class="">{{ userData.nom }}</p>
+            <p class="">{{ userData.firstName }} {{ userData.lastName }}</p>
             <p class="">{{ userData.email }}</p>
-            <p class="">{{ userData.telephone }}</p>
+            <p class="">{{ userData.phone }}</p>
           </div>
         </div>
       </div>
@@ -43,6 +50,7 @@ const userData = ref({
       <!-- Boutons -->
       <div class="flex text-lg flex-col justify-center items-center space-y-4 md:space-y-6">
         <button
+          @click="openChangePasswordForm"
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-hover transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -53,6 +61,7 @@ const userData = ref({
         </button>
 
         <button
+          @click="openDeleteProfileForm"
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-accent2 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
             <path d="M30.75 36H5.25V5.25H30.75V36ZM6.75 34.5H29.25V6.75H6.75V34.5Z" fill="#FBFBFB" />

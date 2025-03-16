@@ -1,4 +1,3 @@
-
 <template>
   <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">

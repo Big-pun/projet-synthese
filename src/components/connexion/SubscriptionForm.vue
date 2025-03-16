@@ -21,6 +21,7 @@
     <button type="submit" :disabled="loading || !isValidForm">
       {{ loading ? "Signing up..." : "Sign Up" }}
     </button>
+
   </form>
 </template>
 
@@ -63,12 +64,14 @@ const isValidForm = computed(() => {
 const handleSubmit = async () => {
   if (password.value !== confirmPassword.value) {
     toast.error("Passwords do not match.");
+
     return;
   }
 
   try {
     loading.value = true;
     const response = await userStore.register({
+
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
