@@ -12,7 +12,7 @@ export const useSchoolStore = defineStore('school', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await apiClient.get(`/users/${userId}/schoolDetails`);
+        const response = await apiClient.get(`/users/${userId}/school-details`);
         this.schoolDetails = response.data;
       } catch (error) {
         this.error = "Impossible de récupérer les informations scolaires.";

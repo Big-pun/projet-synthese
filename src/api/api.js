@@ -20,7 +20,7 @@ export const getUserAddresses = (userId) =>
 
 // Get user banking details
 export const getUserBankingDetails = (userId) =>
-  apiClient.get(`/users/${userId}/bankingDetails`);
+  apiClient.get(`/users/${userId}/banking-details`);
 
 // Login user
 export const loginUser = async (email, password) => {
