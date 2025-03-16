@@ -54,10 +54,7 @@ main {
     p {
         @apply text-base font-roboto;
     }
-}
-
 
     button {
         @apply hover:cursor-pointer;
     }
-}

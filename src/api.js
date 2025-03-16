@@ -22,7 +22,7 @@ const api = axios.create({
   };
 
   //Connexion user
-  export const loginUser = async (userData) => {
+  export default async function loginUser(userData) {
     try {
       const response = await api.post('/users/login', userData);
       return response.data;
