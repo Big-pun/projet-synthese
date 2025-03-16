@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref, computed, defineEmits } from 'vue';
-import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/services/userStore';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 
