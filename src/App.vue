@@ -1,21 +1,28 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import Sidebar from './components/general/Sidebar.vue';
+import Header from './components/general/Header.vue';
+import Footer from './components/general/Footer.vue';
+import { ref } from 'vue';
+
+// userIsConnected is hardcoded for now, will need to be replaced with a real check / store variable
+const userConnected = ref(true);
 </script>
 
 <template>
-  <div class="container mx-auto">
-    <header>
-      <div>
-        <!-- The Router links below are only there for testing purposes / access to all the pages easily and will need to be removed when the header will be functionnal -->
-        <!-- All pages (components inside the view folder) already contain all of their respective components -->
-        <nav>
-          <RouterLink to="/accueil" class="inline-block m-4 font-medium text-lg underline">Accueil</RouterLink>
-          <RouterLink to="/espace-client/profil" class="inline-block m-4 font-medium text-lg underline">Profile</RouterLink>
-          <RouterLink to="/espace-client/budget" class="inline-block m-4 font-medium text-lg underline">Budget</RouterLink>
-        </nav>
+
+  <!-- general lyout shared by the entire app + dyncamic content handled by the router -->
+  <div class="app-container">
+    <div class="flex">
+      <Sidebar :userConnected="userConnected"></Sidebar>
+      <div class="flex flex-col grow p-5 bg-white overflow-y-auto">
+        <Header></Header>
+        <main class="grow"> <!-- ensures that the footer is pushed to the bottom of the page -->
+          <RouterView></RouterView>
+        </main>
+        <Footer></Footer>
       </div>
-    </header>
-    <RouterView />
+    </div>
   </div>
 </template>
 

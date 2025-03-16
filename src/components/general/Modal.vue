@@ -22,7 +22,7 @@ const closeModal = () => {
 </script>
 
 <style scoped>
-
+/* à revoir */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -33,7 +33,6 @@ const closeModal = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
 }
 
 .modal-content {

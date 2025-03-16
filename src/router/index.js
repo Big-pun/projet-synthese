@@ -1,5 +1,5 @@
 
-import ClientInterface from '@/layouts/ClientInterface.vue'
+import App from '@/App.vue'
 import BudgetView from '@/view/BudgetView.vue'
 import ErrorView from '@/view/ErrorView.vue'
 import HomeView from '@/view/HomeView.vue'
@@ -11,31 +11,23 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: { path: '/accueil' }  // Redirect to /accueil
+      name: 'app',
+      redirect: { name: 'home' },
     },
     {
-      path: '/accueil',
+      path: '//accueil',
       name: 'home',
       component: HomeView
     },
     {
-      path: '/espace-client',
-      name: 'client-area',
-      component: ClientInterface,  // Manages the common layout for the client area pages and allows the router to inject the rest of the page content based on the route.
-      children: [
-        {
-          path: 'budget',
-          name: 'budget',
-          component: BudgetView
-          // <RouterLink to="/espace-client/budget">Budget</RouterLink>
-        },
-        {
-          path: 'profil',
-          name: 'profile',
-          component: ProfileView
-          // <RouterLink to="/espace-client/profil">Budget</RouterLink>
-        },
-      ]
+      path: '/budget',
+      name: 'budget',
+      component: BudgetView
+    },
+    {
+      path: '/profil',
+      name: 'profile',
+      component: ProfileView
     },
     {
       path: '/:pathMatch(.*)*',

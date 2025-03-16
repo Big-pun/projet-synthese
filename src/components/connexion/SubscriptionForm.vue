@@ -1,64 +1,101 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <h2>Inscription</h2>
-    <!-- FirstName -->
-    <input v-model="firstName" type="text" placeholder="Prénom" required />
+    <h2>Sign Up</h2>
 
-    <!-- LastName -->
-    <input v-model="lastName" type="text" placeholder="Nom" required />
+    <!-- First Name -->
+    <input v-model="firstName" type="text" placeholder="First Name" required />
 
-    <!-- Mail -->
+    <!-- Last Name -->
+    <input v-model="lastName" type="text" placeholder="Last Name" required />
+
+    <!-- Email -->
     <input v-model="email" type="email" placeholder="Email" required />
 
     <!-- Password -->
-    <input v-model="password" type="password" placeholder="Mot de passe" required />
+    <input v-model="password" type="password" placeholder="Password" required />
 
     <!-- Confirm Password -->
-    <input v-model="confirmPassword" type="password" placeholder="Confirmez le mot de passe" required />
+    <input v-model="confirmPassword" type="password" placeholder="Confirm Password" required />
 
-    <!-- subscription button -->
-    <button type="submit">S'inscrire</button>
+    <!-- Sign Up Button -->
+    <button type="submit" :disabled="loading || !isValidForm">
+      {{ loading ? "Signing up..." : "Sign Up" }}
+    </button>
 
-    <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
   </form>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { registerUser } from '@/api';
+import { ref, computed, defineEmits } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
+import { useToast } from "vue-toastification";
+
+const userStore = useUserStore();
+const router = useRouter();
+const toast = useToast();
+const emit = defineEmits(['closeModal']);
 
 const firstName = ref('');
 const lastName = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
-const errorMessage = ref('');
+const loading = ref(false);
 
-// submit form
+// Email validation (basic regex check)
+const isValidEmail = computed(() => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email.value);
+});
+
+// Password validation (at least 8 characters, 1 uppercase, 1 number, 1 special character)
+const isValidPassword = computed(() => {
+  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password.value);
+});
+
+// Check fields filled and valid
+const isValidForm = computed(() => {
+  return firstName.value && lastName.value && isValidEmail.value && isValidPassword.value && password.value === confirmPassword.value;
+});
+
+// Form submission
 const handleSubmit = async () => {
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = "Les mots de passe ne correspondent pas.";
+    toast.error("Passwords do not match.");
+
     return;
   }
 
   try {
-    const userData = {
+    loading.value = true;
+    const response = await userStore.register({
+
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
       password: password.value,
-    };
-    await registerUser(userData);
-    
-    emit('closeModal'); // close modal after register
+    });
+
+    if (response.success) {
+      toast.success("Sign-up successful!");
+      setTimeout(() => {
+        emit('closeModal'); // Close the modal after sign-up
+        router.push('/profile'); // Redirect to profile page
+      }, 2000);
+    } else {
+      toast.error(response.message || "Error during sign-up.");
+    }
   } catch (error) {
-    errorMessage.value = "Erreur lors de l'inscription. Veuillez réessayer.";
+    toast.error("Server error. Please try again.");
+  } finally {
+    loading.value = false;
   }
 };
 </script>
 
 <style scoped>
-/* à revoir */
 form {
   display: flex;
   flex-direction: column;
@@ -67,7 +104,6 @@ form {
 
 input {
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -81,7 +117,8 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #45a049;
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

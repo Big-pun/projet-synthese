@@ -14,6 +14,7 @@ function openChangePasswordForm() {
 function openDeleteProfileForm() {
   emit('delete-profile');
 }
+
 </script>
 
 <template>

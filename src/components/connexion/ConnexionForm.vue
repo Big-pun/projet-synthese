@@ -1,45 +1,57 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <h2>Connexion</h2>
-
-    <!-- Mail -->
+    <!-- mail -->
     <input v-model="email" type="email" placeholder="Email" required />
 
-    <!-- Password -->
+    <!-- password -->
     <input v-model="password" type="password" placeholder="Mot de passe" required />
 
-    <!-- Connexion button -->
-    <button type="submit">Se connecter</button>
+    <!-- submit -->
+    <button type="submit" :disabled="loading">
+      {{ loading ? 'Connexion...' : 'Se connecter' }}
+    </button>
 
+    <!-- error -->
     <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
   </form>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { loginUser } from '@/api';
+import { ref, defineEmits } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
+import { useToast } from "vue-toastification";
 
+const userStore = useUserStore();
+const router = useRouter();
+const toast = useToast();
+const emit = defineEmits(['closeModal']);
 
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
+const loading = ref(false);
 
 // submit form
 const handleSubmit = async () => {
+  errorMessage.value = '';
+  if (!email.value || !password.value) {
+    errorMessage.value = "Veuillez remplir tous les champs.";
+    return;
+  }
+
   try {
-    const userData = {
-      email: email.value,
-      password: password.value,
-    };
-
-    const response = await loginUser(userData);
-
-    // validation connexion
+    const response = await userStore.login(email.value, password.value);
+    
     if (response.success) {
-      console.log("Utilisateur connecté:", response);
-      emit('closeModal'); // close modal after login
+      toast.success("Login successful!");
+      setTimeout(() => {
+        emit('closeModal'); // Close the modal after login
+        router.push('/profile'); // Redirect to profile page
+      }, 2000);
     } else {
-      errorMessage.value = response.message || "Erreur de connexion.";
+      toast.error(response.message || "Error during login.");
     }
   } catch (error) {
     errorMessage.value = "Erreur de connexion. Veuillez réessayer.";
@@ -48,7 +60,6 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-/* à revoir */
 form {
   display: flex;
   flex-direction: column;
@@ -57,7 +68,6 @@ form {
 
 input {
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -71,7 +81,11 @@ button {
   cursor: pointer;
 }
 
+
 button:hover {
   background-color: #0056b3;
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>
