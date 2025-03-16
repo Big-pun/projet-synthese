@@ -11,7 +11,7 @@
       </svg>
     </div>
     
-    <form @submit.prevent="handleSubmit" class="space-y-4 px-4">
+    <form @submit.prevent="handleSubmit" class="space-y-4 p-4">
         <!-- Nom de l'établissement et domaine d'études -->
         <div class="grid grid-cols-1 gap-x-4 gap-y-2 mb-6">
           <!-- Nom de l'établissement -->

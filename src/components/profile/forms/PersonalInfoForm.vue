@@ -11,7 +11,7 @@
       </svg>
     </div>
     
-    <form @submit.prevent="handleSubmit" class="space-y-4 px-4">
+    <form @submit.prevent="handleSubmit" class="space-y-4 p-4">
       <!-- Informations personnelles -->
       <div class="mb-6">
         <h3 class="text-lg font-medium mb-3 text-gray">Informations personnelles</h3>

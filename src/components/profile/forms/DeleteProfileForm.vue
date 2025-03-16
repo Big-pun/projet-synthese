@@ -11,7 +11,7 @@
       </svg>
     </div>
     
-    <form @submit.prevent="handleSubmit" class="space-y-4 px-4">
+    <form @submit.prevent="handleSubmit" class="space-y-4 p-4">
       <!-- Champ de confirmation texte -->
       <div class="mb-4">
         <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
