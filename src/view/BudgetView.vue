@@ -1,9 +1,7 @@
 <script setup>
 import BudgetForm from '@/components/budget/BudgetForm.vue';
 import BudgetPreview from '@/components/budget/BudgetPreview.vue';
-import IncomeForm from '@/components/budget/IncomeForm.vue';
 import IncomeTable from '@/components/budget/IncomeTable.vue';
-import SpendingForm from '@/components/budget/SpendingForm.vue';
 import SpendingTable from '@/components/budget/SpendingTable.vue';
 import Modal from '@/components/general/Modal.vue';
 import { useTransactionStore } from '@/services/transactionStore';
@@ -56,8 +54,6 @@ const percentageSpent = computed(() => {
   return Math.floor((spendingsTotal.value / incomesTotal.value) * 100);
 });
 
-
-
 const toggleIncomeReccurence = (itemId) => {
   incomes.value = incomes.value.map((item) => {
     if (item.id === itemId) {
@@ -79,10 +75,6 @@ const toggleSpendingReccurence = (itemId) => {
   });
   console.log(spendings.value);
 };
-
-
-
-
 
 const deleteSpending = (itemId) => {
   spendings.value = spendings.value.filter((item) => item.id !== itemId);
@@ -130,6 +122,11 @@ const closeModal = () => {
   spendingFormModalOpen.value = false;
 };
 
+const resetBudgetNewMonth = () => {
+  incomes.value = incomes.value.filter((item) => item.recurrent);
+  spendings.value = spendings.value.filter((item) => item.recurrent);
+}
+
 </script>
 
 <template>
@@ -137,7 +134,7 @@ const closeModal = () => {
 
     <BudgetPreview :balance="balance" :percentageSpent="percentageSpent" :spendingsTotal="spendingsTotal"></BudgetPreview>
 
-    <button class="border-2 border-accent1 hover:bg-accent1 inline-block w-max py-2 px-5 rounded-md self-end text-accent1 hover:text-white font-semibold transition-all">Nouveau mois</button>
+    <button class="border-2 border-accent1 hover:bg-accent1 inline-block w-max py-2 px-5 rounded-md self-end text-accent1 hover:text-white font-semibold transition-all" @click="resetBudgetNewMonth" >Nouveau mois</button>
     
     <IncomeTable
     :incomes="incomes"

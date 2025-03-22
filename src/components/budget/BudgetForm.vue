@@ -2,7 +2,6 @@
 import logo from '@/assets/img/logo.svg';
 import FormBase from '../general/FormBase.vue';
 import { ref } from 'vue';
-import IncomeForm from './IncomeForm.vue';
 
 const emit = defineEmits(['submit']);
 

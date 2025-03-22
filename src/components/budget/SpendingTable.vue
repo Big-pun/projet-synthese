@@ -23,7 +23,7 @@ const headers = [
     :items="spendings" 
     :primaryColorTheme= false
     :itemsTotal="itemsTotal"
-    @toggleReccurence="$emit('toggleReccurence', $event)"
+    @toggleReccurence="$emit('toggleReccurence')"
     @deleteItem="$emit('deleteItem', $event)"
     @openForm="$emit('openForm')"
   />
