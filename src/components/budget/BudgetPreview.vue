@@ -6,38 +6,18 @@ import pieIcon from '@/assets/img/icons/pie_icon.svg';
 import calendarIcon from '@/assets/img/icons/calendar_icon.svg';
 import logo from '@/assets/img/logo.svg';
 
-// This data will come from the backend or store
-const userBudget = ref({
-  incomes: [
-    { id: 1, name: 'Salaire', amount: 2000, reccurent: true },
-    { id: 2, name: 'Bourse', amount: 500, reccurent: true },
-    { id: 3, name: 'Aide familiale', amount: 200, reccurent: false },
-  ],
-  spendings: [
-    { id: 1, name: 'Loyer', amount: 500 },
-    { id: 2, name: 'Courses', amount: 200 },
-    { id: 3, name: 'Transport', amount: 100 },
-  ],
-});
-
-const incomesTotal = computed(() => {
-  return userBudget.value.incomes.reduce((acc, income) => acc + income.amount, 0);
-});
-
-const spendingsTotal = computed(() => {
-  return userBudget.value.spendings.reduce((acc, spending) => acc + spending.amount, 0);
-});
-
-const balance = computed(() => {
-  return incomesTotal.value - spendingsTotal.value;
+const props = defineProps({
+  balance: Number,
+  percentageSpent: Number,
+  spendingsTotal: Number,
 });
 
 // red theme if balance is negative, green theme if balance is positive
 const themeClasses = computed(() => {
   return ({
-    borderColor: balance.value > 0 ? 'border-accent1' : 'border-accent2',
-    textColor: balance.value > 0 ? 'text-accent1' : 'text-accent2',
-    backgroundColor: balance.value > 0 ? 'bg-accent1' : 'bg-accent2',
+    borderColor: props.balance > 0 ? 'border-accent1' : 'border-accent2',
+    textColor: props.balance > 0 ? 'text-accent1' : 'text-accent2',
+    backgroundColor: props.balance > 0 ? 'bg-accent1' : 'bg-accent2',
   })
 });
 </script>
@@ -66,13 +46,13 @@ const themeClasses = computed(() => {
         <button
           class="w-full max-w-xs md:max-w-sm flex items-center bg-gray text-white py-3 px-6 rounded-md">
           <img :src="calendarIcon" alt="Icon de calendrier" class="h-9 w-8" />
-          <span class="grow">21 jours restants</span>
+          <span class="grow">{{ spendingsTotal }}$ de depenses</span>
         </button>
 
         <button
           class="w-full max-w-xs md:max-w-sm flex items-center bg-gray text-white py-3 px-6 rounded-md">
           <img :src="pieIcon" alt="Icon de diagramme circulaire" class="h-9 w-10" />
-          <span class="grow">22% du budget depense</span>
+          <span class="grow">{{ percentageSpent }}% du budget depense</span>
         </button>
       </div>
     </div>
