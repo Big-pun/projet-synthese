@@ -63,7 +63,7 @@ const openForm = () => {
             <!-- Recurrence switch -->
             <template v-if="header.key === 'recurrent'">
               <label class="switch">
-                <input type="checkbox" :checked="item.recurrent" @change="emit('toggleReccurence', item)" />
+                <input type="checkbox" :checked="item.recurrent" @change="emit('toggleReccurence', item.id)" />
                 <span class="slider round"></span>
               </label>
             </template>
