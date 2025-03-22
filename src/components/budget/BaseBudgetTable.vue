@@ -38,6 +38,8 @@ const openForm = () => {
   emit('openForm');
 };
 
+const isEntryRecurrent = (entry) => entry.frequency !== -1;
+
 </script>
 
 <template>
@@ -60,12 +62,34 @@ const openForm = () => {
         <!-- Loop through items (each income or spending) and headers props to populate table body in the right order -->
         <tr v-for="item in items" :key="item.id" class="bg-white rounded-[8px]">
           <td v-for="header in headers" :key="header.label">
-            <!-- Recurrence switch -->
+            <!-- Recurrence -->
             <template v-if="header.key === 'recurrent'">
-              <label class="switch">
-                <input type="checkbox" :checked="item.recurrent" @change="emit('toggleReccurence', item.id)" />
-                <span class="slider round"></span>
-              </label>
+              <div class="flex flex-col items-center gap-2" :class="!isEntryRecurrent(item) ? 'my-5' : ''">
+                <!-- Toggle Switch -->
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    :checked="isEntryRecurrent(item)"
+                    @change="emit('toggleReccurence', item.id)"
+                  />
+                  <span class="slider round"></span>
+                </label>
+
+                <!-- Frequency Select -->
+                <select
+                  v-if="isEntryRecurrent(item)"
+                  v-model="item.frequency"
+                  @change="emit('updateFrequency', { id: item.id, frequency: item.frequency })"
+                  class="border border-gray-300 rounded-md p-1"
+     
+                >
+                  <option :value="1">Quotidien</option>
+                  <option :value="7">Hebdomadaire</option>
+                  <option :value="14">Bihebdomadaire</option>
+                  <option :value="30">Mensuel</option>
+                  <option :value="-1">Non récurrent</option>
+                </select>
+              </div>
             </template>
             <!-- Actions -->
             <template v-else-if="header.key === 'actions'">
@@ -180,52 +204,6 @@ td:nth-child(1) {
 
 table:hover .tag {
   height: 75px;
-}
-
-/* swicth (recurrence) */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 25px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 19px;
-  width: 19px;
-  left: 4px;
-  bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--color-accent1);
-}
-
-input:checked + .slider:before {
-  transform: translateX(23px);
 }
 
 @media screen and (max-width: 800px) {

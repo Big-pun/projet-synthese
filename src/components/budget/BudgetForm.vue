@@ -13,7 +13,7 @@ const props = defineProps({
 
 const name = ref('');
 const amount = ref(0);
-const recurrent = ref(false);
+const frequency = ref(-1);
 const category = ref('');
 
 const errors = ref({
@@ -60,7 +60,7 @@ const validateForm = () => {
     emit('submit', {
       name: name.value,
       amount: amount.value,
-      recurrent: recurrent.value,
+      frequency: frequency.value,
       category: category.value
     });
   }
@@ -88,11 +88,35 @@ const validateForm = () => {
       <span class="text-xs text-accent2">{{ errors.amount }}</span>
     </div>
 
-    <div class="flex gap-2 mx-auto">
-      <label for="income-name">Recurrent</label>
-      <input type="checkbox" v-model="recurrent" />
+    <div class="flex flex-col gap-4 mx-auto">
+        <!-- Toggle Switch -->
+        <div class="flex flex-col items-center gap-2">
+            <span>Recurrent</span>
+            <label class="switch">
+                <input
+                type="checkbox"
+                :checked="frequency !== -1"
+                @change="frequency = frequency === -1 ? 30 : -1"
+                />
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <!-- Frequency Select -->
+        <select
+            v-model="frequency"
+            class="border border-gray-300 rounded-md p-1"
+            :class="frequency !== -1 ? 'block' : 'hidden'"
+        >
+            <option :value="1">Quotidien</option>
+            <option :value="7">Hebdomadaire</option>
+            <option :value="14">Bihebdomadaire</option>
+            <option :value="30">Mensuel</option>
+            <option :value="-1">Non récurrent</option>
+        </select>
     </div>
   </FormBase>
 </template>
 
-<style></style>
+<style>
+</style>

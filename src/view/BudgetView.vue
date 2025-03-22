@@ -6,6 +6,7 @@ import SpendingTable from '@/components/budget/SpendingTable.vue';
 import Modal from '@/components/general/Modal.vue';
 import { useTransactionStore } from '@/services/transactionStore';
 import { computed, onMounted, reactive, ref } from 'vue';
+import Swal from 'sweetalert2';
 
 const transactionStore = useTransactionStore();
 
@@ -21,18 +22,22 @@ const spendingFormModalOpen = ref(false);
 /* this code (userBudget object with hardcoded values) will be deleted once the api will be linked, but the structure of the transactions objects will need to be this way */
 /* use a computed value to perform any needed transformations from the transactions object from the API to the object below */
 const incomes = ref([
-    { id: 1, name: 'Salaire mensuel', amount: 3000, recurrent: true },
-    { id: 2, name: 'Bourse universitaire', amount: 700, recurrent: true },
-    { id: 3, name: 'Revenu freelance', amount: 500, recurrent: false }
+    { id: 1, name: 'Salaire', amount: 3000, frequency: 7 },
+    { id: 2, name: 'Bourse universitaire', amount: 700, frequency: 30 },
+    { id: 3, name: 'Revenu freelance', amount: 500, frequency: -1 }
   ]);
 
 const spendings = ref([
-    { id: 1, name: 'Loyer', category: 'Logement', amount: 900 },
-    { id: 2, name: 'Courses alimentaires', category: 'Alimentation', amount: 300, recurrent: true },
-    { id: 3, name: 'Abonnement Internet', category: 'Services', amount: 50, recurrent: true },
-    { id: 4, name: 'Transport en commun', category: 'Transport', amount: 80, recurrent: false },
-    { id: 5, name: 'Sorties et loisirs', category: 'Divertissement', amount: 150, recurrent: true }
+    { id: 1, name: 'Loyer', category: 'Logement', amount: 900, frequency: 30 },
+    { id: 2, name: 'Courses alimentaires', category: 'Alimentation', amount: 300, frequency: 14},
+    { id: 3, name: 'Abonnement Internet', category: 'Services', amount: 50, frequency: 30 },
+    { id: 4, name: 'Transport en commun', category: 'Transport', amount: 80, frequency: -1 },
+    { id: 5, name: 'Sorties et loisirs', category: 'Divertissement', amount: 150, frequency: -1 }
   ]);
+
+  const defaultFrequency = 30;
+
+  const isEntryRecurrent = (entry) => entry.frequency !== -1;
 
 const calcItemsTotal = (items) => {
   return items.reduce((acc, item) => acc + item.amount, 0);
@@ -57,7 +62,11 @@ const percentageSpent = computed(() => {
 const toggleIncomeReccurence = (itemId) => {
   incomes.value = incomes.value.map((item) => {
     if (item.id === itemId) {
-      return { ...item, recurrent: !item.recurrent };
+      if(item.frequency === -1) {
+        return { ...item, frequency: defaultFrequency };
+      } else {
+        return { ...item, frequency: -1 };
+      }
     } else {
       return item;
     }
@@ -68,7 +77,11 @@ const toggleIncomeReccurence = (itemId) => {
 const toggleSpendingReccurence = (itemId) => {
   spendings.value = spendings.value.map((item) => {
     if (item.id === itemId) {
-      return { ...item, recurrent: !item.recurrent };
+      if(item.frequency === -1) {
+        return { ...item, frequency: defaultFrequency };
+      } else {
+        return { ...item, frequency: -1 };
+      }
     } else {
       return item;
     }
@@ -122,9 +135,26 @@ const closeModal = () => {
   spendingFormModalOpen.value = false;
 };
 
-const resetBudgetNewMonth = () => {
-  incomes.value = incomes.value.filter((item) => item.recurrent);
-  spendings.value = spendings.value.filter((item) => item.recurrent);
+const resetBudgetNewMonth = async () => {
+  const result = await Swal.fire({
+    title: "Etes vous surs de vouloir commencer un nouveau mois?",
+    text: `Cette action est irreversible!`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#00EC86",
+    cancelButtonColor: "#F74949",
+    confirmButtonText: "Oui, supprimer!"
+  });
+
+  if (result.isConfirmed) {
+    incomes.value = incomes.value.filter((item) => isEntryRecurrent(item));
+    spendings.value = spendings.value.filter((item) => isEntryRecurrent(item));
+    Swal.fire({
+      title: "Supprime!",
+      text: `L'entree a bien ete supprimee.`,
+      icon: "success"
+    });
+  }
 }
 
 </script>
