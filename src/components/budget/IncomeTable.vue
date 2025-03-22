@@ -2,7 +2,8 @@
 import BaseBudgetTable from './BaseBudgetTable.vue';
 
 const props = defineProps({
-  incomes: Array
+  incomes: Array,
+  itemsTotal: Number
 });
 
 const headers = [
@@ -17,9 +18,11 @@ const headers = [
   <BaseBudgetTable 
     name="Revenus" 
     :headers="headers" 
-    :items="incomes" 
+    :items="incomes"
+    :primaryColorTheme= true
+    :itemsTotal="itemsTotal"
     @toggleReccurence="$emit('toggleReccurence', $event)"
-    @openModal="$emit('openModal', $event)"
+    @deleteItem="$emit('deleteItem', $event)"
     @openForm="$emit('openForm')"
   />
 </template>

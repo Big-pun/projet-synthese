@@ -2,7 +2,8 @@
 import BaseBudgetTable from './BaseBudgetTable.vue';
 
 const props = defineProps({
-  spendings: Array
+  spendings: Array,
+  itemsTotal: Number
 });
 
 const headers = [
@@ -12,6 +13,7 @@ const headers = [
   { label: 'Recurrent', key: 'recurrent' },
   { label: 'Actions', key: 'actions' }
 ];
+
 </script>
 
 <template>
@@ -19,8 +21,10 @@ const headers = [
     name="Dépenses" 
     :headers="headers" 
     :items="spendings" 
+    :primaryColorTheme= false
+    :itemsTotal="itemsTotal"
     @toggleReccurence="$emit('toggleReccurence', $event)"
-    @openModal="$emit('openModal', $event)"
+    @deleteItem="$emit('deleteItem', $event)"
     @openForm="$emit('openForm')"
   />
 </template>
