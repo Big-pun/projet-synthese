@@ -12,9 +12,11 @@ import { useUserStore } from '@/services/userStore';
 const transactionStore = useTransactionStore();
 const userStore = useUserStore();
 
+const userId = computed(() => userStore.user?.id || null);
+
 // Fetch transactions on component mount
 onMounted(() => {
-  
+  transactionStore.fetchTransactions(userId.value);
 });
 
 const defaultFrequency = 30;
@@ -39,6 +41,9 @@ const spendings = ref([
     { id: 4, name: 'Transport en commun', category: 'Transport', amount: 80, frequency: -1 },
     { id: 5, name: 'Sorties et loisirs', category: 'Divertissement', amount: 150, frequency: -1 }
   ]);
+
+// const incomes = computed(() => transactionStore.transactions.value.filter((transaction) => transaction.type === 'Revenue'));
+// const spendings = computed(() => transactionStore.transactions.value.filter((transaction) => transaction.type === 'Spending'));
 
 const isEntryRecurrent = (entry) => entry.frequency !== -1;
 

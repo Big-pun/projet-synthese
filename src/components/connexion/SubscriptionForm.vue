@@ -3,22 +3,27 @@
     <h2>Sign Up</h2>
 
     <!-- First Name -->
-    <input v-model="firstName" type="text" placeholder="First Name" required />
+    <input v-model="firstName" type="text" placeholder="First Name" />
+    <span class="text-xs text-accent2">{{ errors.firstName }}</span>
 
     <!-- Last Name -->
-    <input v-model="lastName" type="text" placeholder="Last Name" required />
+    <input v-model="lastName" type="text" placeholder="Last Name" />
+    <span class="text-xs text-accent2">{{ errors.lastName }}</span>
 
     <!-- Email -->
-    <input v-model="email" type="email" placeholder="Email" required />
+    <input v-model="email" type="email" placeholder="Email" />
+    <span class="text-xs text-accent2">{{ errors.email }}</span>
 
     <!-- Password -->
-    <input v-model="password" type="password" placeholder="Password" required />
+    <input v-model="password" type="password" placeholder="Password" />
+    <span class="text-xs text-accent2">{{ errors.password }}</span>
 
     <!-- Confirm Password -->
-    <input v-model="confirmPassword" type="password" placeholder="Confirm Password" required />
+    <input v-model="confirmPassword" type="password" placeholder="Confirm Password" />
+    <span class="text-xs text-accent2">{{ errors.confirmPassword }}</span>
 
     <!-- Sign Up Button -->
-    <button type="submit" :disabled="loading || !isValidForm">
+    <button type="submit" :disabled="loading">
       {{ loading ? "Signing up..." : "Sign Up" }}
     </button>
 
@@ -43,6 +48,14 @@ const password = ref('');
 const confirmPassword = ref('');
 const loading = ref(false);
 
+const errors = ref({
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+});
+
 // Email validation (basic regex check)
 const isValidEmail = computed(() => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,35 +75,40 @@ const isValidForm = computed(() => {
 
 // Form submission
 const handleSubmit = async () => {
-  if (password.value !== confirmPassword.value) {
-    toast.error("Passwords do not match.");
+  errors.value.firstName = !firstName.value ? 'Le prénom est requis.' : '';
+  errors.value.lastName = !lastName.value ? 'Le nom est requis.' : '';
+  errors.value.email = !email.value ? 'Le mail est requis' : !isValidEmail.value ? 'Le mail est invalide' : '';
+  errors.value.password = !isValidPassword.value ? 'Le mot de passe doit contenir au moins 8 caractères, dont au moins 1 lettre majuscule, 1 chiffre et 1 caractère spécial.' : '';
+  errors.value.confirmPassword = password.value !== confirmPassword.value ? 'Les mots de passe ne correspondent pas.' : '';
 
-    return;
-  }
-
-  try {
+  if(isValidForm.value === true) {
+    try {
     loading.value = true;
-    const response = await userStore.register({
-
+    await userStore.register({
+      id: "0",
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
       password: password.value,
+      isActive: true,
+      birthDate: null,
+      phone: null
     });
 
-    if (response.success) {
+    if (userStore.user) {
       toast.success("Sign-up successful!");
       setTimeout(() => {
         emit('closeModal'); // Close the modal after sign-up
-        router.push('/profile'); // Redirect to profile page
+        router.push('/profil'); // Redirect to profile page
       }, 2000);
     } else {
-      toast.error(response.message || "Error during sign-up.");
+      toast.error(userStore.error);
     }
-  } catch (error) {
-    toast.error("Server error. Please try again.");
+  } catch {
+    toast.error("Erreur de connexion. Veuillez réessayer.");
   } finally {
     loading.value = false;
+  }
   }
 };
 </script>

@@ -72,7 +72,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <FormTemplate :title="title" :subTitle="subTitle" :handleSubmit="submitForm">
+  <FormTemplate :title="title" :subTitle="subTitle" :handleSubmit="submitForm" btnText="Valider" :disableBtn="false">
 
     <!-- Description Field -->
     <div class="flex flex-col gap-2 items-center">

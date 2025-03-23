@@ -3,10 +3,14 @@ import { RouterView } from 'vue-router'
 import Sidebar from './components/general/Sidebar.vue';
 import Header from './components/general/Header.vue';
 import Footer from './components/general/Footer.vue';
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useUserStore } from './services/userStore';
 
-// userIsConnected is hardcoded for now, will need to be replaced with a real check / store variable
-const userConnected = ref(true);
+const userConnected = computed(() => {
+  const userStore = useUserStore();
+  return userStore.user !== null;
+});
+
 </script>
 
 <template>

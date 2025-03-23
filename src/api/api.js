@@ -10,6 +10,9 @@ const apiClient = axios.create({
 // Get user by ID
 export const getUserById = (userId) => apiClient.get(`/users/${userId}`);
 
+// Get user by email
+export const getUserByEmail = (email) => apiClient.get(`/users/email/${email}`);
+
 // Get user transactions
 export const getUserTransactions = (userId) =>
   apiClient.get(`/users/${userId}/transactions`);
@@ -21,6 +24,9 @@ export const getUserAddresses = (userId) =>
 // Get user banking details
 export const getUserBankingDetails = (userId) =>
   apiClient.get(`/users/${userId}/banking-details`);
+
+// Post new user
+export const postNewUser = (userData) => apiClient.post('/users', userData);
 
 // Login user
 export const loginUser = async (email, password) => {
@@ -40,13 +46,4 @@ export const registerUser = async (userData) => {
   } catch (error) {
     return { success: false, message: error.response?.data?.message || "Erreur lors de l'inscription." };
   }
-};
-
-export default {
-  getUserById,
-  getUserTransactions,
-  getUserAddresses,
-  getUserBankingDetails,
-  loginUser,
-  registerUser,
 };

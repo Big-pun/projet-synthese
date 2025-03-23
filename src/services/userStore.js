@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
-import apiClient from '@/api.js';
+import { getUserByEmail, postNewUser } from '@/api/api.js';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
       user: null,
-      token: null,
       loading: false,
       error: null,
     }),
@@ -13,41 +12,49 @@ export const useUserStore = defineStore('user', {
         this.loading = true;
         this.error = null;
         try {
-          const response = await apiClient.post('/auth/login', { email, password });
-  
-          if (response.data.success) {
-            this.user = response.data.user;
-            this.token = response.data.token;
-            localStorage.setItem('token', this.token);
-            return { success: true };
-          } else {
-            this.error = response.data.message || "Erreur de connexion.";
-            return { success: false, message: this.error };
-          }
-        } catch (error) {
-          this.error = "Identifiants incorrects ou erreur serveur.";
-          return { success: false, message: "Erreur de connexion." };
+            const response = await getUserByEmail(email);
+            const result = response.data;
+            if(result.password === password){
+                this.user = result;
+            } else {
+                this.error = "Mot de passe incorrect.";
+            }
+        } catch {
+            this.error = "Aucun utilisateur trouvé avec cet email.";
+        } finally {
+            this.loading = false;
         }
       },
   
       async register(userData) {
         this.loading = true;
         this.error = null;
+
         try {
-          const response = await apiClient.post('/auth/register', userData);
-  
-          if (response.data.success) {
-            return { success: true, user: response.data.user };
-          } else {
-            this.error = response.data.message || "Erreur lors de l'inscription.";
-            return { success: false, message: this.error };
-          }
-        } catch (error) {
-          this.error = "Erreur de serveur.";
-          return { success: false, message: "Erreur lors de l'inscription." };
+          const response = await postNewUser(userData);
+          const result = response.data;
+          this.user = result;
+        } catch(error) {
+            if (error.response) {
+                this.error = "Une erreur s'est produite, l'adresse courriel est peut-être déjà utilisée.";
+                console.log(error.response.data.message);
+              } else if (error.request) {
+                this.error = "Pas de réponse du serveur.";
+                console.log(error.request);
+              } else {
+                this.error = "Une erreur s'est produite.";
+                this.error = error.message;
+              }
         } finally {
-          this.loading = false;
+          this.loading = false; 
         }
       },
+
+      logout() {
+        this.user = null;
+        this.loading = false;
+        this.error = null;
+      },
+
     },
   });
