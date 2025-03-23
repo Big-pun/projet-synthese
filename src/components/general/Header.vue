@@ -40,4 +40,5 @@ const showSignup = ref(false);
 const showLogin = ref(false);
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

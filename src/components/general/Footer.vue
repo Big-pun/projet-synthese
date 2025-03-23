@@ -4,18 +4,10 @@ export default {
 };
 </script>
 
-<template scoped>
-  
-  <div class="w-screen border-accent1 mt-16 border-2"></div>
+<template scoped> 
 
-  <div class="flex w-screen justify-center">
-    <footer class="m-auto w-7xl">
-      <!-- Container -->
+  <footer class="flex items-center justify-between w-full max-w-1400px my-0 mx-auto border-t-3 border-accent1 mt-15">
 
-      <div class="flex flex-col item-center">
-        <!-- Component -->
-
-        <!--VOIR SI ON L'A MET PARTOUT OU NON-->
         <div class="flex flex-col justify-center items-center md:flex-row md:justify-between py-5 w-full">
         <!-- LOGO -->
           <img
@@ -112,9 +104,7 @@ export default {
             </div>
           </div>
         </div>
-      </div>
-    </footer>
-  </div>
+  </footer>
 </template>
 
 <style scoped>
