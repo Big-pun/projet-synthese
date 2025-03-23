@@ -11,7 +11,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="rounded-md p-8 flex flex-col items-center gap-2">
+  <div class="rounded-md p-8 flex flex-col items-center gap-2 max-h-[75vh] overflow-y-auto">
     <h2 class="font-light text-gray font-main">
       <img :src="logo" class="h-4 inline-block" alt="logo">
       {{ title }}

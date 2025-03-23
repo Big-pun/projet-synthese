@@ -1,7 +1,11 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <h2>Sign Up</h2>
-
+  <FormTemplate
+    title="Inscription"
+    subTitle="Créez votre compte en quelques secondes !"
+    :handleSubmit="handleSubmit"
+    :btnText="loading ? 'Signing up..' : 'Sign Up'"
+    :disableBtn="loading"
+  >
     <!-- First Name -->
     <input v-model="firstName" type="text" placeholder="First Name" />
     <span class="text-xs text-accent2">{{ errors.firstName }}</span>
@@ -21,13 +25,7 @@
     <!-- Confirm Password -->
     <input v-model="confirmPassword" type="password" placeholder="Confirm Password" />
     <span class="text-xs text-accent2">{{ errors.confirmPassword }}</span>
-
-    <!-- Sign Up Button -->
-    <button type="submit" :disabled="loading">
-      {{ loading ? "Signing up..." : "Sign Up" }}
-    </button>
-
-  </form>
+  </FormTemplate>
 </template>
 
 <script setup>
@@ -35,6 +33,7 @@ import { ref, computed, defineEmits } from 'vue';
 import { useUserStore } from '@/services/userStore';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
+import FormTemplate from '../general/FormTemplate.vue';
 
 const userStore = useUserStore();
 const router = useRouter();
