@@ -1,5 +1,5 @@
 <script setup>
-import BaseBudgetTable from './BaseBudgetTable.vue';
+import BudgetTableTemplate from './BudgetTableTemplate.vue';
 
 const props = defineProps({
   spendings: Array,
@@ -17,7 +17,7 @@ const headers = [
 </script>
 
 <template>
-  <BaseBudgetTable 
+  <BudgetTableTemplate 
     name="Dépenses" 
     :headers="headers" 
     :items="spendings" 

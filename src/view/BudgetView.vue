@@ -5,22 +5,27 @@ import IncomeTable from '@/components/budget/IncomeTable.vue';
 import SpendingTable from '@/components/budget/SpendingTable.vue';
 import Modal from '@/components/general/Modal.vue';
 import { useTransactionStore } from '@/services/transactionStore';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Swal from 'sweetalert2';
+import { useUserStore } from '@/services/userStore';
 
 const transactionStore = useTransactionStore();
+const userStore = useUserStore();
 
-// Charger les transactions au montage du composant
+// Fetch transactions on component mount
 onMounted(() => {
-  const userId = 1; // Remplacez par l'ID utilisateur approprié
-  transactionStore.fetchTransactions(userId);
+  
 });
 
+const defaultFrequency = 30;
+
+// State Management
 const incomeFormModalOpen = ref(false);
 const spendingFormModalOpen = ref(false);
 
-/* this code (userBudget object with hardcoded values) will be deleted once the api will be linked, but the structure of the transactions objects will need to be this way */
-/* use a computed value to perform any needed transformations from the transactions object from the API to the object below */
+// this code (incomes and spendings arrays) will be deleted once the api will be linked. We'll get these arrays from the transactionsStore
+// but the structure of the transactions objects will need to be this way
+// use a computed value to perform any needed transformations from the transactions object from the API to the object below
 const incomes = ref([
     { id: 1, name: 'Salaire', amount: 3000, frequency: 7 },
     { id: 2, name: 'Bourse universitaire', amount: 700, frequency: 30 },
@@ -35,12 +40,22 @@ const spendings = ref([
     { id: 5, name: 'Sorties et loisirs', category: 'Divertissement', amount: 150, frequency: -1 }
   ]);
 
-  const defaultFrequency = 30;
+const isEntryRecurrent = (entry) => entry.frequency !== -1;
 
-  const isEntryRecurrent = (entry) => entry.frequency !== -1;
-
+// Totals Calculations
 const calcItemsTotal = (items) => {
-  return items.reduce((acc, item) => acc + item.amount, 0);
+  const itemsTotalsWithFrequency = items.map((item) => {
+    if(item.frequency === 1) {
+      return ({...item, amount: item.amount * 30});
+    } else if(item.frequency === 7) {
+      return ({...item, amount: item.amount * 4});
+    } else if(item.frequency === 14) {
+      return ({...item, amount: item.amount * 2});
+    } else {
+      return item;
+    }
+  });
+  return itemsTotalsWithFrequency.reduce((acc, item) => acc + item.amount, 0);
 };
 
 const incomesTotal = computed(() => {
@@ -51,14 +66,8 @@ const spendingsTotal = computed(() => {
   return calcItemsTotal(spendings.value);
 });
 
-const balance = computed(() => {
-  return incomesTotal.value - spendingsTotal.value;
-});
 
-const percentageSpent = computed(() => {
-  return Math.floor((spendingsTotal.value / incomesTotal.value) * 100);
-});
-
+// Recurrence Toggles Functions
 const toggleIncomeReccurence = (itemId) => {
   incomes.value = incomes.value.map((item) => {
     if (item.id === itemId) {
@@ -71,7 +80,6 @@ const toggleIncomeReccurence = (itemId) => {
       return item;
     }
   });
-  console.log(incomes.value);
 };
 
 const toggleSpendingReccurence = (itemId) => {
@@ -86,48 +94,48 @@ const toggleSpendingReccurence = (itemId) => {
       return item;
     }
   });
-  console.log(spendings.value);
 };
 
+// Add / Deletion Functions
+// this function will be deleted once the api will be linked. Deletion step will be handled by the transactionsStore
 const deleteSpending = (itemId) => {
   spendings.value = spendings.value.filter((item) => item.id !== itemId);
-  console.log('Delete spending', itemId);
 };
 
+// this function will be deleted once the api will be linked. Deletion step will be handled by the transactionsStore
 const deleteIncome = (itemId) => {
   incomes.value = incomes.value.filter((item) => item.id !== itemId);
-  console.log('Delete income', itemId);
 };
 
+// this function will be deleted once the api will be linked. Addition step will be handled by the transactionsStore
 const addIncome = (income) => {
   incomes.value.push({...income, id: incomes.value.length + 1});
   incomeFormModalOpen.value = false;
 };
 
+// this function will be deleted once the api will be linked. Addition step will be handled by the transactionsStore
 const addSpending = (spending) => {
-  console.log(spending)
   spendings.value.push({...spending, id: spendings.value.length + 1});
   spendingFormModalOpen.value = false;
 };
 
 const handleAddEntry = (newEntry) => {
   if (incomeFormModalOpen.value) {
-    addIncome(newEntry);
+    addIncome(newEntry); // will need to be replaced with the actual call to the transactionsStore addIncome method
   } else {
-    addSpending(newEntry);
+    addSpending(newEntry); // will need to be replaced with the actual call to the transactionsStore addSpending method
   }
 }
 
+// Modal Management
 const openIncomeFormModal = () => {
   incomeFormModalOpen.value = true;
   spendingFormModalOpen.value = false;
-  console.log('openIncomeFormModal');
 };
 
 const openSpendingFormModal = () => {
   spendingFormModalOpen.value = true;
   incomeFormModalOpen.value = false;
-  console.log('openSpendingFormModal');
 };
 
 const closeModal = () => {
@@ -135,7 +143,9 @@ const closeModal = () => {
   spendingFormModalOpen.value = false;
 };
 
+// Reset Budget for New Month Function
 const resetBudgetNewMonth = async () => {
+  // SweetAlert2 confirmation modal
   const result = await Swal.fire({
     title: "Etes vous surs de vouloir commencer un nouveau mois?",
     text: `Cette action est irreversible!`,
@@ -146,6 +156,7 @@ const resetBudgetNewMonth = async () => {
     confirmButtonText: "Oui, supprimer!"
   });
 
+  // If user confirms, delete all non-recurrent items
   if (result.isConfirmed) {
     incomes.value = incomes.value.filter((item) => isEntryRecurrent(item));
     spendings.value = spendings.value.filter((item) => isEntryRecurrent(item));
@@ -156,13 +167,12 @@ const resetBudgetNewMonth = async () => {
     });
   }
 }
-
 </script>
 
 <template>
-  <div class="flex flex-col gap-12">
+  <div class="flex flex-col gap-8">
 
-    <BudgetPreview :balance="balance" :percentageSpent="percentageSpent" :spendingsTotal="spendingsTotal"></BudgetPreview>
+    <BudgetPreview :incomesTotal="incomesTotal" :spendingsTotal="spendingsTotal"></BudgetPreview>
 
     <button class="border-2 border-accent1 hover:bg-accent1 inline-block w-max py-2 px-5 rounded-md self-end text-accent1 hover:text-white font-semibold transition-all" @click="resetBudgetNewMonth" >Nouveau mois</button>
     
@@ -188,8 +198,7 @@ const resetBudgetNewMonth = async () => {
       :subTitle="incomeFormModalOpen ? 'Ajoutez un revenu récurrent ou ponctuel' : 'Ajoutez une dépense récurrente ou ponctuelle'"
       :hasCategory="spendingFormModalOpen"
       @submit="handleAddEntry"
-      >
-      </BudgetForm>
+      />
     </Modal>
 
   </div>

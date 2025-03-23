@@ -17,7 +17,7 @@ const props = defineProps({
     <h3 class="font-roboto text-sm">{{ subTitle }}</h3>
     <form v-on:submit.prevent="handleSubmit" action="" class="flex flex-col gap-4 my-4">
         <slot></slot>
-      <button  type="submit" class="mx-auto mt-4 border-2 border-accent1 hover:bg-accent1 inline-block w-max py-2 px-5 rounded-md text-accent1 hover:text-white font-semibold transition-all">Submit</button>
+      <button type="submit" class="mx-auto mt-4 border-2 border-accent1 hover:bg-accent1 inline-block w-max py-2 px-5 rounded-md text-accent1 hover:text-white font-semibold transition-all">Submit</button>
     </form>
   </div>
 </template>

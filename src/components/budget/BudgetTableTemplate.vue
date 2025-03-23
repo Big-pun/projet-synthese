@@ -13,7 +13,8 @@ const props = defineProps({
 
 const emit = defineEmits(['toggleReccurence', 'openForm', 'deleteItem']);
 
-const deleteItem = async (itemId) => {
+const handleDeleteItem = async (itemId) => {
+  // Sweet alert confirmation
   const result = await Swal.fire({
     title: "Etes vous surs?",
     text: `Cette action est irreversible!`,
@@ -24,6 +25,7 @@ const deleteItem = async (itemId) => {
     confirmButtonText: "Oui, supprimer!"
   });
 
+  // If user confirms, delete item (fires deleteItem event)
   if (result.isConfirmed) {
     emit('deleteItem', itemId);
     Swal.fire({
@@ -34,10 +36,6 @@ const deleteItem = async (itemId) => {
   }
 };
 
-const openForm = () => {
-  emit('openForm');
-};
-
 const isEntryRecurrent = (entry) => entry.frequency !== -1;
 
 </script>
@@ -45,7 +43,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
 <template>
   <div class="flex flex-col gap-2">
     <!-- Table title -->
-    <h2 class="uppercase font-semibold" :class="primaryColorTheme ? 'text-accent1' : 'text-accent2'">{{ name }}</h2>
+    <h2 class="uppercase font-semibold mb-1" :class="primaryColorTheme ? 'text-accent1' : 'text-accent2'">{{ name }}</h2>
     <!-- Table -->
     <table class="w-full bg-light-gray rounded-lg relative">
       <!-- Table header - loop through headers props to populate table header -->
@@ -62,10 +60,11 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
         <!-- Loop through items (each income or spending) and headers props to populate table body in the right order -->
         <tr v-for="item in items" :key="item.id" class="bg-white rounded-[8px]">
           <td v-for="header in headers" :key="header.label">
+
             <!-- Recurrence -->
             <template v-if="header.key === 'recurrent'">
               <div class="flex flex-col items-center gap-2" :class="!isEntryRecurrent(item) ? 'my-5' : ''">
-                <!-- Toggle Switch -->
+                <!-- Recurrence Toggle Switch -->
                 <label class="switch">
                   <input
                     type="checkbox"
@@ -75,13 +74,12 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
                   <span class="slider round"></span>
                 </label>
 
-                <!-- Frequency Select -->
+                <!-- Frequency Select (visible if reccurence toggle swicth is ON) -->
                 <select
                   v-if="isEntryRecurrent(item)"
                   v-model="item.frequency"
                   @change="emit('updateFrequency', { id: item.id, frequency: item.frequency })"
                   class="border border-gray-300 rounded-md p-1"
-     
                 >
                   <option :value="1">Quotidien</option>
                   <option :value="7">Hebdomadaire</option>
@@ -91,28 +89,36 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
                 </select>
               </div>
             </template>
+
             <!-- Actions -->
             <template v-else-if="header.key === 'actions'">
-              <button @click="deleteItem(item.id)"><img :src="deleteIcon" class="h-6" alt="supprimer"></button>
+              <button @click="handleDeleteItem(item.id)"><img :src="deleteIcon" class="h-6" alt="supprimer"></button>
             </template>
+
             <!-- Other fields -->
             <template v-else>
               {{ item[header.key] }}
             </template>
+
           </td>
         </tr>
+
         <!-- Add new item btn -->
         <tr class="new-item-btn border-2 bg-white rounded-[8px] m-auto transition-all duration-[250ms]" :class="primaryColorTheme ? 'hover:bg-accent1 border-accent1 hover:border-accent1' : 'hover:bg-accent2 border-accent2 hover:border-accent2'">
           <td :colspan="headers.length" class="w-full">
-            <button class="cursor-pointer font-medium transition-all duration-200 hover:text-white" @click="openForm" :class="primaryColorTheme ? 'hover:bg-accent1' : 'hover:bg-accent2'">
+            <button class="cursor-pointer font-medium transition-all duration-200 hover:text-white" @click="emit('openForm')" :class="primaryColorTheme ? 'hover:bg-accent1' : 'hover:bg-accent2'">
               + Ajouter {{ name === 'Revenus' ? 'un revenu' : 'une dépense' }}
             </button>
           </td>
         </tr>
       </tbody>
+
       <!-- Table tag -->
       <span class="tag" :class="primaryColorTheme ? 'bg-accent1' : 'bg-accent2'"></span>
+
     </table>
+
+    <!-- Total -->
     <p :class="primaryColorTheme ? 'text-accent1' : 'text-accent2'" class="text-right">Total des {{ name }}: {{ itemsTotal }}$</p>
   </div>
 </template>
@@ -146,6 +152,10 @@ tr {
   display: block;
   padding-left: 22px;
   padding-right: 22px;
+}
+
+tbody tr:hover {
+  background-color: rgb(247, 247, 247);
 }
 
 tbody tr {
