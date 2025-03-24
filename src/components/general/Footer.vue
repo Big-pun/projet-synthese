@@ -6,9 +6,9 @@ export default {
 
 <template scoped>
   
-  <div class="w-screen border-accent1 mt-16 border-2"></div>
+  <div class="w-full border-accent1 mt-16 border-2"></div>
 
-  <div class="flex w-screen justify-center">
+  <div class="flex w-full justify-center">
     <footer class="m-auto w-7xl">
       <!-- Container -->
 

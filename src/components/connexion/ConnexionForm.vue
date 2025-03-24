@@ -1,27 +1,22 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <h2>Connexion</h2>
+  <FormTemplate title="Connexion" subTitle="Connectez-vous pour avoir accès à votre compte" :handleSubmit="handleSubmit" :btnText="userStore.loading ? 'Connexion...' : 'Se connecter'" :disableBtn="userStore.loading">
     <!-- mail -->
-    <input v-model="email" type="email" placeholder="Email" required />
+    <input v-model="email" type="email" placeholder="Email" />
 
     <!-- password -->
-    <input v-model="password" type="password" placeholder="Mot de passe" required />
-
-    <!-- submit -->
-    <button type="submit" :disabled="loading">
-      {{ loading ? 'Connexion...' : 'Se connecter' }}
-    </button>
+    <input v-model="password" type="password" placeholder="Mot de passe" />
 
     <!-- error -->
-    <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
-  </form>
+    <p v-if="errorMessage" class="text-xs text-accent2">{{ errorMessage }}</p>
+  </FormTemplate>
 </template>
 
 <script setup>
 import { ref, defineEmits } from 'vue';
-import { useUserStore } from '@/services/userStore';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
+import { useUserStore } from '@/services/userStore';
+import FormTemplate from '../general/FormTemplate.vue';
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -31,7 +26,6 @@ const emit = defineEmits(['closeModal']);
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
-const loading = ref(false);
 
 // submit form
 const handleSubmit = async () => {
@@ -42,18 +36,18 @@ const handleSubmit = async () => {
   }
 
   try {
-    const response = await userStore.login(email.value, password.value);
+    await userStore.login(email.value, password.value);
     
-    if (response.success) {
+    if (userStore.user) {
       toast.success("Login successful!");
       setTimeout(() => {
         emit('closeModal'); // Close the modal after login
-        router.push('/profile'); // Redirect to profile page
+        router.push('/profil'); // Redirect to profile page
       }, 2000);
     } else {
-      toast.error(response.message || "Error during login.");
+      toast.error(userStore.error);
     }
-  } catch (error) {
+  } catch {
     errorMessage.value = "Erreur de connexion. Veuillez réessayer.";
   }
 };
