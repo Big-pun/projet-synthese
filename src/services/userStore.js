@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { getUserByEmail, postNewUser, updateUser } from '@/api/api.js';
+import { getUserByEmail, postNewUser, updateUser, deleteUser } from '@/api/api.js';
+import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -70,5 +71,32 @@ export const useUserStore = defineStore('user', {
           this.loading = false;
         }
       },
+
+      async deleteUser(userId) {
+        this.loading = true;
+        this.error = null;
+        const router = useRouter();
+
+        try {
+          // Appel à l'API de suppression
+          await deleteUser(userId);
+          
+          // Si la suppression réussit, nettoyer l'état
+          this.user = null;
+          localStorage.removeItem('user');
+          router.push('/accueil');
+          return true;
+        } catch (error) {
+          // Gestion des erreurs selon le type de réponse
+          if (error.response?.status === 500) {
+            this.error = "Le serveur a rencontré une erreur. Veuillez réessayer plus tard.";
+          } else {
+            this.error = error.response?.data?.message || "Erreur lors de la suppression du profil.";
+          }
+          throw error;
+        } finally {
+          this.loading = false;
+        }
+      }
     },
   });

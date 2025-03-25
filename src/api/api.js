@@ -7,8 +7,10 @@ const apiClient = axios.create({
   },
 });
 
-// Get user by ID
+// Users endpoints
 export const getUserById = (userId) => apiClient.get(`/users/${userId}`);
+export const updateUser = (userId, userData) => apiClient.put(`/users/${userId}`, userData);
+export const deleteUser = (userId) => apiClient.delete(`/users/${userId}`);
 
 // Get user by email
 export const getUserByEmail = (email) => apiClient.get(`/users/email/${email}`);
@@ -66,9 +68,3 @@ export const registerUser = async (userData) => {
     };
   }
 };
-
-// Users
-export const updateUser = (userId, userData) => apiClient.put(`/users/${userId}`, userData);
-
-// Delete user
-export const deleteUser = (userId) => apiClient.delete(`/users/${userId}`);
