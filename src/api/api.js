@@ -25,6 +25,10 @@ export const getUserAddresses = (userId) =>
 export const getUserBankingDetails = (userId) =>
   apiClient.get(`/users/${userId}/banking-details`);
 
+// Get user school details
+export const getUserSchoolDetails = (userId) =>
+  apiClient.get(`/users/${userId}/school-details`);
+
 // Post new user
 export const postNewUser = (userData) => apiClient.post('/users', userData);
 

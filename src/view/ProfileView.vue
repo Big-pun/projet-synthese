@@ -17,12 +17,72 @@ import { showLoading, closeLoading, showConfirm } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 import { mockUser } from '@/mock/userData';
 
+import { onMounted, computed } from 'vue';
+import { useUserStore } from '@/services/userStore';
+import { useBankingStore } from '@/services/bankingStore';
+import { useSchoolStore } from '@/services/schoolStore';
+import { useAddressStore } from '@/services/addressStore';
+
 // État local pour le modal et les formulaires
 const isModalOpen = ref(false);
 const activeForm = shallowRef(null);
 const formTitle = ref('');
 const formData = ref(null);
 const userAddresses = ref(null);
+
+const userStore = useUserStore();
+const bankingStore = useBankingStore();
+const schoolStore = useSchoolStore();
+const addressStore = useAddressStore();
+
+const userData = computed(() => userStore.user);
+const bankingDetails = computed(() => bankingStore.bankingDetails);
+const schoolDetails = computed(() => schoolStore.schoolDetails);
+// const userAddresses = computed(() => addressStore.addresses);
+
+// Fonction de chargement des données
+async function loadProfileData() {
+  if (!userStore.user?.id) {
+    console.log("Pas d'ID utilisateur disponible");
+    return;
+  }
+  
+  console.log("Loading profile data for user:", userStore.user.id);
+  showLoading('Chargement de vos informations...');
+  
+  try {
+    // Charger les données une par une pour mieux identifier les erreurs
+    try {
+      await bankingStore.fetchBankingDetails(userStore.user.id);
+      console.log("Banking details loaded");
+    } catch (e) {
+      console.error("Error loading banking details:", e);
+    }
+
+    try {
+      await schoolStore.fetchSchoolDetails(userStore.user.id);
+      console.log("School details loaded");
+    } catch (e) {
+      console.error("Error loading school details:", e);
+    }
+
+    try {
+      await addressStore.fetchAddresses(userStore.user.id);
+      console.log("Addresses loaded");
+    } catch (e) {
+      console.error("Error loading addresses:", e);
+    }
+  } catch (error) {
+    showError('Erreur lors du chargement des données');
+    console.error("Global error:", error);
+  } finally {
+    closeLoading();
+  }
+}
+
+onMounted(() => {
+  loadProfileData();
+});
 
 // Fonction pour ouvrir un formulaire spécifique
 function openForm(formType, data = null, addresses = null) {

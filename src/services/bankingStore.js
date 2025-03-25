@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getUserBankingDetails } from '@/api/api.js';
+import { getUserBankingDetails } from '../api/api.js';
 
 export const useBankingStore = defineStore('banking', {
   state: () => ({

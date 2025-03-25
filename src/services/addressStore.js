@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getUserAddresses } from '@/api/api.js';
+import { getUserAddresses } from '../api/api.js';
 
 export const useAddressStore = defineStore('address', {
   state: () => ({
@@ -12,7 +12,7 @@ export const useAddressStore = defineStore('address', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await getUserAddresses(userId);
+        const response = await apiClient.get(`users/${userId}/addresses`);
         this.addresses = response.data;
       } catch (error) {
         this.error = "Impossible de récupérer les adresses.";

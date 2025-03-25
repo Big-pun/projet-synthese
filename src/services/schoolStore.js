@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import apiClient from '@/api/api.js';
+import { getUserSchoolDetails } from '../api/api.js';
 
 export const useSchoolStore = defineStore('school', {
   state: () => ({
@@ -12,7 +12,7 @@ export const useSchoolStore = defineStore('school', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await apiClient.get(`/users/${userId}/school-details`);
+        const response = await getUserSchoolDetails(userId);
         this.schoolDetails = response.data;
       } catch (error) {
         this.error = "Impossible de récupérer les informations scolaires.";
