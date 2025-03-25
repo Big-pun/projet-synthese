@@ -14,6 +14,7 @@ export const useTransactionStore = defineStore('transaction', {
       try {
         const response = await getUserTransactions(userId);
         this.transactions = response.data;
+        console.log(this.transactions);
       } catch (error) {
         this.error = "Impossible de récupérer les transactions.";
         console.error(error);

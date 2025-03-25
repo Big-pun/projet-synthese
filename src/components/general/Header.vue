@@ -7,13 +7,21 @@
 
     <!-- MENUS -->
     <ul class="flex items-center mx-10 gap-10">
+
+      <!-- if user is NOT connected -->
       <!-- Bouton Inscription -->
-      <li class="px-5 py-2 font-flex rounded text-light-gray bg-accent1 hover:bg-hover">
+      <li v-if="!userStore.user" class="px-5 py-2 font-flex rounded text-light-gray bg-accent1 hover:bg-hover">
         <button @click="showSignup = true">Inscription</button>
       </li>
       <!-- Bouton Connexion -->
-      <li class="px-5 py-2 font-flex rounded text-light-gray bg-accent1 hover:bg-hover">
+      <li v-if="!userStore.user" class="px-5 py-2 font-flex rounded text-light-gray bg-accent1 hover:bg-hover">
         <button @click="showLogin = true">Connexion</button>
+      </li>
+
+      <!-- if user is connected -->
+      <!-- Bouton deconnexion -->
+      <li v-if="userStore.user" class="px-5 py-2 font-flex rounded text-light-gray bg-accent1 hover:bg-hover">
+        <button @click="handleLogout">Deonnexion</button>
       </li>
     </ul>
 
@@ -34,10 +42,21 @@ import { ref } from 'vue';
 import Modal from '@/components/general/Modal.vue';  
 import SubscriptionForm from '@/components/connexion/SubscriptionForm.vue';  
 import ConnexionForm from '@/components/connexion/ConnexionForm.vue';
+import { useUserStore } from '@/services/userStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // États pour gérer l'affichage des modales
 const showSignup = ref(false);
 const showLogin = ref(false);
+
+const userStore = useUserStore();
+
+const handleLogout = () => {
+  userStore.logout();
+  router.push('/accueil');
+};
 </script>
 
 <style scoped>
