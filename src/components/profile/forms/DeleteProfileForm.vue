@@ -92,9 +92,13 @@ import { ref, reactive, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, helpers } from '@vuelidate/validators';
 import { useUserStore } from '@/services/userStore';
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 import Swal from 'sweetalert2';
 
 const userStore = useUserStore();
+const router = useRouter();
+const toast = useToast();
 const emit = defineEmits(['save', 'cancel']);
 
 const props = defineProps({
@@ -135,32 +139,9 @@ function togglePasswordVisibility() {
 
 async function handleSubmit() {
   try {
-    console.log('Début de la soumission du formulaire de suppression');
-    console.log('Données du formulaire:', formData);
-    console.log('Utilisateur actuel:', userStore.user);
-
-    // Valider le formulaire
     const isValid = await v$.value.$validate();
-    console.log('Résultat de la validation:', isValid);
-    console.log('Erreurs de validation:', v$.value.$errors);
     if (!isValid) return;
 
-    // Vérifier le mot de passe
-    console.log('Vérification du mot de passe...');
-    if (formData.password !== userStore.user?.password) {
-      console.log('Mot de passe incorrect');
-      Swal.fire({
-        icon: 'error',
-        title: 'Erreur',
-        text: 'Le mot de passe est incorrect',
-        confirmButtonColor: '#F74949'
-      });
-      return;
-    }
-    console.log('Mot de passe correct');
-
-    // Demander confirmation finale
-    console.log('Demande de confirmation à l\'utilisateur');
     const result = await Swal.fire({
       title: 'Êtes-vous sûr ?',
       text: "Cette action est irréversible. Toutes vos données seront définitivement supprimées.",
@@ -172,66 +153,41 @@ async function handleSubmit() {
       cancelButtonText: 'Annuler'
     });
 
-    console.log('Réponse de confirmation:', result);
-
     if (result.isConfirmed) {
-      try {
-        // Afficher le loading
-        Swal.fire({
-          title: 'Suppression en cours...',
-          text: 'Veuillez patienter pendant la suppression de votre compte',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-            Swal.showLoading();
-          }
-        });
+      // Afficher le loading
+      Swal.fire({
+        title: 'Suppression en cours...',
+        text: 'Veuillez patienter pendant la suppression de votre compte',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
 
-        await userStore.deleteUser(userStore.user.id);
+      try {
+        await userStore.deleteUser(userStore.user.id, formData.password);
         
-        // Si la suppression réussit
-        await Swal.fire({
-          icon: 'success',
-          title: 'Compte supprimé',
-          text: 'Votre compte a été supprimé avec succès',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        // Fermer le SweetAlert de loading
+        Swal.close();
+        
+        // Afficher le toast de succès
+        toast.success("Votre compte a été supprimé avec succès");
 
         emit('save');
+        router.push('/accueil');
       } catch (error) {
-        // Gérer spécifiquement l'erreur 500
-        if (error.response?.status === 500) {
-          await Swal.fire({
-            icon: 'error',
-            title: 'Erreur serveur',
-            text: 'Le serveur a rencontré une erreur lors de la suppression. Veuillez réessayer plus tard.',
-            confirmButtonColor: '#F74949',
-            showCancelButton: true,
-            confirmButtonText: 'Réessayer',
-            cancelButtonText: 'Annuler'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Si l'utilisateur veut réessayer
-              handleSubmit();
-            }
-          });
-        } else {
-          await Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: error.response?.data?.message || 'Une erreur est survenue lors de la suppression du profil',
-            confirmButtonColor: '#F74949'
-          });
+        let errorMessage = "Une erreur est survenue lors de la suppression du profil";
+        if (error.message === "Mot de passe incorrect") {
+          errorMessage = "Le mot de passe est incorrect";
         }
+
+        toast.error(errorMessage);
       }
     }
   } catch (error) {
-    console.error('Erreur détaillée lors de la suppression:', {
-      message: error.message,
-      stack: error.stack,
-      response: error.response?.data
-    });
+    console.error('Erreur lors de la suppression:', error);
+    toast.error("Une erreur inattendue est survenue");
   } finally {
     isSubmitting.value = false;
   }

@@ -142,8 +142,7 @@ onMounted(async () => {
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
   try {
-    // Afficher l'indicateur de chargement
-    showLoading('Traitement en cours...');
+    showLoading('Enregistrement en cours...');
     
     // Simuler un délai de traitement côté serveur (1 seconde)
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -174,6 +173,7 @@ async function handleSave(data) {
     }
     else if (activeForm.value === SchoolInfoForm) {
       console.log('Saving school info:', data);
+      await schoolStore.fetchSchoolDetails(userStore.user.id);
       successMessage = 'Vos informations scolaires ont été mises à jour avec succès.';
     }
     else if (activeForm.value === BankingInfoForm) {

@@ -24,10 +24,10 @@
               id="schoolName" 
               v-model="formData.schoolName"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.schoolName.$error }"
+              :class="{ 'border-accent2': v$?.schoolName?.$error }"
             />
-            <div v-if="v$.schoolName.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.schoolName.$errors[0].$message }}
+            <div v-if="v$?.schoolName?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.schoolName?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -41,10 +41,10 @@
               id="fieldOfStudy" 
               v-model="formData.fieldOfStudy"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.fieldOfStudy.$error }"
+              :class="{ 'border-accent2': v$?.fieldOfStudy?.$error }"
             />
-            <div v-if="v$.fieldOfStudy.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.fieldOfStudy.$errors[0].$message }}
+            <div v-if="v$?.fieldOfStudy?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.fieldOfStudy?.$errors[0]?.$message }}
             </div>
           </div>
         </div>
@@ -61,10 +61,10 @@
               id="startDate" 
               v-model="formData.startDate"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.startDate.$error }"
+              :class="{ 'border-accent2': v$?.startDate?.$error }"
             />
-            <div v-if="v$.startDate.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.startDate.$errors[0].$message }}
+            <div v-if="v$?.startDate?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.startDate?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -78,13 +78,10 @@
               id="projectedEndDate" 
               v-model="formData.projectedEndDate"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.projectedEndDate.$error || endDateError }"
+              :class="{ 'border-accent2': v$?.projectedEndDate?.$error }"
             />
-            <div v-if="v$.projectedEndDate.$error" class="text-accent2 text-sm">
-              {{ v$.projectedEndDate.$errors[0].$message }}
-            </div>
-            <div v-if="endDateError" class="text-accent2 text-sm">
-              La date de fin ne peut pas être antérieure à la date de début
+            <div v-if="v$?.projectedEndDate?.$error" class="text-accent2 text-sm">
+              {{ v$?.projectedEndDate?.$errors[0]?.$message }}
             </div>
           </div>
         </div>
@@ -99,8 +96,9 @@
         </button>
         <button 
           type="submit" 
-          class="px-8 py-3 border border-accent1 bg-white text-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors">
-          Enregistrer
+          class="px-8 py-3 border border-accent1 bg-white text-accent1 rounded-md hover:bg-accent1 hover:text-white transition-colors"
+          :disabled="isSubmitting">
+          {{ isSubmitting ? 'En cours...' : 'Enregistrer' }}
         </button>
       </div>
     </form>
@@ -108,9 +106,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, computed, watch, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, helpers } from '@vuelidate/validators';
+import { useSchoolStore } from '@/services/schoolStore';
+import { useUserStore } from '@/services/userStore';
+import { useToast } from 'vue-toastification';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   schoolData: {
@@ -125,16 +127,18 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel']);
 
-// État du formulaire
+const userStore = useUserStore();
+const schoolStore = useSchoolStore();
+const toast = useToast();
+
+const isSubmitting = ref(false);
+
 const formData = reactive({
   schoolName: '',
   fieldOfStudy: '',
   startDate: '',
   projectedEndDate: ''
 });
-
-const isSubmitting = ref(false);
-const endDateError = ref(false);
 
 // Charger les données initiales
 function loadSchoolData() {
@@ -167,21 +171,12 @@ function loadSchoolData() {
 
 // Règles de validation
 const rules = computed(() => ({
-  schoolName: { 
-    required: helpers.withMessage('Le nom de l\'établissement est requis', required) 
-  },
-  fieldOfStudy: { 
-    required: helpers.withMessage('Le domaine d\'études est requis', required) 
-  },
-  startDate: { 
-    required: helpers.withMessage('La date de début du programme est requise', required) 
-  },
-  projectedEndDate: { 
-    required: helpers.withMessage('La date de fin prévue du programme est requise', required) 
-  }
+  schoolName: { required: helpers.withMessage('Le nom de l\'établissement est requis', required) },
+  fieldOfStudy: { required: helpers.withMessage('Le domaine d\'études est requis', required) },
+  startDate: { required: helpers.withMessage('La date de début du programme est requise', required) },
+  projectedEndDate: { required: helpers.withMessage('La date de fin prévue du programme est requise', required) }
 }));
 
-// Initialiser Vuelidate
 const v$ = useVuelidate(rules, formData);
 
 // Charger les données initiales au montage
@@ -192,40 +187,91 @@ watch(() => props.schoolData, () => {
   loadSchoolData();
 }, { deep: true });
 
-// Surveiller les dates pour la validation
-watch([() => formData.startDate, () => formData.projectedEndDate], ([startDate, endDate]) => {
-  if (startDate && endDate) {
-    endDateError.value = new Date(endDate) < new Date(startDate);
-  } else {
-    endDateError.value = false;
-  }
-});
-
 async function handleSubmit() {
-  isSubmitting.value = true;
-  
-  // Valider le formulaire
-  const isValid = await v$.value.$validate();
-  
-  if (!isValid || endDateError.value) {
-    isSubmitting.value = false;
-    return;
-  }
-  
+  console.log('Début handleSubmit');
+  console.log('État initial du formulaire:', formData);
+
   try {
-    // Émettre l'événement save avec les données du formulaire
-    emit('save', {
+    const isFormValid = await v$.value.$validate();
+    console.log('Résultat de la validation:', isFormValid);
+    if (!isFormValid) {
+      console.log('Erreurs de validation:', v$.value.$errors);
+      return;
+    }
+
+    isSubmitting.value = true;
+    console.log('isSubmitting mis à true');
+
+    // Formater les données
+    const schoolData = {
       schoolName: formData.schoolName,
       fieldOfStudy: formData.fieldOfStudy,
-      startDate: formData.startDate,
-      projectedEndDate: formData.projectedEndDate
+      startDate: new Date(formData.startDate).toISOString(),
+      projectedEndDate: new Date(formData.projectedEndDate).toISOString()
+    };
+
+    console.log('Données formatées à envoyer:', schoolData);
+    console.log('ID utilisateur:', userStore.user?.id);
+
+    // Afficher le loading
+    Swal.fire({
+      title: 'Mise à jour en cours...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+        console.log('SweetAlert loading affiché');
+      }
     });
+
+    console.log('Tentative de mise à jour des données...');
+    await schoolStore.updateSchoolDetails(userStore.user.id, schoolData);
+    console.log('Mise à jour réussie');
+
+    Swal.close();
+    console.log('SweetAlert fermé');
+
+    toast.success("Vos informations scolaires ont été mises à jour avec succès");
+    console.log('Toast de succès affiché');
+
+    // Émettre l'événement save avec les données
+    emit('save', schoolData);
+
   } catch (error) {
-    console.error('Erreur lors de la soumission du formulaire', error);
+    console.error('Erreur détaillée:', {
+      message: error.message,
+      stack: error.stack,
+      response: error.response?.data
+    });
+    toast.error(schoolStore.error || 'Une erreur est survenue lors de la mise à jour');
   } finally {
     isSubmitting.value = false;
+    console.log('isSubmitting remis à false');
   }
 }
+
+onMounted(() => {
+  console.log('Composant monté');
+  console.log('Données école initiales:', schoolStore.schoolDetails);
+  
+  if (schoolStore.schoolDetails) {
+    formData.schoolName = schoolStore.schoolDetails.schoolName || '';
+    formData.fieldOfStudy = schoolStore.schoolDetails.fieldOfStudy || '';
+    
+    if (schoolStore.schoolDetails.startDate) {
+      formData.startDate = new Date(schoolStore.schoolDetails.startDate).toISOString().split('T')[0];
+      console.log('Date de début formatée:', formData.startDate);
+    }
+    
+    if (schoolStore.schoolDetails.projectedEndDate) {
+      formData.projectedEndDate = new Date(schoolStore.schoolDetails.projectedEndDate).toISOString().split('T')[0];
+      console.log('Date de fin formatée:', formData.projectedEndDate);
+    }
+    
+    console.log('Données du formulaire après initialisation:', formData);
+  } else {
+    console.log('Aucune donnée école disponible');
+  }
+});
 </script>
 
 <style scoped>

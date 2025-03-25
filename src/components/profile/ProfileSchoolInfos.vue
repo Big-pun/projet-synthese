@@ -1,11 +1,19 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { mockUser, formatDate } from '@/mock/userData';
+import { ref, onMounted } from 'vue';
+import { useSchoolStore } from '@/services/schoolStore';
+import { useUserStore } from '@/services/userStore';
+import { formatDate } from '@/mock/userData';
 
 const hovered = ref(false);
+const schoolStore = useSchoolStore();
+const userStore = useUserStore();
 
-// Données scolaires provenant du mock
-const schoolData = reactive({...mockUser.schoolDetails});
+// Charger les données scolaires au montage du composant
+onMounted(async () => {
+  if (userStore.user?.id) {
+    await schoolStore.fetchSchoolDetails(userStore.user.id);
+  }
+});
 
 // Définir l'événement pour l'édition
 const emit = defineEmits(['edit']);
@@ -36,25 +44,25 @@ function openEditForm() {
       <!-- Nom de l'établissement -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Nom</p>
-        <p>{{ schoolData.schoolName || 'Non spécifié' }}</p>
+        <p>{{ schoolStore.schoolDetails?.schoolName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Domaine d'études -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Domaine</p>
-        <p>{{ schoolData.fieldOfStudy || 'Non spécifié' }}</p>
+        <p>{{ schoolStore.schoolDetails?.fieldOfStudy || 'Non spécifié' }}</p>
       </div>
 
       <!-- Début du programme -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Début du programme</p>
-        <p>{{ formatDate(schoolData.startDate) }}</p>
+        <p>{{ formatDate(schoolStore.schoolDetails?.startDate) }}</p>
       </div>
 
       <!-- Fin du programme -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Fin du programme</p>
-        <p>{{ formatDate(schoolData.projectedEndDate) }}</p>
+        <p>{{ formatDate(schoolStore.schoolDetails?.projectedEndDate) }}</p>
       </div>
     </div>
 
