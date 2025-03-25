@@ -1,12 +1,28 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { mockUser } from '@/mock/userData';
-
+import { ref, onMounted, computed } from 'vue';
+import { useBankingStore } from '@/services/bankingStore';
+import { useUserStore } from '@/services/userStore';
 // État pour le survol
 const hovered = ref(false);
+const bankingStore = useBankingStore();
+const userStore = useUserStore();
 
-// Données bancaires (provenant du mock)
-const bankingData = reactive({...mockUser.bankingDetails});
+// Créer des computed properties avec des valeurs par défaut
+const bankingInfo = computed(() => {
+  return bankingStore.bankingDetails || {
+    institutionName: '',
+    accountInfo: '',
+    loanInfo: '',
+    other: ''
+  };
+});
+
+// Charger les données bancaires au montage du composant
+onMounted(async () => {
+  if (userStore.user?.id) {
+    await bankingStore.fetchBankingDetails(userStore.user.id);
+  }
+});
 
 // Définir l'événement pour l'édition
 const emit = defineEmits(['edit']);
@@ -38,25 +54,25 @@ function openEditForm() {
       <!-- Institution -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Institution</p>
-        <p>{{ bankingData.institutionName || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.institutionName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Numéro de compte -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Compte</p>
-        <p>{{ bankingData.accountInfo || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.accountInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Prêts -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Prêts</p>
-        <p>{{ bankingData.loanInfo || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.loanInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Autres informations -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Autres</p>
-        <p>{{ bankingData.other || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.other || 'Non spécifié' }}</p>
       </div>
     </div>
 

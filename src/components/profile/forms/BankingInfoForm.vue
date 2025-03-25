@@ -105,24 +105,21 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, helpers } from '@vuelidate/validators';
+import { useBankingStore } from '@/services/bankingStore';
+import { useUserStore } from '@/services/userStore';
+import { useToast } from 'vue-toastification';
 
-const props = defineProps({
-  bankingData: {
-    type: Object,
-    default: () => ({})
-  },
-  title: {
-    type: String,
-    default: 'Informations bancaires'
-  }
-});
+const bankingStore = useBankingStore();
+const userStore = useUserStore();
+const toast = useToast();
+const emit = defineEmits(['save']);
 
-const emit = defineEmits(['save', 'cancel']);
+const isSubmitting = ref(false);
 
-// État du formulaire
+// Données du formulaire
 const formData = reactive({
   institutionName: '',
   accountInfo: '',
@@ -130,98 +127,108 @@ const formData = reactive({
   other: ''
 });
 
-const isSubmitting = ref(false);
-
-// Charger les données initiales
+// Charger les données depuis le store
 function loadBankingData() {
-  if (props.bankingData) {
-    // Formatage des données bancaires pour assurer la cohérence
-    formData.institutionName = props.bankingData.institutionName || '';
+  console.log('Chargement des données bancaires depuis le store:', bankingStore.bankingDetails);
+  
+  if (bankingStore.bankingDetails) {
+    formData.institutionName = bankingStore.bankingDetails.institutionName || '';
+    formData.accountInfo = bankingStore.bankingDetails.accountInfo || '';
+    formData.loanInfo = bankingStore.bankingDetails.loanInfo || '';
+    formData.other = bankingStore.bankingDetails.other || '';
     
-    // Formatage du numéro de compte avec la même fonction que lors de la soumission
-    formData.accountInfo = props.bankingData.accountInfo ? formatAccountInfo(props.bankingData.accountInfo) : '';
-    
-    // Formatage des informations de prêt et autres
-    formData.loanInfo = props.bankingData.loanInfo || '';
-    formData.other = props.bankingData.other || '';
+    console.log('Données chargées dans le formulaire:', formData);
   }
 }
 
 // Règles de validation
-const rules = computed(() => ({
+const rules = {
   institutionName: { 
     required: helpers.withMessage('L\'institution bancaire est requise', required) 
   },
   accountInfo: { 
     required: helpers.withMessage('Les informations du compte sont requises', required),
-    // Validation du format après saisie par l'utilisateur
     validate: helpers.withMessage(
       'Veuillez entrer un numéro de compte valide (exemple: 123-456-7890)', 
       (value) => {
-        // On accepte au moins 6 chiffres
         const digitsOnly = value.replace(/\D/g, '');
         return digitsOnly.length >= 6;
       }
     )
   },
   loanInfo: {
-    // Peut être facultatif, mais nous le rendons obligatoire ici pour l'exemple
     required: helpers.withMessage('Les informations de prêt sont requises', required)
   }
-}));
+};
 
-// Initialiser Vuelidate
 const v$ = useVuelidate(rules, formData);
 
-// Charger les données initiales au montage
-loadBankingData();
-
-// Surveiller les changements de bankingData pour recharger les données
-watch(() => props.bankingData, () => {
-  loadBankingData();
-}, { deep: true });
-
-async function handleSubmit() {
-  isSubmitting.value = true;
+// Formatage du numéro de compte
+function formatAccountInfo(accountInfo) {
+  console.log('Formatage du numéro de compte:', accountInfo);
   
-  // Valider le formulaire
-  const isValid = await v$.value.$validate();
+  if (!accountInfo) return '';
   
-  if (!isValid) {
-    isSubmitting.value = false;
-    return;
+  const digitsOnly = accountInfo.replace(/\D/g, '');
+  
+  if (digitsOnly.length === 10) {
+    return `${digitsOnly.substring(0, 3)}-${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6, 10)}`;
   }
   
+  return accountInfo;
+}
+
+// Soumission du formulaire
+async function handleSubmit() {
+  console.log('Début de la soumission du formulaire');
+  
   try {
-    // Formater les données avant de les envoyer
-    const formattedAccountInfo = formatAccountInfo(formData.accountInfo);
+    const isValid = await v$.value.$validate();
+    if (!isValid) {
+      console.log('Erreurs de validation:', v$.value.$errors);
+      return;
+    }
+
+    isSubmitting.value = true;
     
-    // Émettre l'événement save avec les données du formulaire
-    emit('save', {
+    const formattedData = {
       institutionName: formData.institutionName,
-      accountInfo: formattedAccountInfo,
+      accountInfo: formatAccountInfo(formData.accountInfo),
       loanInfo: formData.loanInfo,
       other: formData.other
-    });
+    };
+
+    console.log('Données à envoyer:', formattedData);
+    
+    // Mise à jour via le store
+    await bankingStore.updateBankingDetails(userStore.user.id, formattedData);
+    
+    toast.success("Vos informations bancaires ont été mises à jour avec succès");
+    emit('save', formattedData);
+
   } catch (error) {
-    console.error('Erreur lors de la soumission du formulaire', error);
+    console.error('Erreur lors de la mise à jour:', error);
+    toast.error(bankingStore.error || "Une erreur est survenue lors de la mise à jour");
   } finally {
     isSubmitting.value = false;
   }
 }
 
-// Fonction utilitaire pour formater le numéro de compte
-function formatAccountInfo(accountInfo) {
-  if (!accountInfo) return '';
-  
-  const digitsOnly = accountInfo.replace(/\D/g, '');
-  if (digitsOnly.length === 10) {
-    return `${digitsOnly.substring(0, 3)}-${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6, 10)}`;
+// Charger les données au montage
+onMounted(async () => {
+  console.log('Montage du formulaire bancaire');
+  if (userStore.user?.id) {
+    console.log('Chargement des données pour l\'utilisateur:', userStore.user.id);
+    await bankingStore.fetchBankingDetails(userStore.user.id);
+    loadBankingData();
   }
-  
-  // Si aucun chiffre n'est présent, retourner la chaîne originale
-  return accountInfo;
-}
+});
+
+// Observer les changements dans le store
+watch(() => bankingStore.bankingDetails, (newVal) => {
+  console.log('Changement détecté dans les données bancaires:', newVal);
+  loadBankingData();
+}, { deep: true });
 </script>
 
 <style scoped>

@@ -35,6 +35,10 @@ export const getAddressByType = (userId, addressType) =>
 export const getUserBankingDetails = (userId) =>
   apiClient.get(`/users/${userId}/banking-details`);
 
+// update banking details
+export const updateBankingDetails = (userId, bankingData) =>
+  apiClient.put(`/users/${userId}/banking-details`, bankingData);
+
 // school details
 export const getUserSchoolDetails = (userId) =>
   apiClient.get(`/users/${userId}/school-details`);
