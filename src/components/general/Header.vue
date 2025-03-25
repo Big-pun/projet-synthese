@@ -59,4 +59,5 @@ const handleLogout = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

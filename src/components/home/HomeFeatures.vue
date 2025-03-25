@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<template scoped> <!--ATTENTION LES FONTES NE CORRESPONT PAS À LA MAQUETTE, AJUSTEMENT REQUIS POUR LE H4-->
+<template scoped>
  <div class="flex justify-center">
 
   <section class="m-auto md:w-[50%] w-[90%] pt-10">

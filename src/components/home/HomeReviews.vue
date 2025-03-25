@@ -2,9 +2,10 @@
 </script>
 
 <template scoped>
-  <div class="flex justify-center item-center w-screen">
-    <section class="test flex flex-col item-center m-auto md:w-[80%] w-[90%] py-20">
 
+    <section class="flex items-center justify-between w-full max-w-1400px my-0 mx-auto mt-15">
+      <div class="flex flex-col justify-center items-center py-5 w-full">
+ 
         <!--TITRE-->
         <div class="flex items-center justify-center sm:pb-5 pb-20">
           <img src="@/assets/img/logo.svg" alt="Flow icon" class="w-[25px] pb-8 md:pb-0 hover:animate-spin" > <!--Je me suis amusé ;), c'est peut-être trop-->
@@ -13,7 +14,7 @@
 
         <!--Blocs des avis des utilisateurs-->
         <div class="pb-20">
-          <div class="relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
+          <div class="m-auto relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
             <h4 class="font-roboto text-accent2 uppercase">Enfin une app de budget qui ne me prend pas la tête!</h4>
             <p class="py-6">Grâce à Flow, j’ai une vision claire de mes dépenses et j’ai pu mettre de côté pour mon voyage. J’adore la fonction de transactions récurrentes, ça change tout!</p>
             <p class="text-right"><strong>— Maxime, 22 ans, étudiant en ingénierie</strong></p>
@@ -27,7 +28,7 @@
         </div>
 
         <div class="pb-20">
-          <div class="relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
+          <div class="m-auto relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
             <h4 class="font-roboto text-accent1 uppercase">Enfin une app de budget qui ne me prend pas la tête!</h4>
             <p class="py-6">Grâce à Flow, j’ai une vision claire de mes dépenses et j’ai pu mettre de côté pour mon voyage. J’adore la fonction de transactions récurrentes, ça change tout!</p>
             <p class="text-right"><strong>— Maxime, 22 ans, étudiant en ingénierie</strong></p>
@@ -42,7 +43,7 @@
 
 
         <div class="pb-20">
-          <div class="relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
+          <div class="m-auto relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
             <h4 class="font-roboto text-accent2 uppercase">Enfin une app de budget qui ne me prend pas la tête!</h4>
             <p class="py-6">Grâce à Flow, j’ai une vision claire de mes dépenses et j’ai pu mettre de côté pour mon voyage. J’adore la fonction de transactions récurrentes, ça change tout!</p>
             <p class="text-right"><strong>— Maxime, 22 ans, étudiant en ingénierie</strong></p>
@@ -54,9 +55,9 @@
             </div>
           </div>
         </div>
-
+      </div>
     </section>
-  </div>
+  <!-- </div> -->
 </template>
 
 <style>
