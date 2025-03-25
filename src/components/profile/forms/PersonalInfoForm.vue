@@ -28,10 +28,10 @@
               id="firstName" 
               v-model="formData.firstName"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.firstName.$error }"
+              :class="{ 'border-accent2': v$?.firstName?.$error }"
             />
-            <div v-if="v$.firstName.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.firstName.$errors[0].$message }}
+            <div v-if="v$?.firstName?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.firstName?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -45,10 +45,10 @@
               id="lastName" 
               v-model="formData.lastName"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.lastName.$error }"
+              :class="{ 'border-accent2': v$?.lastName?.$error }"
             />
-            <div v-if="v$.lastName.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.lastName.$errors[0].$message }}
+            <div v-if="v$?.lastName?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.lastName?.$errors[0]?.$message }}
             </div>
           </div>
         </div>
@@ -65,10 +65,10 @@
               id="birthDate" 
               v-model="formData.birthDate"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.birthDate.$error }"
+              :class="{ 'border-accent2': v$?.birthDate?.$error }"
             />
-            <div v-if="v$.birthDate.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.birthDate.$errors[0].$message }}
+            <div v-if="v$?.birthDate?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.birthDate?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -82,10 +82,10 @@
               id="phone" 
               v-model="formData.phone"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.phone.$error }"
+              :class="{ 'border-accent2': v$?.phone?.$error }"
             />
-            <div v-if="v$.phone.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.phone.$errors[0].$message }}
+            <div v-if="v$?.phone?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.phone?.$errors[0]?.$message }}
             </div>
           </div>
         </div>
@@ -100,10 +100,10 @@
             id="email" 
             v-model="formData.email"
             class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-            :class="{ 'border-accent2': v$.email.$error }"
+            :class="{ 'border-accent2': v$?.email?.$error }"
           />
-          <div v-if="v$.email.$error" class="text-accent2 text-sm mt-1">
-            {{ v$.email.$errors[0].$message }}
+          <div v-if="v$?.email?.$error" class="text-accent2 text-sm mt-1">
+            {{ v$?.email?.$errors[0]?.$message }}
           </div>
         </div>
       </div>
@@ -121,13 +121,13 @@
               v-model="formData.addressType"
               @change="handleAddressTypeChange"
               class="w-48 px-3 py-2 border border-accent1 rounded-md focus:border-accent1 outline-none bg-white text-gray"
-              :class="{ 'border-accent2': v$.addressType.$error }"
+              :class="{ 'border-accent2': v$?.addressType?.$error }"
             >
               <option value="PERSONAL">Personnelle</option>
               <option value="WORK">Professionnelle</option>
             </select>
-            <div v-if="v$.addressType.$error" class="absolute text-accent2 text-sm mt-1">
-              {{ v$.addressType.$errors[0].$message }}
+            <div v-if="v$?.addressType?.$error" class="absolute text-accent2 text-sm mt-1">
+              {{ v$?.addressType?.$errors[0]?.$message }}
             </div>
           </div>
         </div>
@@ -144,10 +144,10 @@
               id="streetNumber" 
               v-model="formData.streetNumber"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.streetNumber.$error }"
+              :class="{ 'border-accent2': v$?.streetNumber?.$error }"
             />
-            <div v-if="v$.streetNumber.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.streetNumber.$errors[0].$message }}
+            <div v-if="v$?.streetNumber?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.streetNumber?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -161,10 +161,10 @@
               id="streetName" 
               v-model="formData.streetName"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.streetName.$error }"
+              :class="{ 'border-accent2': v$?.streetName?.$error }"
             />
-            <div v-if="v$.streetName.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.streetName.$errors[0].$message }}
+            <div v-if="v$?.streetName?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.streetName?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -178,10 +178,10 @@
               id="city" 
               v-model="formData.city"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.city.$error }"
+              :class="{ 'border-accent2': v$?.city?.$error }"
             />
-            <div v-if="v$.city.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.city.$errors[0].$message }}
+            <div v-if="v$?.city?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.city?.$errors[0]?.$message }}
             </div>
           </div>
           
@@ -194,15 +194,15 @@
               id="province" 
               v-model="formData.province"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.province.$error }"
+              :class="{ 'border-accent2': v$?.province?.$error }"
             >
               <option value="">Sélectionnez une option</option>
               <option v-for="province in provinces" :key="province.value" :value="province.value">
                 {{ province.label }}
               </option>
             </select>
-            <div v-if="v$.province.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.province.$errors[0].$message }}
+            <div v-if="v$?.province?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.province?.$errors[0]?.$message }}
             </div>
           </div>
         </div>
@@ -216,12 +216,12 @@
               id="country" 
               v-model="formData.country"
               class="w-full px-3 py-2 border border-accent1 rounded-md focus:border-accent1 outline-none"
-              :class="{ 'border-accent2': v$.country.$error }"
+              :class="{ 'border-accent2': v$?.country?.$error }"
             >
               <option value="CA">Canada</option>
             </select>
-            <div v-if="v$.country.$error" class="text-accent2 text-sm mt-1">
-              {{ v$.country.$errors[0].$message }}
+            <div v-if="v$?.country?.$error" class="text-accent2 text-sm mt-1">
+              {{ v$?.country?.$errors[0]?.$message }}
             </div>
           </div>
       </div>
@@ -245,26 +245,29 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue';
+import { reactive, computed, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, helpers } from '@vuelidate/validators';
+import { useUserStore } from '@/services/userStore';
+import { useAddressStore } from '@/services/addressStore';
+
+const userStore = useUserStore();
+const addressStore = useAddressStore();
 
 const props = defineProps({
   userData: {
     type: Object,
-    default: () => ({})
+    required: true
   },
   userAddresses: {
     type: Array,
     default: () => []
   },
-  title: {
-    type: String,
-    default: 'Informations personnelles'
-  }
+  isOpen: Boolean,
+  title: String
 });
 
-const emit = defineEmits(['save', 'cancel']);
+const emit = defineEmits(['update:isOpen', 'save', 'cancel']);
 
 // Provinces disponibles
 const provinces = [
@@ -283,7 +286,7 @@ const provinces = [
   { value: 'NU', label: 'Nunavut' }
 ];
 
-// État du formulaire
+// Formulaire réactif
 const formData = reactive({
   firstName: '',
   lastName: '',
@@ -298,62 +301,8 @@ const formData = reactive({
   country: 'CA'
 });
 
-const isSubmitting = ref(false);
-
-// Chargement des données initiales
-function loadUserData() {
-  if (props.userData) {
-    formData.firstName = props.userData.firstName || '';
-    formData.lastName = props.userData.lastName || '';
-    
-    // Convertir la date de naissance au format YYYY-MM-DD pour le champ date
-    if (props.userData.birthDate) {
-      const date = new Date(props.userData.birthDate);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      formData.birthDate = `${year}-${month}-${day}`;
-    } else {
-      formData.birthDate = '';
-    }
-    
-    formData.phone = props.userData.phone || '';
-    formData.email = props.userData.email || '';
-    
-    // Charger l'adresse par défaut (personnelle)
-    loadAddressByType('PERSONAL');
-  }
-}
-
-// Charger une adresse selon son type
-function loadAddressByType(type) {
-  const address = props.userAddresses?.find(addr => addr.type === type);
-  
-  if (address) {
-    formData.addressType = type;
-    formData.streetNumber = address.streetNumber || '';
-    formData.streetName = address.streetName || '';
-    formData.city = address.city || '';
-    formData.province = address.province || '';
-    formData.country = address.country || 'CA';
-  } else {
-    // Réinitialiser les champs d'adresse si l'adresse n'existe pas
-    formData.addressType = type;
-    formData.streetNumber = '';
-    formData.streetName = '';
-    formData.city = '';
-    formData.province = '';
-    formData.country = 'CA';
-  }
-}
-
-// Gérer le changement de type d'adresse
-function handleAddressTypeChange() {
-  loadAddressByType(formData.addressType);
-}
-
 // Règles de validation
-const rules = computed(() => ({
+const rules = {
   firstName: { 
     required: helpers.withMessage('Le prénom est requis', required) 
   },
@@ -370,9 +319,6 @@ const rules = computed(() => ({
     required: helpers.withMessage('L\'adresse email est requise', required),
     email: helpers.withMessage('Veuillez entrer une adresse email valide', email)
   },
-  addressType: { 
-    required: helpers.withMessage('Le type d\'adresse est requis', required) 
-  },
   streetNumber: { 
     required: helpers.withMessage('Le numéro de rue est requis', required) 
   },
@@ -384,58 +330,92 @@ const rules = computed(() => ({
   },
   province: { 
     required: helpers.withMessage('La province est requise', required) 
-  },
-  country: { 
-    required: helpers.withMessage('Le pays est requis', required) 
   }
-}));
+};
 
 // Initialiser Vuelidate
-const v$ = useVuelidate(rules, formData);
+const v$ = useVuelidate(rules, formData, { $lazy: true });
 
-// Charger les données initiales au montage
-loadUserData();
-
-// Surveiller les changements de userData pour recharger les données
-watch(() => props.userData, () => {
-  loadUserData();
-}, { deep: true });
-
-async function handleSubmit() {
-  isSubmitting.value = true;
-  
-  // Valider le formulaire
-  const isValid = await v$.value.$validate();
-  
-  if (!isValid) {
-    isSubmitting.value = false;
-    return;
+// Charger les données de l'utilisateur
+function loadUserData() {
+  if (props.userData) {
+    formData.firstName = props.userData.firstName || '';
+    formData.lastName = props.userData.lastName || '';
+    formData.birthDate = props.userData.birthDate ? new Date(props.userData.birthDate).toISOString().split('T')[0] : '';
+    formData.phone = props.userData.phone || '';
+    formData.email = props.userData.email || '';
+    
+    // Charger l'adresse initiale
+    loadAddressByType('PERSONAL');
   }
+}
+
+// Charger une adresse par type
+function loadAddressByType(type) {
+  const address = props.userAddresses?.find(addr => addr.type === type);
   
+  if (address) {
+    formData.addressType = type;
+    formData.streetNumber = address.streetNumber || '';
+    formData.streetName = address.streetName || '';
+    formData.city = address.city || '';
+    formData.province = address.province || '';
+    formData.country = address.country || 'CA';
+  } else {
+    // Réinitialiser les champs d'adresse
+    formData.addressType = type;
+    formData.streetNumber = '';
+    formData.streetName = '';
+    formData.city = '';
+    formData.province = '';
+    formData.country = 'CA';
+  }
+}
+
+// Gérer le changement de type d'adresse
+function handleAddressTypeChange() {
+  loadAddressByType(formData.addressType);
+}
+
+// Charger les données au montage du composant
+onMounted(() => {
+  loadUserData();
+});
+
+// Fonction de soumission du formulaire
+async function handleSubmit() {
+  const isFormCorrect = await v$.value.$validate();
+  if (!isFormCorrect) return;
+
   try {
-    // Préparer les données à envoyer
-    const personalData = {
+    // Préparer les données utilisateur
+    const userData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       birthDate: formData.birthDate,
       phone: formData.phone,
-      email: formData.email,
-      address: {
-        type: formData.addressType,
-        streetNumber: formData.streetNumber,
-        streetName: formData.streetName,
-        city: formData.city,
-        province: formData.province,
-        country: formData.country
-      }
+      email: formData.email
     };
-    
-    // Émettre l'événement save avec les données du formulaire
-    emit('save', personalData);
+
+    // Préparer les données d'adresse
+    const addressData = {
+      type: formData.addressType,
+      streetNumber: formData.streetNumber,
+      streetName: formData.streetName,
+      city: formData.city,
+      province: formData.province,
+      country: formData.country
+    };
+
+    // Mettre à jour l'utilisateur et l'adresse
+    await Promise.all([
+      userStore.updateUser(userStore.user.id, userData),
+      addressStore.updateAddress(userStore.user.id, addressData)
+    ]);
+
+    emit('update:isOpen', false);
   } catch (error) {
-    console.error('Erreur lors de la soumission du formulaire', error);
-  } finally {
-    isSubmitting.value = false;
+    console.error('Erreur lors de la mise à jour:', error);
   }
 }
 </script>

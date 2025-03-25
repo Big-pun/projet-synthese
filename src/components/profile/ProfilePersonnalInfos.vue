@@ -1,9 +1,28 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { mockUser, formatDate, getAddressByType, formatAddress } from '@/mock/userData';
+import { ref, computed } from 'vue';
+import { useUserStore } from '@/services/userStore';
+import { useAddressStore } from '@/services/addressStore';
 
 const hovered = ref(false);
-const userData = reactive({...mockUser});
+const userStore = useUserStore();
+const addressStore = useAddressStore();
+
+const userData = computed(() => userStore.user);
+const userAddresses = computed(() => addressStore.addresses);
+
+function getAddressByType(type) {
+  return userAddresses.value.find(address => address.type === type);
+}
+
+function formatAddress(address) {
+  if (!address) return 'Non spécifié';
+  return `${address.streetNumber} ${address.streetName}, ${address.city}, ${address.province}`;
+}
+
+function formatDate(date) {
+  if (!date) return 'Non spécifié';
+  return new Date(date).toLocaleDateString('fr-CA');
+}
 
 // Définir l'événement pour l'édition
 const emit = defineEmits(['edit']);
@@ -35,12 +54,12 @@ function openEditForm() {
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Prénom</p>
-          <p class="">{{ userData.firstName || 'Non spécifié' }}</p>
+          <p>{{ userData?.firstName || 'Non spécifié' }}</p>
         </div>
 
         <div class="rounded-lg bg-white p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Date de naissance</p>
-          <p class="">{{ formatDate(userData.birthDate) }}</p>
+          <p>{{ userData?.birthDate ? formatDate(userData.birthDate) : 'Non spécifié' }}</p>
         </div>
       </div>
 
@@ -48,12 +67,12 @@ function openEditForm() {
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Nom</p>
-          <p class="">{{ userData.lastName || 'Non spécifié' }}</p>
+          <p>{{ userData?.lastName || 'Non spécifié' }}</p>
         </div>
 
-        <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
+        <div class="rounded-lg bg-white p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Téléphone</p>
-          <p class="">{{ userData.phone || 'Non spécifié' }}</p>
+          <p>{{ userData?.phone || 'Non spécifié' }}</p>
         </div>
       </div>
     </div>
@@ -62,17 +81,17 @@ function openEditForm() {
     <div class="mt-2 px-6">
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Courriel</p>
-        <p class="">{{ userData.email || 'Non spécifié' }}</p>
+        <p>{{ userData?.email || 'Non spécifié' }}</p>
       </div>
 
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center ">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Adresse personnelle</p>
-        <p class="">{{ formatAddress(getAddressByType(userData.addresses, 'PERSONAL')) }}</p>
+        <p>{{ formatAddress(getAddressByType('PERSONAL')) }}</p>
       </div>
 
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center ">
+      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Adresse au travail</p>
-        <p class="">{{ formatAddress(getAddressByType(userData.addresses, 'WORK')) }}</p>
+        <p>{{ formatAddress(getAddressByType('WORK')) }}</p>
       </div>
     </div>
 

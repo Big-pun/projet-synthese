@@ -1,8 +1,11 @@
 <script setup>
-import { ref } from 'vue';
-import { mockUser } from '@/mock/userData';
+import { computed } from 'vue';
+import { useUserStore } from '@/services/userStore';
 
-const userData = ref({...mockUser});
+const userStore = useUserStore();
+
+// Utiliser computed avec une vérification de null
+const userData = computed(() => userStore.user || {});
 
 // Définir les événements
 const emit = defineEmits(['change-password', 'delete-profile']);
@@ -14,7 +17,6 @@ function openChangePasswordForm() {
 function openDeleteProfileForm() {
   emit('delete-profile');
 }
-
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, shallowRef } from 'vue';
+import { ref, shallowRef, onMounted, nextTick } from 'vue';
 import Modal from '@/components/general/Modal.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
@@ -17,7 +17,7 @@ import { showLoading, closeLoading, showConfirm } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 import { mockUser } from '@/mock/userData';
 
-import { onMounted, computed } from 'vue';
+import { computed } from 'vue';
 import { useUserStore } from '@/services/userStore';
 import { useBankingStore } from '@/services/bankingStore';
 import { useSchoolStore } from '@/services/schoolStore';
@@ -80,51 +80,64 @@ async function loadProfileData() {
   }
 }
 
-onMounted(() => {
-  loadProfileData();
-});
-
-// Fonction pour ouvrir un formulaire spécifique
-function openForm(formType, data = null, addresses = null) {
-  // Configurer le formulaire actif
-  switch (formType) {
-    case 'changePassword':
-      activeForm.value = ChangePasswordForm;
-      formTitle.value = 'Changer votre mot de passe';
-      break;
-      
-    case 'deleteProfile':
-      activeForm.value = DeleteProfileForm;
-      formTitle.value = 'Supprimer votre profil';
-      break;
-      
-    case 'personnalInfo':
-      activeForm.value = PersonalInfoForm;
-      formTitle.value = 'Modifier vos informations personnelles';
-      break;
-      
-    case 'schoolInfo':
-      activeForm.value = SchoolInfoForm;
-      formTitle.value = 'Modifier votre établissement scolaire';
-      break;
-      
-    case 'bankingInfo':
-      activeForm.value = BankingInfoForm;
-      formTitle.value = 'Modifier vos renseignements bancaires';
-      break;
-      
-    default:
-      console.error('Type de formulaire non reconnu:', formType);
-      return;
+// Fonction pour ouvrir le formulaire
+async function openForm(formType) {
+  try {
+    switch (formType) {
+      case 'changePassword':
+        activeForm.value = ChangePasswordForm;
+        formTitle.value = 'Changer votre mot de passe';
+        break;
+        
+      case 'deleteProfile':
+        activeForm.value = DeleteProfileForm;
+        formTitle.value = 'Supprimer votre profil';
+        break;
+        
+      case 'personnalInfo':
+        activeForm.value = PersonalInfoForm;
+        formTitle.value = 'Modifier vos informations personnelles';
+        formData.value = userStore.user;
+        userAddresses.value = addressStore.addresses;
+        break;
+        
+      case 'schoolInfo':
+        activeForm.value = SchoolInfoForm;
+        formTitle.value = 'Modifier votre établissement scolaire';
+        formData.value = schoolStore.schoolDetails;
+        break;
+        
+      case 'bankingInfo':
+        activeForm.value = BankingInfoForm;
+        formTitle.value = 'Modifier vos renseignements bancaires';
+        formData.value = bankingStore.bankingDetails;
+        break;
+        
+      default:
+        console.error('Type de formulaire non reconnu:', formType);
+        return;
+    }
+    
+    await nextTick();
+    isModalOpen.value = true;
+  } catch (error) {
+    console.error('Erreur lors de l\'ouverture du formulaire:', error);
   }
-  
-  // Définir les données du formulaire
-  formData.value = data;
-  userAddresses.value = addresses;
-  
-  // Ouvrir le modal
-  isModalOpen.value = true;
 }
+
+// Fonction pour fermer le modal
+function handleClose() {
+  isModalOpen.value = false;
+  activeForm.value = null;
+  formTitle.value = '';
+}
+
+// Chargement initial des données
+onMounted(async () => {
+  if (userStore.user?.id) {
+    await loadProfileData();
+  }
+});
 
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
@@ -193,39 +206,47 @@ async function handleSave(data) {
     console.error('Error saving data:', error);
   }
 }
-
-// Gérer la fermeture du modal
-function handleClose() {
-  isModalOpen.value = false;
-}
 </script>
 
 <template>
-    <div class="container mx-auto px-4 py-8">
-      <ProfilePreview @change-password="openForm('changePassword')" @delete-profile="openForm('deleteProfile')"></ProfilePreview>
-      <ProfilePersonnalInfos @edit="openForm('personnalInfo', mockUser, mockUser.addresses)"></ProfilePersonnalInfos>
-      
-      <!-- Section avec informations scolaires et bancaires côte à côte -->
-      <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
-        <ProfileSchoolInfos @edit="openForm('schoolInfo', mockUser.schoolDetails)"></ProfileSchoolInfos>
-        <ProfileBankingInfos @edit="openForm('bankingInfo', mockUser.bankingDetails)"></ProfileBankingInfos>
-      </div>
-      
-      <!-- Modal avec les formulaires spécifiques -->
-      <Modal :isOpen="isModalOpen" @close="handleClose">
-        <component 
-          :is="activeForm" 
-          :title="formTitle"
-          :userData="activeForm === PersonalInfoForm ? formData : null" 
-          :userAddresses="activeForm === PersonalInfoForm ? userAddresses : null"
-          :schoolData="activeForm === SchoolInfoForm ? formData : null"
-          :bankingData="activeForm === BankingInfoForm ? formData : null"
-          @save="handleSave"
-          @cancel="handleClose"
-          class="w-full"
-        />
-      </Modal>
+  <div class="container mx-auto px-4 py-8">
+    <ProfilePreview 
+      @change-password="openForm('changePassword')" 
+      @delete-profile="openForm('deleteProfile')"
+    />
+    
+    <ProfilePersonnalInfos 
+      @edit="openForm('personnalInfo')"
+    />
+    
+    <!-- Section avec informations scolaires et bancaires côte à côte -->
+    <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
+      <ProfileSchoolInfos 
+        @edit="openForm('schoolInfo')"
+      />
+      <ProfileBankingInfos 
+        @edit="openForm('bankingInfo')"
+      />
     </div>
+    
+    <!-- Modal pour les formulaires -->
+    <Modal
+      v-if="isModalOpen"
+      :isOpen="isModalOpen"
+      :title="formTitle"
+      @close="handleClose"
+    >
+      <component 
+        :is="activeForm"
+        v-if="activeForm"
+        :userData="formData"
+        :userAddresses="userAddresses"
+        @save="handleSave"
+        @cancel="handleClose"
+        class="w-full"
+      />
+    </Modal>
+  </div>
 </template>
 
 <style>

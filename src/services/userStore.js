@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getUserByEmail, postNewUser } from '@/api/api.js';
+import { getUserByEmail, postNewUser, updateUser } from '@/api/api.js';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -56,5 +56,19 @@ export const useUserStore = defineStore('user', {
         this.error = null;
       },
 
+      async updateUser(userId, userData) {
+        this.loading = true;
+        this.error = null;
+        try {
+          const response = await updateUser(userId, userData);
+          this.user = { ...this.user, ...response.data };
+          return response.data;
+        } catch (error) {
+          this.error = "Impossible de mettre à jour les informations utilisateur.";
+          throw error;
+        } finally {
+          this.loading = false;
+        }
+      },
     },
   });
