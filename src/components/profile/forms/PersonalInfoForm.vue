@@ -64,6 +64,8 @@
               type="date" 
               id="birthDate" 
               v-model="formData.birthDate"
+              :max="maxDate.toISOString().split('T')[0]"
+              :min="minDate.toISOString().split('T')[0]"
               class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
               :class="{ 'border-accent2': v$?.birthDate?.$error }"
             />
@@ -235,7 +237,7 @@
           Annuler
         </button>
         <button 
-          type="submit" 
+          type="submit"
           class="px-8 py-3 border-2 border-accent1 text-gray rounded-md hover:bg-accent1 transition-colors">
           Enregistrer
         </button>
@@ -245,14 +247,17 @@
 </template>
 
 <script setup>
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, onMounted, watch, ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required, email, helpers } from '@vuelidate/validators';
+import { required, email, helpers, minLength } from '@vuelidate/validators';
 import { useUserStore } from '@/services/userStore';
 import { useAddressStore } from '@/services/addressStore';
+import Swal from 'sweetalert2';
+import { useToast } from 'vue-toastification';
 
 const userStore = useUserStore();
 const addressStore = useAddressStore();
+const toast = useToast();
 
 const props = defineProps({
   userData: {
@@ -286,6 +291,14 @@ const provinces = [
   { value: 'NU', label: 'Nunavut' }
 ];
 
+// Calcul des dates limites
+const today = new Date();
+const minAge = 16;
+const maxAge = 100;
+
+const maxDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate());
+const minDate = new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate());
+
 // Formulaire réactif
 const formData = reactive({
   firstName: '',
@@ -304,49 +317,85 @@ const formData = reactive({
 // Règles de validation
 const rules = {
   firstName: { 
-    required: helpers.withMessage('Le prénom est requis', required) 
+    required: helpers.withMessage('Le prénom est requis', required),
+    minLength: helpers.withMessage('Le prénom doit contenir au moins 2 caractères', minLength(2))
   },
   lastName: { 
-    required: helpers.withMessage('Le nom est requis', required) 
+    required: helpers.withMessage('Le nom est requis', required),
+    minLength: helpers.withMessage('Le nom doit contenir au moins 2 caractères', minLength(2))
   },
-  birthDate: { 
-    required: helpers.withMessage('La date de naissance est requise', required) 
+  birthDate: {
+    required: helpers.withMessage('La date de naissance est requise', required),
+    validAge: helpers.withMessage(
+      `La date de naissance doit être comprise entre ${minDate.toLocaleDateString()} et ${maxDate.toLocaleDateString()}`,
+      (value) => {
+        const date = new Date(value);
+        return date >= minDate && date <= maxDate;
+      }
+    )
   },
   phone: { 
-    required: helpers.withMessage('Le numéro de téléphone est requis', required) 
+    required: helpers.withMessage('Le numéro de téléphone est requis', required),
+    minLength: helpers.withMessage('Le numéro de téléphone doit contenir au moins 10 chiffres', minLength(10))
   },
   email: { 
     required: helpers.withMessage('L\'adresse email est requise', required),
     email: helpers.withMessage('Veuillez entrer une adresse email valide', email)
   },
   streetNumber: { 
-    required: helpers.withMessage('Le numéro de rue est requis', required) 
+    required: helpers.withMessage('Le numéro de rue est requis', required),
+    minLength: helpers.withMessage('Le numéro de rue doit contenir au moins 1 chiffre', minLength(1))
   },
   streetName: { 
-    required: helpers.withMessage('Le nom de rue est requis', required) 
+    required: helpers.withMessage('Le nom de rue est requis', required),
+    minLength: helpers.withMessage('Le nom de rue doit contenir au moins 2 caractères', minLength(2))
   },
   city: { 
-    required: helpers.withMessage('La ville est requise', required) 
+    required: helpers.withMessage('La ville est requise', required),
+    minLength: helpers.withMessage('La ville doit contenir au moins 2 caractères', minLength(2))
   },
   province: { 
-    required: helpers.withMessage('La province est requise', required) 
+    required: helpers.withMessage('La province est requise', required),
+    minLength: helpers.withMessage('La province doit contenir au moins 2 caractères', minLength(2))
   }
 };
 
 // Initialiser Vuelidate
 const v$ = useVuelidate(rules, formData, { $lazy: true });
 
+// Ajouter cette ligne avant la fonction handleSubmit
+const isSubmitting = ref(false);
+
 // Charger les données de l'utilisateur
 function loadUserData() {
+  console.log('Début loadUserData');
   if (props.userData) {
+    console.log('Données utilisateur disponibles:', props.userData);
+    
     formData.firstName = props.userData.firstName || '';
     formData.lastName = props.userData.lastName || '';
-    formData.birthDate = props.userData.birthDate ? new Date(props.userData.birthDate).toISOString().split('T')[0] : '';
-    formData.phone = props.userData.phone || '';
+    
+    if (props.userData.birthDate) {
+      formData.birthDate = new Date(props.userData.birthDate).toISOString().split('T')[0];
+    }
+    
     formData.email = props.userData.email || '';
+    formData.phone = props.userData.phone || '';
     
     // Charger l'adresse initiale
-    loadAddressByType('PERSONAL');
+    if (props.userAddresses && props.userAddresses.length > 0) {
+      // Chercher d'abord l'adresse personnelle
+      const personalAddress = props.userAddresses.find(addr => addr.type === 'PERSONAL');
+      const workAddress = props.userAddresses.find(addr => addr.type === 'WORK');
+      
+      // Utiliser l'adresse personnelle en priorité, sinon l'adresse professionnelle
+      const addressToLoad = personalAddress || workAddress;
+      
+      if (addressToLoad) {
+        formData.addressType = addressToLoad.type;
+        loadAddressByType(addressToLoad.type);
+      }
+    }
   }
 }
 
@@ -379,25 +428,33 @@ function handleAddressTypeChange() {
 
 // Charger les données au montage du composant
 onMounted(() => {
+  console.log('Composant monté');
+  console.log('Props reçues:', props);
   loadUserData();
 });
 
 // Fonction de soumission du formulaire
 async function handleSubmit() {
-  const isFormCorrect = await v$.value.$validate();
-  if (!isFormCorrect) return;
-
   try {
-    // Préparer les données utilisateur
+    const isFormValid = await v$.value.$validate();
+    
+    if (!isFormValid) {
+      console.log('Erreurs de validation:', v$.value.$errors);
+      return;
+    }
+
+    isSubmitting.value = true;
+
+    // Formatage des données utilisateur
     const userData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
-      birthDate: formData.birthDate,
+      birthDate: new Date(formData.birthDate).toISOString(),
+      email: formData.email,
       phone: formData.phone,
-      email: formData.email
     };
 
-    // Préparer les données d'adresse
+    // Formatage des données d'adresse
     const addressData = {
       type: formData.addressType,
       streetNumber: formData.streetNumber,
@@ -407,17 +464,49 @@ async function handleSubmit() {
       country: formData.country
     };
 
-    // Mettre à jour l'utilisateur et l'adresse
+    // Afficher le loading
+    Swal.fire({
+      title: 'Mise à jour en cours...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    // Récupérer l'ID de l'utilisateur
+    const userId = userStore.user?.id;
+    if (!userId) {
+      throw new Error("ID utilisateur non trouvé");
+    }
+
+    // Mise à jour des deux stores en parallèle avec l'ID utilisateur
     await Promise.all([
-      userStore.updateUser(userStore.user.id, userData),
-      addressStore.updateAddress(userStore.user.id, addressData)
+      userStore.updateUser(userId, userData),
+      addressStore.updateAddress(userId, addressData)
     ]);
 
-    emit('update:isOpen', false);
+    Swal.close();
+    toast.success("Vos informations personnelles ont été mises à jour avec succès");
+    emit('save');
+
   } catch (error) {
     console.error('Erreur lors de la mise à jour:', error);
+    Swal.close();
+    toast.error(error.message || "Une erreur est survenue lors de la mise à jour");
+  } finally {
+    isSubmitting.value = false;
   }
 }
+
+// Ajouter des logs pour la validation
+watch(formData, async (newVal) => {
+  console.log('Changement détecté dans formData:', newVal);
+  if (v$.value.$dirty) {
+    console.log('Validation automatique...');
+    await v$.value.$validate();
+    console.log('Erreurs de validation:', v$.value.$errors);
+  }
+}, { deep: true });
 </script>
 
 <style scoped>
