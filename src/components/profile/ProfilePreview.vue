@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useUserStore } from '@/services/userStore';
 
 const userStore = useUserStore();
@@ -17,6 +17,11 @@ function openChangePasswordForm() {
 function openDeleteProfileForm() {
   emit('delete-profile');
 }
+
+// Function to load user data
+onMounted(async () => {
+  await userStore.getUserById(userStore.user.id);
+});
 </script>
 
 <template>

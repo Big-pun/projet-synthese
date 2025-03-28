@@ -15,9 +15,8 @@ import BankingInfoForm from '@/components/profile/forms/BankingInfoForm.vue';
 
 import { showLoading, closeLoading, showConfirm } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
-import { mockUser } from '@/mock/userData';
 
-import { computed } from 'vue';
+// Import stores
 import { useUserStore } from '@/services/userStore';
 import { useBankingStore } from '@/services/bankingStore';
 import { useSchoolStore } from '@/services/schoolStore';
@@ -28,57 +27,12 @@ const isModalOpen = ref(false);
 const activeForm = shallowRef(null);
 const formTitle = ref('');
 const formData = ref(null);
-const userAddresses = ref(null);
 
 const userStore = useUserStore();
 const bankingStore = useBankingStore();
 const schoolStore = useSchoolStore();
 const addressStore = useAddressStore();
 
-const userData = computed(() => userStore.user);
-const bankingDetails = computed(() => bankingStore.bankingDetails);
-const schoolDetails = computed(() => schoolStore.schoolDetails);
-// const userAddresses = computed(() => addressStore.addresses);
-
-// Fonction de chargement des données
-async function loadProfileData() {
-  if (!userStore.user?.id) {
-    console.log("Pas d'ID utilisateur disponible");
-    return;
-  }
-  
-  console.log("Loading profile data for user:", userStore.user.id);
-  showLoading('Chargement de vos informations...');
-  
-  try {
-    // Charger les données une par une pour mieux identifier les erreurs
-    try {
-      await bankingStore.fetchBankingDetails(userStore.user.id);
-      console.log("Banking details loaded");
-    } catch (e) {
-      console.error("Error loading banking details:", e);
-    }
-
-    try {
-      await schoolStore.fetchSchoolDetails(userStore.user.id);
-      console.log("School details loaded");
-    } catch (e) {
-      console.error("Error loading school details:", e);
-    }
-
-    try {
-      await addressStore.fetchAddresses(userStore.user.id);
-      console.log("Addresses loaded");
-    } catch (e) {
-      console.error("Error loading addresses:", e);
-    }
-  } catch (error) {
-    showError('Erreur lors du chargement des données');
-    console.error("Global error:", error);
-  } finally {
-    closeLoading();
-  }
-}
 
 // Fonction pour ouvrir le formulaire
 async function openForm(formType) {
@@ -131,13 +85,6 @@ function handleClose() {
   activeForm.value = null;
   formTitle.value = '';
 }
-
-// Chargement initial des données
-onMounted(async () => {
-  if (userStore.user?.id) {
-    await loadProfileData();
-  }
-});
 
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
