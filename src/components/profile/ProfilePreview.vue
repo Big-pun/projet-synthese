@@ -1,11 +1,21 @@
 <script setup>
 import { computed } from 'vue';
-import { useUserStore } from '@/services/userStore';
 
-const userStore = useUserStore();
+// Définir les props pour recevoir les données utilisateur
+const props = defineProps({
+  userData: {
+    type: Object,
+    default: () => ({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: ''
+    })
+  }
+});
 
-// Utiliser computed avec une vérification de null
-const userData = computed(() => userStore.user || {});
+// Computed property avec vérification des valeurs nulles
+const userInfo = computed(() => props.userData || {});
 
 // Définir les événements
 const emit = defineEmits(['change-password', 'delete-profile']);
@@ -42,9 +52,9 @@ function openDeleteProfileForm() {
           </div>
 
           <div class="flex flex-col text-gray text-left space-y-1 font-medium ">
-            <p class="">{{ userData.firstName }} {{ userData.lastName }}</p>
-            <p class="">{{ userData.email }}</p>
-            <p class="">{{ userData.phone }}</p>
+            <p class="">{{ userInfo.firstName }} {{ userInfo.lastName }}</p>
+            <p class="">{{ userInfo.email }}</p>
+            <p class="">{{ userInfo.phone }}</p>
           </div>
         </div>
       </div>

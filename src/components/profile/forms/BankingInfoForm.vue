@@ -165,10 +165,7 @@ const formData = reactive({
 
 // Charger les données depuis le store
 function loadBankingData() {
-  console.log(
-    "Chargement des données bancaires depuis le store:",
-    bankingStore.bankingDetails
-  );
+
 
   if (bankingStore.bankingDetails) {
     formData.institutionName =
@@ -177,7 +174,6 @@ function loadBankingData() {
     formData.loanInfo = bankingStore.bankingDetails.loanInfo || "";
     formData.other = bankingStore.bankingDetails.other || "";
 
-    console.log("Données chargées dans le formulaire:", formData);
   }
 }
 
@@ -218,7 +214,6 @@ const v$ = useVuelidate(rules, formData);
 
 // Formatage du numéro de compte
 function formatAccountInfo(accountInfo) {
-  console.log("Formatage du numéro de compte:", accountInfo);
 
   if (!accountInfo) return "";
 
@@ -233,12 +228,10 @@ function formatAccountInfo(accountInfo) {
 
 // Soumission du formulaire
 async function handleSubmit() {
-  console.log("Début de la soumission du formulaire");
 
   try {
     const isValid = await v$.value.$validate();
     if (!isValid) {
-      console.log("Erreurs de validation:", v$.value.$errors);
       return;
     }
 
@@ -250,8 +243,6 @@ async function handleSubmit() {
       loanInfo: formData.loanInfo,
       other: formData.other,
     };
-
-    console.log("Données à envoyer:", formattedData);
 
     // Mise à jour via le store
     await bankingStore.updateBankingDetails(userStore.user.id, formattedData);
@@ -272,12 +263,8 @@ async function handleSubmit() {
 
 // Charger les données au montage
 onMounted(async () => {
-  console.log("Montage du formulaire bancaire");
+
   if (userStore.user?.id) {
-    console.log(
-      "Chargement des données pour l'utilisateur:",
-      userStore.user.id
-    );
     await bankingStore.fetchBankingDetails(userStore.user.id);
     loadBankingData();
   }
@@ -287,7 +274,6 @@ onMounted(async () => {
 watch(
   () => bankingStore.bankingDetails,
   (newVal) => {
-    console.log("Changement détecté dans les données bancaires:", newVal);
     loadBankingData();
   },
   { deep: true }

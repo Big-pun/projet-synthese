@@ -1,5 +1,6 @@
 <script setup>
 import { ref, shallowRef, onMounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import Modal from '@/components/general/Modal.vue';
 import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
@@ -28,12 +29,23 @@ const activeForm = shallowRef(null);
 const formTitle = ref('');
 const formData = ref(null);
 const userAddresses = ref([]);
+const bankingDetails = ref(null);
+const schoolDetails = ref(null);
+const isLoading = ref(false);
 
 const userStore = useUserStore();
 const bankingStore = useBankingStore();
 const schoolStore = useSchoolStore();
 const addressStore = useAddressStore();
+const router = useRouter();
 
+// Vérification de l'authentification
+function checkAuthentication() {
+  if (!userStore.user) {
+    showError('Veuillez vous connecter pour accéder à votre profil');
+    router.push('/accueil');
+  }
+}
 
 // Fonction pour ouvrir le formulaire
 async function openForm(formType) {
@@ -53,19 +65,18 @@ async function openForm(formType) {
         activeForm.value = PersonalInfoForm;
         formTitle.value = 'Modifier vos informations personnelles';
         formData.value = userStore.user;
-        userAddresses.value = addressStore.addresses;
         break;
         
       case 'schoolInfo':
         activeForm.value = SchoolInfoForm;
         formTitle.value = 'Modifier votre établissement scolaire';
-        formData.value = schoolStore.schoolDetails;
+        formData.value = schoolDetails.value;
         break;
         
       case 'bankingInfo':
         activeForm.value = BankingInfoForm;
         formTitle.value = 'Modifier vos renseignements bancaires';
-        formData.value = bankingStore.bankingDetails;
+        formData.value = bankingDetails.value;
         break;
         
       default:
@@ -90,7 +101,12 @@ function handleClose() {
 // Ajouter cette fonction pour charger toutes les données nécessaires
 async function loadAllUserData() {
   try {
-    if (!userStore.user?.id) return;
+    isLoading.value = true;
+    // Vérifier d'abord si l'utilisateur est connecté
+    if (!userStore.user?.id) {
+      checkAuthentication();
+      return;
+    }
     
     const userId = userStore.user.id;
     
@@ -101,18 +117,28 @@ async function loadAllUserData() {
       schoolStore.fetchSchoolDetails(userId)
     ]);
     
-    // Mettre à jour les références locales
+    // Mettre à jour TOUTES les références locales
     userAddresses.value = addressStore.addresses;
+    bankingDetails.value = bankingStore.bankingDetails;
+    schoolDetails.value = schoolStore.schoolDetails;
     
   } catch (error) {
     console.error('Erreur lors du chargement des données:', error);
     showError('Impossible de charger certaines données utilisateur');
+  } finally {
+    isLoading.value = false;
   }
 }
 
 // Appeler au montage du composant
 onMounted(async () => {
-  await loadAllUserData();
+  // Vérifier si l'utilisateur est connecté
+  checkAuthentication();
+  
+  // Si oui, charger les données
+  if (userStore.user) {
+    await loadAllUserData();
+  }
 });
 
 // Gérer la sauvegarde des données en fonction du type de modal
@@ -189,7 +215,15 @@ async function handleSave(data) {
 
 <template>
   <div class="container mx-auto">
+    <!-- Indicateur de chargement global optionnel -->
+    <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-4 rounded-lg shadow-lg">
+        Chargement en cours...
+      </div>
+    </div>
+    
     <ProfilePreview 
+      :userData="userStore.user"
       @change-password="openForm('changePassword')" 
       @delete-profile="openForm('deleteProfile')"
     />
@@ -201,10 +235,12 @@ async function handleSave(data) {
     
     <!-- Section avec informations scolaires et bancaires côte à côte -->
     <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
-      <ProfileSchoolInfos 
+      <ProfileSchoolInfos
+        :schoolDetails="schoolDetails"
         @edit="openForm('schoolInfo')"
       />
       <ProfileBankingInfos 
+        :bankingDetails="bankingDetails"
         @edit="openForm('bankingInfo')"
       />
     </div>
@@ -221,6 +257,8 @@ async function handleSave(data) {
         v-if="activeForm"
         :userData="formData"
         :userAddresses="userAddresses"
+        :bankingDetails="bankingDetails"
+        :schoolDetails="schoolDetails"
         @save="handleSave"
         @cancel="handleClose"
         class="w-full"

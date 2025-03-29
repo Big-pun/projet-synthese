@@ -1,19 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useSchoolStore } from '@/services/schoolStore';
-import { useUserStore } from '@/services/userStore';
+import { ref, computed } from 'vue';
 import { formatDate } from '@/utils/format';
 
 const hovered = ref(false);
-const schoolStore = useSchoolStore();
-const userStore = useUserStore();
 
-// Charger les données scolaires au montage du composant
-onMounted(async () => {
-  if (userStore.user?.id) {
-    await schoolStore.fetchSchoolDetails(userStore.user.id);
+// Ajouter les props pour recevoir les données du parent
+const props = defineProps({
+  schoolDetails: {
+    type: Object,
+    default: () => null
   }
 });
+
+// Référence aux données via props plutôt que store
+const schoolInfo = computed(() => props.schoolDetails);
 
 // Définir l'événement pour l'édition
 const emit = defineEmits(['edit']);
@@ -44,25 +44,25 @@ function openEditForm() {
       <!-- Nom de l'établissement -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Nom</p>
-        <p>{{ schoolStore.schoolDetails?.schoolName || 'Non spécifié' }}</p>
+        <p>{{ schoolInfo?.schoolName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Domaine d'études -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Domaine</p>
-        <p>{{ schoolStore.schoolDetails?.fieldOfStudy || 'Non spécifié' }}</p>
+        <p>{{ schoolInfo?.fieldOfStudy || 'Non spécifié' }}</p>
       </div>
 
       <!-- Début du programme -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Début du programme</p>
-        <p>{{ formatDate(schoolStore.schoolDetails?.startDate) }}</p>
+        <p>{{ formatDate(schoolInfo?.startDate) }}</p>
       </div>
 
       <!-- Fin du programme -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Fin du programme</p>
-        <p>{{ formatDate(schoolStore.schoolDetails?.projectedEndDate) }}</p>
+        <p>{{ formatDate(schoolInfo?.projectedEndDate) }}</p>
       </div>
     </div>
 

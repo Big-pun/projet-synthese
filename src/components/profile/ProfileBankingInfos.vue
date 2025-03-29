@@ -1,27 +1,32 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useBankingStore } from '@/services/bankingStore';
+import { ref, computed } from 'vue';
 import { useUserStore } from '@/services/userStore';
+
 // État pour le survol
 const hovered = ref(false);
-const bankingStore = useBankingStore();
 const userStore = useUserStore();
 
-// Créer des computed properties avec des valeurs par défaut
+// Définir les props pour recevoir les données du parent
+const props = defineProps({
+  bankingDetails: {
+    type: Object,
+    default: () => ({
+      institutionName: '',
+      accountInfo: '',
+      loanInfo: '',
+      other: ''
+    })
+  }
+});
+
+// S'assurer que bankingInfo est toujours un objet valide
 const bankingInfo = computed(() => {
-  return bankingStore.bankingDetails || {
+  return props.bankingDetails || {
     institutionName: '',
     accountInfo: '',
     loanInfo: '',
     other: ''
   };
-});
-
-// Charger les données bancaires au montage du composant
-onMounted(async () => {
-  if (userStore.user?.id) {
-    await bankingStore.fetchBankingDetails(userStore.user.id);
-  }
 });
 
 // Définir l'événement pour l'édition
