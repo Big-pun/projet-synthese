@@ -4,7 +4,17 @@ import { useRouter } from 'vue-router';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-      user: null,
+      // remettre a null une fois tests finis
+      user: {
+        id: 18,
+        firstName: "Jean-Michel",
+        lastName: "Tremblay",
+        birthDate: "2025-03-23",
+        isActive: true,
+        phone: "581-999-5477",
+        email: "jeanmicheltremblay@gmail.com",
+        password: "123456"
+      },
       loading: false,
       error: null,
     }),

@@ -11,46 +11,57 @@ const apiClient = axios.create({
 export const getUserById = (userId) => apiClient.get(`/users/${userId}`);
 export const updateUser = (userId, userData) => apiClient.put(`/users/${userId}`, userData);
 export const deleteUser = (userId) => apiClient.delete(`/users/${userId}`);
-
-// Get user by email
+export const postNewUser = (userData) => apiClient.post("/users", userData);
 export const getUserByEmail = (email) => apiClient.get(`/users/email/${email}`);
 
-// Get user transactions
+
+// Transactions endpoints
 export const getUserTransactions = (userId) =>
   apiClient.get(`/users/${userId}/transactions`);
 
-// addresses
+export const postNewTransaction = (userId, transactionData) =>{
+  const url = `/users/${userId}/transactions`;
+  console.log('url', url);
+  console.log('transactionData', transactionData);
+  return apiClient.post(url, transactionData);
+}
+
+export const deleteTransaction = (userId, transactionId) => {
+  console.log('deleting en cours');
+  return apiClient.delete(`/users/${userId}/transactions/${transactionId}`);
+}
+
+export const updateTransaction = (userId, transactionId, transactionData) =>
+  apiClient.put(`/users/${userId}/transactions/${transactionId}`, transactionData);
+
+
+// Addresses endpoints
 export const getUserAddresses = (userId) =>
   apiClient.get(`/users/${userId}/addresses`);
 
-// update address
 export const updateAddress = (userId, addressData) =>
   apiClient.put(`/users/${userId}/addresses`, addressData);
 
-// get address by type
 export const getAddressByType = (userId, addressType) =>
   apiClient.get(`/users/${userId}/addresses/${addressType}`);
 
-// Get user banking details
+
+// Banking details endpoints
 export const getUserBankingDetails = (userId) =>
   apiClient.get(`/users/${userId}/banking-details`);
 
-// update banking details
 export const updateBankingDetails = (userId, bankingData) =>
   apiClient.put(`/users/${userId}/banking-details`, bankingData);
 
-// school details
+
+// School details endpoints
 export const getUserSchoolDetails = (userId) =>
   apiClient.get(`/users/${userId}/school-details`);
 
-// update school details
 export const updateSchoolDetails = (userId, schoolData) =>
   apiClient.put(`/users/${userId}/school-details`, schoolData);
 
-// Post new user
-export const postNewUser = (userData) => apiClient.post("/users", userData);
-
-
+/* A EFFACER (voir userStore)
 // Login user
 export const loginUser = async (email, password) => {
   try {
@@ -72,4 +83,4 @@ export const registerUser = async (userData) => {
       message: error.response?.data?.message || "Erreur lors de l'inscription.",
     };
   }
-};
+}; */

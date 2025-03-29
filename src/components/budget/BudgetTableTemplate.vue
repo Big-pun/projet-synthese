@@ -8,10 +8,11 @@ const props = defineProps({
   headers: Array,
   items: Array,
   primaryColorTheme: Boolean,
-  itemsTotal: Number
+  itemsTotal: Number,
+  loading: Boolean
 });
 
-const emit = defineEmits(['toggleReccurence', 'openForm', 'deleteItem']);
+const emit = defineEmits(['toggleTransactionReccurence', 'updateFrequency', 'openForm', 'deleteItem']);
 
 const handleDeleteItem = async (itemId) => {
   // Sweet alert confirmation
@@ -36,6 +37,14 @@ const handleDeleteItem = async (itemId) => {
   }
 };
 
+const handleToggleTransactionReccurence = (itemId) => {
+  emit('toggleTransactionReccurence', itemId);
+};
+
+const handleUpdateFrequency = (itemId, frequency) => {
+  emit('updateFrequency', { itemId, frequency });
+};
+
 const isEntryRecurrent = (entry) => entry.frequency !== -1;
 
 </script>
@@ -57,6 +66,12 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
       </thead>
       <!-- Table body -->
       <tbody>
+        <!-- Loading And No transaction yet handling -->
+      <tr class="tr-w-full bg-white rounded-[8px]" v-if="items.length === 0">
+        <td class="text-gray-500 font-medium py-5">
+          <p class="text-sm">{{ loading ? "Loading..." : "Aucune transaction pour le moment" }}</p>
+        </td>
+      </tr>
         <!-- Loop through items (each income or spending) and headers props to populate table body in the right order -->
         <tr v-for="item in items" :key="item.id" class="bg-white rounded-[8px]">
           <td v-for="header in headers" :key="header.label">
@@ -69,7 +84,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
                   <input
                     type="checkbox"
                     :checked="isEntryRecurrent(item)"
-                    @change="emit('toggleReccurence', item.id)"
+                    @change="handleToggleTransactionReccurence(item.id)"
                   />
                   <span class="slider round"></span>
                 </label>
@@ -78,12 +93,12 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
                 <select
                   v-if="isEntryRecurrent(item)"
                   v-model="item.frequency"
-                  @change="emit('updateFrequency', { id: item.id, frequency: item.frequency })"
+                  @change="handleUpdateFrequency(item.id, item.frequency)"
                   class="border border-gray-300 rounded-md p-1"
                 >
                   <option :value="1">Quotidien</option>
                   <option :value="7">Hebdomadaire</option>
-                  <option :value="14">Bihebdomadaire</option>
+                  <option :value="14">Bimensuel</option>
                   <option :value="30">Mensuel</option>
                   <option :value="-1">Non récurrent</option>
                 </select>
@@ -97,7 +112,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
 
             <!-- Other fields -->
             <template v-else>
-              {{ item[header.key] }}
+              {{ item[header.key] === '' ? '-' : item[header.key] }}
             </template>
 
           </td>
@@ -135,6 +150,11 @@ tbody tr {
   gap: 10px;
   align-items: center;
   justify-content: center;
+}
+
+tbody tr.tr-w-full {
+  grid-template-columns: 1fr !important;
+  justify-items: center;
 }
 
 tbody, thead {

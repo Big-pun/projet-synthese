@@ -17,7 +17,14 @@ const balance = computed(() => {
 });
 
 const percentageSpent = computed(() => {
-  return Math.floor((props.spendingsTotal / props.incomesTotal) * 100);
+  // Avoid division by zero
+  if (props.incomesTotal === 0) {
+    return 100;
+  }
+  else {
+    return Math.floor((props.spendingsTotal / props.incomesTotal) * 100);
+  }
+    
 });
 
 // Theme settings

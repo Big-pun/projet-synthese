@@ -11,24 +11,24 @@ const props = defineProps({
 });
 
 // Form data
-const name = ref('');
+const description = ref('');
 const amount = ref(0);
 const frequency = ref(-1);
 const category = ref('');
 
 // Form errors
 const errors = ref({
-  name: '',
+  description: '',
   amount: '',
   category: ''
 })
 
 // Form validations
-const validateName = () => {
-  if (name.value.trim().length < 3) {
-    errors.value.name = 'La description doit contenir au moins 3 caractères';
+const validateDescription = () => {
+  if (description.value.trim().length < 3) {
+    errors.value.description = 'La description doit contenir au moins 3 caractères';
   } else {
-    errors.value.name = '';
+    errors.value.description = '';
   }
 }
 
@@ -52,16 +52,16 @@ const validateAmount = () => {
 const submitForm = () => {
   let valide = true;
 
-  validateName();
+  validateDescription();
   validateAmount();
 
-  if (errors.value.name || errors.value.amount) {
+  if (errors.value.description || errors.value.amount) {
     valide = false;
   }
 
   if(valide) {
     emit('submit', {
-      name: name.value,
+      description: description.value,
       amount: amount.value,
       frequency: frequency.value,
       category: category.value
@@ -76,21 +76,21 @@ const submitForm = () => {
 
     <!-- Description Field -->
     <div class="flex flex-col gap-2 items-center">
-      <label for="income-name">Description</label>
-      <input type="text" class="border border-slate-400 rounded-sm" name="description" v-model="name" @input="validateName" />
-      <span class="text-xs text-accent2">{{ errors.name }}</span>
+      <label for="income-description">Description</label>
+      <input type="text" class="border border-slate-400 rounded-sm" name="description" v-model="description" @input="validateDescription" />
+      <span class="text-xs text-accent2">{{ errors.description }}</span>
     </div>
 
     <!-- Category Field (if table has a category column) -->
     <div v-if="hasCategory" class="flex flex-col gap-2 items-center">
-      <label for="income-name">Categorie</label>
+      <label for="income-description">Categorie</label>
       <input type="text" class="border border-slate-400 rounded-sm" name="category" v-model="category" @input="validateCategory" />
       <span class="text-xs text-accent2">{{ errors.category }}</span>
     </div>
 
     <!-- $/month field -->
     <div class="flex flex-col gap-2 items-center">
-      <label for="income-name">$/mois</label>
+      <label for="income-description">$/mois</label>
       <input type="number" step="0.01" min="0" class="border border-slate-400 rounded-sm" name="amount" v-model="amount" @input="validateAmount" />
       <span class="text-xs text-accent2">{{ errors.amount }}</span>
     </div>
