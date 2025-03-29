@@ -97,6 +97,9 @@
               <div v-if="v$?.birthDate?.$error" class="text-accent2 text-sm mt-1">
                 {{ v$?.birthDate?.$errors[0]?.$message }}
               </div>
+              <div v-else class="text-gray text-sm mt-1">
+                Vous devez avoir entre 16 et 100 ans
+              </div>
 
               <input
                 type="date"
@@ -272,7 +275,7 @@
                 class="w-full px-3 py-2 border rounded-md focus:border-accent1 outline-none"
                 :class="{ 'border-accent2': v$?.province?.$error }"
             >
-              <option value="">Sélectionnez une option</option>
+             
               <option
                 v-for="province in provinces"
                 :key="province.value"
@@ -410,10 +413,6 @@ const rules = {
       "Le prénom doit contenir au moins 2 caractères",
       minLength(2)
     ),
-    validName: helpers.withMessage(
-      "Le prénom ne peut contenir que des lettres",
-      (value) => /^[a-zA-Z]+$/.test(value)
-    ),
   },
   lastName: {
     required: helpers.withMessage("Le nom est requis", required),
@@ -421,19 +420,15 @@ const rules = {
       "Le nom doit contenir au moins 2 caractères",
       minLength(2)
     ),
-    validName: helpers.withMessage(
-      "Le nom ne peut contenir que des lettres",
-      (value) => /^[a-zA-Z]+$/.test(value)
-    ),
   },
   birthDate: {
-    required: helpers.withMessage("La date de naissance est requise", required),
+    required: helpers.withMessage("La date de naissance est requise et doit être comprise entre 16 et 100 ans", required),
     validAge: helpers.withMessage(
       `La date de naissance doit être comprise entre ${minDate.toLocaleDateString()} et ${maxDate.toLocaleDateString()}`,
       (value) => {
         const date = new Date(value);
         return date >= minDate && date <= maxDate;
-      }
+      },
     ),
   },
   phone: {

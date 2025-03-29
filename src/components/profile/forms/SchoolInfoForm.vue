@@ -300,7 +300,6 @@ async function handleSubmit() {
     const isFormValid = await v$.value.$validate();
 
     if (!isFormValid) {
-      console.log("Erreurs de validation:", v$.value.$errors);
       return;
     }
 
@@ -319,11 +318,6 @@ async function handleSubmit() {
     // Émettre l'événement save avec les données
     emit("save", schoolData);
   } catch (error) {
-    console.error("Erreur détaillée:", {
-      message: error.message,
-      stack: error.stack,
-      response: error.response?.data,
-    });
     toast.error(
       schoolStore.error || "Une erreur est survenue lors de la mise à jour"
     );

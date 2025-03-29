@@ -206,6 +206,7 @@ async function handleSave(data) {
       :userData="userStore.user"
       @change-password="openForm('changePassword')" 
       @delete-profile="openForm('deleteProfile')"
+      
     />
     
     <ProfilePersonnalInfos 

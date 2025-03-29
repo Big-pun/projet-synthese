@@ -151,7 +151,7 @@ import { useToast } from "vue-toastification";
 const bankingStore = useBankingStore();
 const userStore = useUserStore();
 const toast = useToast();
-const emit = defineEmits(["save"]);
+const emit = defineEmits(["save", "cancel"]);
 
 const isSubmitting = ref(false);
 
@@ -280,6 +280,10 @@ watch(
   },
   { deep: true }
 );
+
+function handleCancel() {
+  emit("cancel");
+}
 </script>
 
 <style scoped></style>
