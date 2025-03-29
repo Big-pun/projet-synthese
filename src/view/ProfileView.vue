@@ -14,7 +14,7 @@ import PersonalInfoForm from '@/components/profile/forms/PersonalInfoForm.vue';
 import SchoolInfoForm from '@/components/profile/forms/SchoolInfoForm.vue';
 import BankingInfoForm from '@/components/profile/forms/BankingInfoForm.vue';
 
-import { showLoading, closeLoading, showConfirm } from '@/utils/sweetAlert';
+import { showLoading, closeLoading } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 
 // Import stores
@@ -26,7 +26,6 @@ import { useAddressStore } from '@/services/addressStore';
 // Local state for modal and forms
 const isModalOpen = ref(false);
 const activeForm = shallowRef(null);
-const formTitle = ref('');
 const formData = ref(null);
 const userAddresses = ref([]);
 const bankingDetails = ref(null);
@@ -53,29 +52,25 @@ async function openForm(formType) {
     switch (formType) {
       case 'changePassword':
         activeForm.value = ChangePasswordForm;
-        formTitle.value = 'Changer votre mot de passe';
+
         break;
         
       case 'deleteProfile':
         activeForm.value = DeleteProfileForm;
-        formTitle.value = 'Supprimer votre profil';
         break;
         
       case 'personnalInfo':
         activeForm.value = PersonalInfoForm;
-        formTitle.value = 'Modifier vos informations personnelles';
         formData.value = userStore.user;
         break;
         
       case 'schoolInfo':
         activeForm.value = SchoolInfoForm;
-        formTitle.value = 'Modifier votre établissement scolaire';
         formData.value = schoolDetails.value;
         break;
         
       case 'bankingInfo':
         activeForm.value = BankingInfoForm;
-        formTitle.value = 'Modifier vos renseignements bancaires';
         formData.value = bankingDetails.value;
         break;
         
@@ -95,7 +90,6 @@ async function openForm(formType) {
 function handleClose() {
   isModalOpen.value = false;
   activeForm.value = null;
-  formTitle.value = '';
 }
 
 // Add this function to load all necessary data
@@ -231,7 +225,6 @@ async function handleSave(data) {
     <Modal
       v-if="isModalOpen"
       :isOpen="isModalOpen"
-      :title="formTitle"
       @close="handleClose"
     >
       <component 
@@ -241,7 +234,6 @@ async function handleSave(data) {
         :userAddresses="userAddresses"
         :bankingDetails="bankingDetails"
         :schoolDetails="schoolDetails"
-        :title="formTitle"
         @save="handleSave"
         @cancel="handleClose"
         class="w-full"

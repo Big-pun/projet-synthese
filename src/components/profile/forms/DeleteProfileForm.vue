@@ -2,7 +2,7 @@
   <div class="bg-light-gray font-roboto rounded-lg mx-auto max-w-screen-sm">
     <!-- En-tête du formulaire -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
-      <h2 class="text-xl font-roboto font-semibold text-white ml-4">{{ title }}</h2>
+      <h2 class="text-xl font-roboto font-semibold text-white ml-4">Supprimer votre profil</h2>
       
       <!-- Rectangle SVG avec couleur d'accent -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -100,13 +100,6 @@ const userStore = useUserStore();
 const router = useRouter();
 const toast = useToast();
 const emit = defineEmits(['save', 'cancel']);
-
-const props = defineProps({
-  title: {
-    type: String,
-    default: 'Supprimer votre profil'
-  }
-});
 
 // États du formulaire
 const formData = reactive({

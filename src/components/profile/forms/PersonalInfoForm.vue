@@ -5,7 +5,7 @@
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
       <h2 class="text-xl font-roboto font-semibold text-white ml-4">
-        {{ title }}
+        Modifier vos informations personnelles
       </h2>
 
       <!-- Rectangle SVG avec couleur d'accent -->
@@ -352,7 +352,6 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  title: String,
 });
 
 const emit = defineEmits(["save", "cancel"]);

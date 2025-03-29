@@ -4,8 +4,8 @@
     <div
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
-      <h2 class="text-xl font-main font-semibold text-white ml-4">
-        {{ title }}
+      <h2 class="text-xl font-roboto font-semibold text-white ml-4">
+        Modifier vos renseignements bancaires
       </h2>
 
       <!-- Rectangle SVG avec couleur d'accent -->
@@ -163,26 +163,6 @@ const formData = reactive({
   other: "",
 });
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: 'Modifier vos renseignements bancaires'
-  }
-});
-
-// Charger les données depuis le store
-function loadBankingData() {
-
-  if (bankingStore.bankingDetails) {
-    formData.institutionName =
-      bankingStore.bankingDetails.institutionName || "";
-    formData.accountInfo = bankingStore.bankingDetails.accountInfo || "";
-    formData.loanInfo = bankingStore.bankingDetails.loanInfo || "";
-    formData.other = bankingStore.bankingDetails.other || "";
-
-  }
-}
-
 // Règles de validation
 const rules = {
   institutionName: {
@@ -217,6 +197,20 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, formData);
+
+// Charger les données depuis le store
+function loadBankingData() {
+
+  if (bankingStore.bankingDetails) {
+    formData.institutionName =
+      bankingStore.bankingDetails.institutionName || "";
+    formData.accountInfo = bankingStore.bankingDetails.accountInfo || "";
+    formData.loanInfo = bankingStore.bankingDetails.loanInfo || "";
+    formData.other = bankingStore.bankingDetails.other || "";
+
+  }
+}
+
 
 // Formatage du numéro de compte
 function formatAccountInfo(accountInfo) {
@@ -280,10 +274,6 @@ watch(
   },
   { deep: true }
 );
-
-function handleCancel() {
-  emit("cancel");
-}
 </script>
 
 <style scoped></style>

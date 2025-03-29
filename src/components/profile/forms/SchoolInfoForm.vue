@@ -5,7 +5,7 @@
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
       <h2 class="text-xl font-roboto font-semibold text-white ml-4">
-        {{ title }}
+        Modifier votre établissement scolaire
       </h2>
 
       <!-- Rectangle SVG avec couleur d'accent -->
@@ -154,18 +154,6 @@ import { required, helpers, minLength } from "@vuelidate/validators";
 import { useSchoolStore } from "@/services/schoolStore";
 import { useUserStore } from "@/services/userStore";
 import { useToast } from "vue-toastification";
-import Swal from "sweetalert2";
-
-const props = defineProps({
-  schoolData: {
-    type: Object,
-    default: () => ({}),
-  },
-  title: {
-    type: String,
-    default: "Modifier vos informations scolaires",
-  },
-});
 
 const emit = defineEmits(["save", "cancel"]);
 
@@ -183,7 +171,7 @@ const formData = reactive({
 });
 
 // Charger les données initiales
-function loadSchoolDataDirectly() {
+function loadSchoolData() {
 
 
   if (schoolStore.schoolDetails) {
@@ -263,18 +251,9 @@ const v$ = useVuelidate(rules, formData);
 onMounted(async () => {
   if (userStore.user?.id) {
       await schoolStore.fetchSchoolDetails(userStore.user.id);
-    loadSchoolDataDirectly();
+    loadSchoolData();
   }
 });
-
-// Surveiller les changements de schoolData pour recharger les données
-watch(
-  () => props.schoolData,
-  () => {
-    loadSchoolDataDirectly();
-  },
-  { deep: true }
-);
 
 // Ajoutons une fonction watch pour réinitialiser la date de fin si elle devient invalide
 watch(

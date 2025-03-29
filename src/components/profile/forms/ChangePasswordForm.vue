@@ -5,7 +5,7 @@
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
       <h2 class="text-xl font-roboto font-semibold text-white ml-4">
-        {{ title }}
+        Changer votre mot de passe
       </h2>
 
       <!-- Rectangle SVG avec couleur d'accent -->
@@ -200,19 +200,12 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, helpers, sameAs } from "@vuelidate/validators";
 import { useUserStore } from "@/services/userStore";
 import { useToast } from "vue-toastification";
-import sweetAlert from "@/plugins/sweetAlert";
 import Swal from "sweetalert2";
 
 const userStore = useUserStore();
 const toast = useToast();
 const emit = defineEmits(["save", "cancel"]);
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: "Changer votre mot de passe",
-  },
-});
 
 // État du formulaire
 const formData = reactive({
