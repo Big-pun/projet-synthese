@@ -170,11 +170,13 @@ async function handleSubmit() {
         emit('save');
         router.push('/accueil');
       } catch (error) {
-        let errorMessage = "Une erreur est survenue lors de la suppression du profil";
-        if (error.message === "Mot de passe incorrect") {
-          errorMessage = "Le mot de passe est incorrect";
+        Swal.close();
+        // Gérer spécifiquement l'erreur de mot de passe incorrect
+        if (error.message === "Mot de passe incorrect" || userStore.error === "Mot de passe incorrect") {
+          toast.error("Le mot de passe est incorrect");
+        } else {
+          toast.error("Une erreur est survenue lors de la suppression du profil");
         }
-        toast.error(errorMessage);
       }
     }
   } catch (error) {
@@ -182,7 +184,6 @@ async function handleSubmit() {
     toast.error("Une erreur inattendue est survenue");
     Swal.close();
   } finally {
-    router.push('/accueil');
     isSubmitting.value = false;
   }
 }

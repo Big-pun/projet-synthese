@@ -288,42 +288,41 @@ async function handleSubmit() {
   isSubmitting.value = true;
 
   try {
-    // Valider le formulaire
+    // Valider le formulaire d'abord
     const isValid = await v$.value.$validate();
     if (!isValid) {
+      isSubmitting.value = false;
       return;
     }
 
-    // Vérifier que le mot de passe actuel est correct
-    if (formData.currentPassword !== userStore.user?.password) {
-      toast.error("Le mot de passe actuel est incorrect");
+    // Vérifier que les mots de passe correspondent
+    if (formData.newPassword !== formData.confirmPassword) {
+      toast.error("Les mots de passe ne correspondent pas");
+      isSubmitting.value = false;
       return;
     }
 
-    // Vérifier que le nouveau mot de passe est différent de l'ancien
-    if (formData.currentPassword === formData.newPassword) {
-      toast.error("Le nouveau mot de passe doit être différent de l'ancien");
-      return;
-    }
-
-    // Mettre à jour le mot de passe
-    await userStore.updateUser(userStore.user.id, {
-      password: formData.newPassword,
+    // Appeler le store pour changer le mot de passe
+    await userStore.changePassword({
+      currentPassword: formData.currentPassword,
+      newPassword: formData.newPassword
     });
 
+    // Notification de succès
     Swal.fire({
-      title: "Modification en cours...",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
+      title: "Modification réussie!",
+      text: "Votre mot de passe a été mis à jour",
+      icon: "success"
     });
 
     emit("save");
   } catch (error) {
-    console.error("Erreur lors du changement de mot de passe:", error);
-    toast.error("Erreur lors du changement de mot de passe");
+    // Gérer spécifiquement l'erreur de mot de passe incorrect
+    if (error.message === "Mot de passe actuel incorrect" || userStore.error === "Le mot de passe actuel est incorrect") {
+      toast.error("Le mot de passe actuel est incorrect");
+    } else {
+      toast.error("Erreur lors du changement de mot de passe");
+    }
   } finally {
     isSubmitting.value = false;
   }

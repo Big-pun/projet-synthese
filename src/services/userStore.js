@@ -72,26 +72,63 @@ export const useUserStore = defineStore('user', {
         }
       },
 
-      async deleteUser(userId) {
+      async deleteUser(userId, password) {
         this.loading = true;
         this.error = null;
-        const router = useRouter();
-
+        
         try {
-          // Appel à l'API de suppression
+          // Vérifier d'abord si le mot de passe est correct
+          if (this.user && this.user.password !== password) {
+            this.error = "Mot de passe incorrect";
+            throw new Error("Mot de passe incorrect");
+          }
+          
+          // Continuer avec la suppression
           await deleteUser(userId);
           
-          // Si la suppression réussit, nettoyer l'état
           this.user = null;
           localStorage.removeItem('user');
-          router.push('/accueil');
           return true;
         } catch (error) {
-          // Gestion des erreurs selon le type de réponse
-          if (error.response?.status === 500) {
+          if (error.message === "Mot de passe incorrect") {
+            // Erreur déjà définie
+          } else if (error.response?.status === 500) {
             this.error = "Le serveur a rencontré une erreur. Veuillez réessayer plus tard.";
           } else {
             this.error = error.response?.data?.message || "Erreur lors de la suppression du profil.";
+          }
+          throw error;
+        } finally {
+          this.loading = false;
+        }
+      },
+
+      async changePassword(passwordData) {
+        this.loading = true;
+        this.error = null;
+        
+        try {
+          // Vérifier si le mot de passe actuel est correct
+          if (this.user.password !== passwordData.currentPassword) {
+            this.error = "Le mot de passe actuel est incorrect";
+            throw new Error("Mot de passe actuel incorrect");
+          }
+          
+          // Mettre à jour le mot de passe
+          const updatedUser = {
+            ...this.user,
+            password: passwordData.newPassword
+          };
+          
+          // Appeler l'API pour mettre à jour l'utilisateur
+          const response = await updateUser(this.user.id, updatedUser);
+          
+          // Mettre à jour l'utilisateur dans le store
+          this.user = response.data;
+          return response.data;
+        } catch (error) {
+          if (error.message !== "Mot de passe actuel incorrect") {
+            this.error = "Erreur lors de la mise à jour du mot de passe";
           }
           throw error;
         } finally {
