@@ -155,7 +155,7 @@ const resetBudgetNewMonth = async () => {
   // SweetAlert2 confirmation modal
   const result = await Swal.fire({
     title: "Etes vous surs de vouloir commencer un nouveau mois?",
-    text: `Cette action est irreversible!`,
+    text: `Cette action est irreversible et effacera toutes vos transactions non récurrentes!`,
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#00EC86",
@@ -168,7 +168,7 @@ const resetBudgetNewMonth = async () => {
     transactionStore.deleteNonRecurrentTransactions(userId.value);
     Swal.fire({
       title: "Supprime!",
-      text: `Les transactions non reccurentes ont bien ete supprimees. Vous etes pret pour votre nouveau mois !`,
+      text: `Les transactions non réccurentes ont bien ete supprimées. Vous êtes prêt pour votre nouveau mois !`,
       icon: "success"
     });
   }
