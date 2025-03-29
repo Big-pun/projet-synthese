@@ -1,10 +1,23 @@
 <script setup>
-import { ref } from 'vue';
-import { mockUser } from '@/mock/userData';
+import { computed } from 'vue';
 
-const userData = ref({...mockUser});
+// define the props for receiving the user data
+const props = defineProps({
+  userData: {
+    type: Object,
+    default: () => ({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: ''
+    })
+  }
+});
 
-// Définir les événements
+// computed property with null value check
+const userInfo = computed(() => props.userData || {});
+
+// define the events
 const emit = defineEmits(['change-password', 'delete-profile']);
 
 function openChangePasswordForm() {
@@ -14,22 +27,21 @@ function openChangePasswordForm() {
 function openDeleteProfileForm() {
   emit('delete-profile');
 }
-
 </script>
 
 <template>
   <div class="mb-8 font-roboto max-w-screen-lg mx-auto">
-    <!-- Titre de la section -->
+    <!-- title of the section -->
     <div class="flex items-center mb-4 md:-ml-8">
       <img src="@/assets/img/logo.svg" alt="Logo" class="w-6 h-6 mr-2" />
       <h1 class="uppercase text-gray font-bold">Details du profil</h1>
     </div>
 
-    <!-- Section complète en grille -->
+    <!-- complete section in grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 space-y-6 lg:space-y-0">
-      <!-- Carte d'aperçu -->
+      <!-- preview card -->
       <div class="bg-light-gray text-lg lg:text-xl p-6 md:p-8 shadow-sm rounded-3xl border-b-8 border-accent2 flex flex-col mt-4 items-center">
-        <h2 class="text-center text-accent2 mb-4 font-medium">Aperçu</h2>
+        <h2 class="text-center text-accent2 mb-4 font-medium font-roboto">Aperçu</h2>
         <div class="flex flex-row items-center space-x-4 w-full justify-center lg:justify-start">
           <div class="shrink-0 w-20 h-20 md:w-28 md:h-28 md:p-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 92 84" fill="none">
@@ -40,14 +52,14 @@ function openDeleteProfileForm() {
           </div>
 
           <div class="flex flex-col text-gray text-left space-y-1 font-medium ">
-            <p class="">{{ userData.firstName }} {{ userData.lastName }}</p>
-            <p class="">{{ userData.email }}</p>
-            <p class="">{{ userData.phone }}</p>
+            <p class="">{{ userInfo.firstName }} {{ userInfo.lastName }}</p>
+            <p class="">{{ userInfo.email }}</p>
+            <p class="">{{ userInfo.phone }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Boutons -->
+      <!-- buttons -->
       <div class="flex text-lg flex-col justify-center items-center space-y-4 md:space-y-6">
         <button
           @click="openChangePasswordForm"

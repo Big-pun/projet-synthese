@@ -1,13 +1,26 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { mockUser, formatDate } from '@/mock/userData';
+import { ref, computed } from 'vue';
+import { formatDate } from '@/utils/format';
 
 const hovered = ref(false);
 
-// Données scolaires provenant du mock
-const schoolData = reactive({...mockUser.schoolDetails});
+// add the props for receiving the data from the parent
+const props = defineProps({
+  schoolDetails: {
+    type: Object,
+    default: () => ({
+      schoolName: '',
+      fieldOfStudy: '',
+      startDate: '',
+      projectedEndDate: ''
+    })
+  }
+});
 
-// Définir l'événement pour l'édition
+// reference to the data via props rather than store
+const schoolInfo = computed(() => props.schoolDetails);
+
+// define the event for the edit
 const emit = defineEmits(['edit']);
 
 function openEditForm() {
@@ -20,45 +33,45 @@ function openEditForm() {
   @mouseenter="hovered = true"
   @mouseleave="hovered = false">
 
-    <!-- En-tête de la section avec barre de couleur -->
+    <!-- header -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
-      <h3 class="text-white ml-8">Établissement scolaire</h3>
+      <h3 class="text-white ml-8 font-roboto">Établissement scolaire</h3>
 
-      <!-- Rectangle coloré à droite -->
+      <!-- Rectangle -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
         class="absolute right-5 top-0 rounded-b transition-colors duration-200">
         <rect width="36" height="75" :class="{ 'rectangle-fill-default': !hovered, 'rectangle-fill-hovered': hovered }" />
       </svg>
     </div>
 
-    <!-- Contenu des informations scolaires -->
+    <!-- school information content -->
     <div class="px-6 pt-4 space-y-2">
-      <!-- Nom de l'établissement -->
+      <!-- school name -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Nom</p>
-        <p>{{ schoolData.schoolName || 'Non spécifié' }}</p>
+        <p>{{ schoolInfo?.schoolName || 'Non spécifié' }}</p>
       </div>
 
-      <!-- Domaine d'études -->
+      <!-- field of study -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Domaine</p>
-        <p>{{ schoolData.fieldOfStudy || 'Non spécifié' }}</p>
+        <p>{{ schoolInfo?.fieldOfStudy || 'Non spécifié' }}</p>
       </div>
 
-      <!-- Début du programme -->
+      <!-- start date -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Début du programme</p>
-        <p>{{ formatDate(schoolData.startDate) }}</p>
+        <p>{{ formatDate(schoolInfo?.startDate) }}</p>
       </div>
 
-      <!-- Fin du programme -->
+      <!-- projected end date -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Fin du programme</p>
-        <p>{{ formatDate(schoolData.projectedEndDate) }}</p>
+        <p>{{ formatDate(schoolInfo?.projectedEndDate) }}</p>
       </div>
     </div>
 
-    <!-- Bouton d'édition -->
+    <!-- edit button -->
     <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden bg-white" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditForm"
