@@ -163,6 +163,13 @@ const toast = useToast();
 
 const isSubmitting = ref(false);
 
+const props = defineProps({
+  schoolDetails: {
+    type: Object,
+    required: true,
+  },
+});
+
 const formData = reactive({
   schoolName: "",
   fieldOfStudy: "",
@@ -170,11 +177,17 @@ const formData = reactive({
   projectedEndDate: "",
 });
 
-// Charger les données initiales
+// load initial data
 function loadSchoolData() {
+  if (props.schoolDetails) {  
+    formData.schoolName = props.schoolDetails.schoolName || "";
+    formData.fieldOfStudy = props.schoolDetails.fieldOfStudy || "";
 
-
-  if (schoolStore.schoolDetails) {
+    if (props.schoolDetails.startDate) {
+      formData.startDate = new Date(props.schoolDetails.startDate)
+        .toISOString()
+        .split("T")[0];
+    }
     formData.schoolName = schoolStore.schoolDetails.schoolName || "";
     formData.fieldOfStudy = schoolStore.schoolDetails.fieldOfStudy || "";
 
@@ -194,7 +207,7 @@ function loadSchoolData() {
   }
 }
 
-// Règles de validation
+// validation rules
 const rules = computed(() => {
   return {
     schoolName: {
@@ -247,7 +260,7 @@ const rules = computed(() => {
 
 const v$ = useVuelidate(rules, formData);
 
-// Charger les données initiales au montage
+// load initial data on mount
 onMounted(async () => {
   if (userStore.user?.id) {
       await schoolStore.fetchSchoolDetails(userStore.user.id);
@@ -255,11 +268,11 @@ onMounted(async () => {
   }
 });
 
-// Ajoutons une fonction watch pour réinitialiser la date de fin si elle devient invalide
+// add a watch to reset the end date if it becomes invalid
 watch(
   () => formData.startDate,
   (newStartDate) => {
-    // Si la date de fin existe et est avant la nouvelle date de début, on la réinitialise
+    // if the end date exists and is before the new start date, reset it
     if (formData.projectedEndDate && newStartDate) {
       const startDate = new Date(newStartDate);
       const endDate = new Date(formData.projectedEndDate);
@@ -267,7 +280,7 @@ watch(
       if (endDate <= startDate) {
         formData.projectedEndDate = "";
         toast.info(
-          "Veuillez sélectionner une nouvelle date de fin après la date de début"
+          "Please select a new end date after the start date"
         );
       }
     }
@@ -284,7 +297,7 @@ async function handleSubmit() {
 
     isSubmitting.value = true;
 
-    // Formater les données
+    // format the data
     const schoolData = {
       schoolName: formData.schoolName,
       fieldOfStudy: formData.fieldOfStudy,
@@ -294,11 +307,11 @@ async function handleSubmit() {
 
     await schoolStore.updateSchoolDetails(userStore.user.id, schoolData);
 
-    // Émettre l'événement save avec les données
+    // emit the save event with the data
     emit("save", schoolData);
   } catch (error) {
     toast.error(
-      schoolStore.error || "Une erreur est survenue lors de la mise à jour"
+    schoolStore.error || "An error occurred during update"
     );
   } finally {
     isSubmitting.value = false;

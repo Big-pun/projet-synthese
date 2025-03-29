@@ -356,7 +356,7 @@ const props = defineProps({
 
 const emit = defineEmits(["save", "cancel"]);
 
-// Provinces disponibles
+// provinces
 const provinces = [
   { value: "QC", label: "Québec" },
   { value: "ON", label: "Ontario" },
@@ -373,7 +373,7 @@ const provinces = [
   { value: "NU", label: "Nunavut" },
 ];
 
-// Calcul des dates limites
+// calculate the limits
 const today = new Date();
 const minAge = 16;
 const maxAge = 100;
@@ -389,7 +389,7 @@ const minDate = new Date(
   today.getDate()
 );
 
-// Formulaire réactif
+// reactive form
 const formData = reactive({
   firstName: "",
   lastName: "",
@@ -404,7 +404,7 @@ const formData = reactive({
   country: "CA",
 });
 
-// Règles de validation
+// validation rules
 const rules = {
   firstName: {
     required: helpers.withMessage("Le prénom est requis", required),
@@ -482,13 +482,13 @@ const rules = {
   },
 };
 
-// Initialiser Vuelidate
+// initialize Vuelidate
 const v$ = useVuelidate(rules, formData, { $lazy: true });
 
-// Ajouter cette ligne avant la fonction handleSubmit
+// add this line before the handleSubmit function
 const isSubmitting = ref(false);
 
-// Charger les données de l'utilisateur
+// load user data
 function loadUserData() {
 
   if (props.userData) {
@@ -505,9 +505,9 @@ function loadUserData() {
     formData.email = props.userData.email || "";
     formData.phone = props.userData.phone || "";
 
-    // Charger l'adresse initiale
+    // load the initial address
     if (props.userAddresses && props.userAddresses.length > 0) {
-      // Chercher d'abord l'adresse personnelle
+      // first search for the personal address
       const personalAddress = props.userAddresses.find(
         (addr) => addr.type === "PERSONAL"
       );
@@ -515,7 +515,7 @@ function loadUserData() {
         (addr) => addr.type === "WORK"
       );
 
-      // Utiliser l'adresse personnelle en priorité, sinon l'adresse professionnelle
+      // use the personal address in priority, otherwise the work address
       const addressToLoad = personalAddress || workAddress;
 
       if (addressToLoad) {
@@ -526,7 +526,7 @@ function loadUserData() {
   }
 }
 
-// Charger une adresse par type
+// load an address by type
 function loadAddressByType(type) {
   const address = props.userAddresses?.find((addr) => addr.type === type);
 
@@ -538,7 +538,7 @@ function loadAddressByType(type) {
     formData.province = address.province || "";
     formData.country = address.country || "CA";
   } else {
-    // Réinitialiser les champs d'adresse
+    // reset the address fields
     formData.addressType = type;
     formData.streetNumber = "";
     formData.streetName = "";
@@ -548,17 +548,17 @@ function loadAddressByType(type) {
   }
 }
 
-// Gérer le changement de type d'adresse
+// handle the address type change
 function handleAddressTypeChange() {
   loadAddressByType(formData.addressType);
 }
 
-// Charger les données au montage du composant
+// load data on mount
 onMounted(() => {
   loadUserData();
 });
 
-// Fonction de soumission du formulaire
+// form submission
 async function handleSubmit() {
   try {
     const isFormValid = await v$.value.$validate();
@@ -569,7 +569,7 @@ async function handleSubmit() {
 
     isSubmitting.value = true;
 
-    // Formatage des données utilisateur
+    // format user data
     const userData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -578,7 +578,7 @@ async function handleSubmit() {
       phone: formData.phone,
     };
 
-    // Formatage des données d'adresse
+    // format address data
     const addressData = {
       type: formData.addressType,
       streetNumber: formData.streetNumber,
@@ -588,13 +588,13 @@ async function handleSubmit() {
       country: formData.country,
     };
 
-    // Récupérer l'ID de l'utilisateur
+    // get the user id
     const userId = userStore.user?.id;
     if (!userId) {
-      throw new Error("ID utilisateur non trouvé");
+      throw new Error("User ID not found");
     }
 
-    // Mise à jour des deux stores en parallèle avec l'ID utilisateur
+    // update the two stores in parallel with the user id
     await Promise.all([
       userStore.updateUser(userId, userData),
       addressStore.updateAddress(userId, addressData),
@@ -602,10 +602,10 @@ async function handleSubmit() {
 
     emit("save", userData, addressData);
   } catch (error) {
-    console.error("Erreur lors de la mise à jour:", error);
+    console.error("Error during update:", error);
     Swal.close();
     toast.error(
-      error.message || "Une erreur est survenue lors de la mise à jour"
+      error.message || "An error occurred during update"
     );
   } finally {
     isSubmitting.value = false;
@@ -623,20 +623,20 @@ watch(
 );
 
 function formatPhoneNumber(event) {
-  // Enlever tout ce qui n'est pas un chiffre
+  // remove everything that is not a digit
   let phoneNumber = event.target.value.replace(/\D/g, "");
 
-  // Limiter à 10 chiffres
+  // limit to 10 digits
   phoneNumber = phoneNumber.substring(0, 10);
 
-  // Formatter en XXX-XXX-XXXX
+  // format as XXX-XXX-XXXX
   if (phoneNumber.length >= 6) {
     phoneNumber = `${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}`;
   } else if (phoneNumber.length >= 3) {
     phoneNumber = `${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3)}`;
   }
 
-  // Mettre à jour la valeur
+    // update the value
   formData.phone = phoneNumber;
 }
 </script>

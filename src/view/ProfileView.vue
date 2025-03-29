@@ -104,14 +104,14 @@ async function loadAllUserData() {
     
     const userId = userStore.user.id;
     
-    // Charger toutes les données en parallèle
+    // load all the data in parallel
     await Promise.all([
       addressStore.fetchAddresses(userId),
       bankingStore.fetchBankingDetails(userId),
       schoolStore.fetchSchoolDetails(userId)
     ]);
     
-    // Mettre à jour TOUTES les références locales
+    // update all the local references
     userAddresses.value = addressStore.addresses;
     bankingDetails.value = bankingStore.bankingDetails;
     schoolDetails.value = schoolStore.schoolDetails;
@@ -124,29 +124,29 @@ async function loadAllUserData() {
   }
 }
 
-// Appeler au montage du composant
+// call when the component is mounted
 onMounted(async () => {
-  // Vérifier si l'utilisateur est connecté
+  // check if the user is connected
   checkAuthentication();
   
-  // Si oui, charger les données
+  // if yes, load the data
   if (userStore.user) {
     await loadAllUserData();
   }
 });
 
-// Gérer la sauvegarde des données en fonction du type de modal
+// handle the save of the data depending on the type of modal
 async function handleSave(data) {
   try {
     showLoading('Enregistrement en cours...');
     
-    // Simuler un délai de traitement côté serveur (1 seconde)
+    // simulate a server processing delay (1 second)
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Fermer l'indicateur de chargement
+    // close the loading indicator
     closeLoading();
     
-    // Traitement spécifique selon le type de formulaire
+    // specific processing depending on the type of form
     let successMessage = '';
     
     if (activeForm.value === PersonalInfoForm) {
@@ -168,19 +168,19 @@ async function handleSave(data) {
       successMessage = 'Vos modifications ont été enregistrées avec succès.';
     }
     
-    // Afficher le toast de succès standardisé
+    // display the standardized success toast
     showSuccess(successMessage);
     
-    // Fermer le modal après traitement
+    // close the modal after processing
     isModalOpen.value = false;
     
-    // Après une sauvegarde réussie, recharger les données
+    // after a successful save, reload the data
     await loadAllUserData();
   } catch (error) {
-    // Fermer l'indicateur de chargement en cas d'erreur
+    // close the loading indicator in case of error
     closeLoading();
     
-    // Gérer les erreurs
+    // handle the errors
     showError('Une erreur est survenue lors de la sauvegarde des données.');
     console.error('Error saving data:', error);
   }
@@ -189,7 +189,7 @@ async function handleSave(data) {
 
 <template>
   <div class="container mx-auto">
-    <!-- Indicateur de chargement global optionnel -->
+    <!-- global loading indicator (optional) -->
     <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white p-4 rounded-lg shadow-lg">
         Chargement en cours...
@@ -209,7 +209,7 @@ async function handleSave(data) {
       @edit="openForm('personnalInfo')"
     />
     
-    <!-- Section avec informations scolaires et bancaires côte à côte -->
+    <!-- section with school and banking information side by side -->
     <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
       <ProfileSchoolInfos
         :schoolDetails="schoolDetails"
@@ -221,7 +221,7 @@ async function handleSave(data) {
       />
     </div>
     
-    <!-- Modal pour les formulaires -->
+    <!-- modal for the forms -->
     <Modal
       v-if="isModalOpen"
       :isOpen="isModalOpen"

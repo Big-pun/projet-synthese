@@ -155,7 +155,7 @@ const emit = defineEmits(["save", "cancel"]);
 
 const isSubmitting = ref(false);
 
-// Données du formulaire
+// form data
 const formData = reactive({
   institutionName: "",
   accountInfo: "",
@@ -163,7 +163,7 @@ const formData = reactive({
   other: "",
 });
 
-// Règles de validation
+// validation rules
 const rules = {
   institutionName: {
     required: helpers.withMessage(
@@ -198,7 +198,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, formData);
 
-// Charger les données depuis le store
+// load banking data from store
 function loadBankingData() {
 
   if (bankingStore.bankingDetails) {
@@ -212,7 +212,7 @@ function loadBankingData() {
 }
 
 
-// Formatage du numéro de compte
+// format account info
 function formatAccountInfo(accountInfo) {
 
   if (!accountInfo) return "";
@@ -226,7 +226,7 @@ function formatAccountInfo(accountInfo) {
   return accountInfo;
 }
 
-// Soumission du formulaire
+// form submission
 async function handleSubmit() {
 
   try {
@@ -257,7 +257,7 @@ async function handleSubmit() {
   }
 }
 
-// Charger les données au montage
+// load data on mount
 onMounted(async () => {
 
   if (userStore.user?.id) {
@@ -266,7 +266,7 @@ onMounted(async () => {
   }
 });
 
-// Observer les changements dans le store
+// watch for changes in the store
 watch(
   () => bankingStore.bankingDetails,
   (newVal) => {

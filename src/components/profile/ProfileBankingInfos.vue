@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-// État pour le survol
+// state for the hover
 const hovered = ref(false);
 
-// Définir les props pour recevoir les données du parent
+// define the props for receiving the data from the parent
 const props = defineProps({
   title: {
     type: String,
@@ -21,7 +21,7 @@ const props = defineProps({
   }
 });
 
-// S'assurer que bankingInfo est toujours un objet valide
+// ensure that bankingInfo is always a valid object
 const bankingInfo = computed(() => {
   return props.bankingDetails || {
     institutionName: '',
@@ -31,10 +31,10 @@ const bankingInfo = computed(() => {
   };
 });
 
-// Définir l'événement pour l'édition
+// define the event for the edit
 const emit = defineEmits(['edit']);
 
-// Fonction pour ouvrir le formulaire d'édition
+// function to open the edit form
 function openEditForm() {
   emit('edit');
 }

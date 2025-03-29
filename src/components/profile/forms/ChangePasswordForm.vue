@@ -288,27 +288,27 @@ async function handleSubmit() {
   isSubmitting.value = true;
 
   try {
-    // Valider le formulaire d'abord
+    // validate the form first
     const isValid = await v$.value.$validate();
     if (!isValid) {
       isSubmitting.value = false;
       return;
     }
 
-    // Vérifier que les mots de passe correspondent
+    // check if the passwords match
     if (formData.newPassword !== formData.confirmPassword) {
       toast.error("Les mots de passe ne correspondent pas");
       isSubmitting.value = false;
       return;
     }
 
-    // Appeler le store pour changer le mot de passe
+    // call the store to change the password
     await userStore.changePassword({
       currentPassword: formData.currentPassword,
       newPassword: formData.newPassword
     });
 
-    // Notification de succès
+    // success notification
     Swal.fire({
       title: "Modification réussie!",
       text: "Votre mot de passe a été mis à jour",
@@ -317,7 +317,7 @@ async function handleSubmit() {
 
     emit("save");
   } catch (error) {
-    // Gérer spécifiquement l'erreur de mot de passe incorrect
+    // handle the incorrect password error
     if (error.message === "Mot de passe actuel incorrect" || userStore.error === "Le mot de passe actuel est incorrect") {
       toast.error("Le mot de passe actuel est incorrect");
     } else {

@@ -147,7 +147,7 @@ async function handleSubmit() {
     });
 
     if (result.isConfirmed) {
-      // Afficher le loading
+      // show loading
       Swal.fire({
         title: 'Suppression en cours...',
         text: 'Veuillez patienter pendant la suppression de votre compte',
@@ -160,18 +160,20 @@ async function handleSubmit() {
 
       try {
         await userStore.deleteUser(userStore.user.id, formData.password);
+        localStorage.removeItem('user');
         
-        // Fermer le SweetAlert de loading
+        // close the loading SweetAlert
         Swal.close();
         
-        // Afficher le toast de succès
+        // show success toast
         toast.success("Votre compte a été supprimé avec succès");
 
         emit('save');
         router.push('/accueil');
+        window.location.reload();
       } catch (error) {
         Swal.close();
-        // Gérer spécifiquement l'erreur de mot de passe incorrect
+        // handle the incorrect password error
         if (error.message === "Mot de passe incorrect" || userStore.error === "Mot de passe incorrect") {
           toast.error("Le mot de passe est incorrect");
         } else {
@@ -180,8 +182,8 @@ async function handleSubmit() {
       }
     }
   } catch (error) {
-    console.error('Erreur lors de la suppression:', error);
-    toast.error("Une erreur inattendue est survenue");
+    console.error('Error during deletion:', error);
+    toast.error("An unexpected error occurred");
     Swal.close();
   } finally {
     isSubmitting.value = false;

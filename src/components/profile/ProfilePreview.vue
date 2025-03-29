@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 
-// Définir les props pour recevoir les données utilisateur
+// define the props for receiving the user data
 const props = defineProps({
   userData: {
     type: Object,
@@ -14,10 +14,10 @@ const props = defineProps({
   }
 });
 
-// Computed property avec vérification des valeurs nulles
+// computed property with null value check
 const userInfo = computed(() => props.userData || {});
 
-// Définir les événements
+// define the events
 const emit = defineEmits(['change-password', 'delete-profile']);
 
 function openChangePasswordForm() {
@@ -31,15 +31,15 @@ function openDeleteProfileForm() {
 
 <template>
   <div class="mb-8 font-roboto max-w-screen-lg mx-auto">
-    <!-- Titre de la section -->
+    <!-- title of the section -->
     <div class="flex items-center mb-4 md:-ml-8">
       <img src="@/assets/img/logo.svg" alt="Logo" class="w-6 h-6 mr-2" />
       <h1 class="uppercase text-gray font-bold">Details du profil</h1>
     </div>
 
-    <!-- Section complète en grille -->
+    <!-- complete section in grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 space-y-6 lg:space-y-0">
-      <!-- Carte d'aperçu -->
+      <!-- preview card -->
       <div class="bg-light-gray text-lg lg:text-xl p-6 md:p-8 shadow-sm rounded-3xl border-b-8 border-accent2 flex flex-col mt-4 items-center">
         <h2 class="text-center text-accent2 mb-4 font-medium font-roboto">Aperçu</h2>
         <div class="flex flex-row items-center space-x-4 w-full justify-center lg:justify-start">
@@ -59,7 +59,7 @@ function openDeleteProfileForm() {
         </div>
       </div>
 
-      <!-- Boutons -->
+      <!-- buttons -->
       <div class="flex text-lg flex-col justify-center items-center space-y-4 md:space-y-6">
         <button
           @click="openChangePasswordForm"
