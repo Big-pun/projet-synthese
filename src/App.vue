@@ -19,7 +19,7 @@ const userConnected = computed(() => {
   <div class="app-container">
     <div class="flex">
       <Sidebar :userConnected="userConnected"></Sidebar>
-      <div class="flex flex-col grow p-5 bg-white overflow-y-auto">
+      <div class="flex flex-col grow bg-white overflow-y-auto">
         <Header></Header>
         <main class="grow"> <!-- ensures that the footer is pushed to the bottom of the page -->
           <RouterView></RouterView>

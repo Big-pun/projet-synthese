@@ -60,7 +60,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
         <tr>
           <th v-for="header in headers" :key="header.label" class="text-left">
             <img v-if="header.icon" class="block sm:hidden h-6" :src="header.icon" :alt="header.label" />
-            <span class="hidden sm:inline-block">{{ header.label }}</span>
+            <span class="hidden md:inline-block">{{ header.label }}</span>
           </th>
         </tr>
       </thead>
@@ -79,6 +79,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
             <!-- Recurrence -->
             <template v-if="header.key === 'recurrent'">
               <div class="flex flex-col items-center gap-2" :class="!isEntryRecurrent(item) ? 'my-5' : ''">
+                <span class="block md:hidden font-semibold">Récurrent</span>
                 <!-- Recurrence Toggle Switch -->
                 <label class="switch">
                   <input
@@ -112,7 +113,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
 
             <!-- Other fields -->
             <template v-else>
-              {{ item[header.key] === '' ? '-' : item[header.key] }}
+              {{ item[header.key] === '' ? '-' : item[header.key] }} {{ header.key === 'amount' ? '$' : '' }}
             </template>
 
           </td>
@@ -169,7 +170,6 @@ thead {
 }
 
 tr {
-  display: block;
   padding-left: 22px;
   padding-right: 22px;
 }
@@ -239,6 +239,13 @@ table:hover .tag {
 @media screen and (max-width: 800px) {
   tr {
     padding: 5px 10px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  tbody tr {
+    display: flex;
+    flex-direction: column;
   }
 }
 
