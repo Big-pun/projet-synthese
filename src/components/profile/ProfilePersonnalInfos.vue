@@ -1,23 +1,31 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useUserStore } from '@/services/userStore';
-import { useAddressStore } from '@/services/addressStore';
+import { ref, computed } from 'vue';
 
 const hovered = ref(false);
-const userStore = useUserStore();
-const addressStore = useAddressStore();
 
-const userData = computed(() => userStore.user);
+// Définir les props pour recevoir les données du parent
 const props = defineProps({
+  userData: {
+    type: Object,
+    default: () => ({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      birthDate: null
+    })
+  },
   userAddresses: {
     type: Array,
     default: () => []
   }
 });
-const userAddresses = computed(() => props.userAddresses || addressStore.addresses);
+
+// Référence aux données utilisateur via props
+const userInfo = computed(() => props.userData);
 
 function getAddressByType(type) {
-  return userAddresses.value.find(address => address.type === type);
+  return props.userAddresses.find(address => address.type === type);
 }
 
 function formatAddress(address) {
@@ -36,10 +44,6 @@ const emit = defineEmits(['edit']);
 function openEditForm() {
   emit('edit');
 }
-
-onMounted(async () => {
-  // Aucun chargement ici - tout est géré par le composant parent
-});
 </script>
 
 <template>
@@ -64,12 +68,12 @@ onMounted(async () => {
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Prénom</p>
-          <p>{{ userData?.firstName || 'Non spécifié' }}</p>
+          <p>{{ userInfo?.firstName || 'Non spécifié' }}</p>
         </div>
 
         <div class="rounded-lg bg-white p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Date de naissance</p>
-          <p>{{ userData?.birthDate ? formatDate(userData.birthDate) : 'Non spécifié' }}</p>
+          <p>{{ userInfo?.birthDate ? formatDate(userInfo.birthDate) : 'Non spécifié' }}</p>
         </div>
       </div>
 
@@ -77,12 +81,12 @@ onMounted(async () => {
       <div>
         <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Nom</p>
-          <p>{{ userData?.lastName || 'Non spécifié' }}</p>
+          <p>{{ userInfo?.lastName || 'Non spécifié' }}</p>
         </div>
 
         <div class="rounded-lg bg-white p-4 flex flex-row items-center">
           <p class="font-medium responsive-margin">Téléphone</p>
-          <p>{{ userData?.phone || 'Non spécifié' }}</p>
+          <p>{{ userInfo?.phone || 'Non spécifié' }}</p>
         </div>
       </div>
     </div>
@@ -91,7 +95,7 @@ onMounted(async () => {
     <div class="mt-2 px-6">
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Courriel</p>
-        <p>{{ userData?.email || 'Non spécifié' }}</p>
+        <p>{{ userInfo?.email || 'Non spécifié' }}</p>
       </div>
 
       <div class="rounded-lg bg-white mb-2 p-4 flex flex-row items-center">

@@ -7,7 +7,7 @@ import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vu
 import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
 
-// Importer les formulaires
+// Import forms
 import ChangePasswordForm from '@/components/profile/forms/ChangePasswordForm.vue';
 import DeleteProfileForm from '@/components/profile/forms/DeleteProfileForm.vue';
 import PersonalInfoForm from '@/components/profile/forms/PersonalInfoForm.vue';
@@ -23,7 +23,7 @@ import { useBankingStore } from '@/services/bankingStore';
 import { useSchoolStore } from '@/services/schoolStore';
 import { useAddressStore } from '@/services/addressStore';
 
-// État local pour le modal et les formulaires
+// Local state for modal and forms
 const isModalOpen = ref(false);
 const activeForm = shallowRef(null);
 const formTitle = ref('');
@@ -39,7 +39,7 @@ const schoolStore = useSchoolStore();
 const addressStore = useAddressStore();
 const router = useRouter();
 
-// Vérification de l'authentification
+// Authentication check
 function checkAuthentication() {
   if (!userStore.user) {
     showError('Veuillez vous connecter pour accéder à votre profil');
@@ -47,7 +47,7 @@ function checkAuthentication() {
   }
 }
 
-// Fonction pour ouvrir le formulaire
+// Function to open the form
 async function openForm(formType) {
   try {
     switch (formType) {
@@ -91,18 +91,18 @@ async function openForm(formType) {
   }
 }
 
-// Fonction pour fermer le modal
+// Function to close the modal
 function handleClose() {
   isModalOpen.value = false;
   activeForm.value = null;
   formTitle.value = '';
 }
 
-// Ajouter cette fonction pour charger toutes les données nécessaires
+// Add this function to load all necessary data
 async function loadAllUserData() {
   try {
     isLoading.value = true;
-    // Vérifier d'abord si l'utilisateur est connecté
+    // Check if the user is connected first
     if (!userStore.user?.id) {
       checkAuthentication();
       return;
@@ -229,6 +229,7 @@ async function handleSave(data) {
     />
     
     <ProfilePersonnalInfos 
+      :userData="userStore.user"
       :userAddresses="userAddresses"
       @edit="openForm('personnalInfo')"
     />

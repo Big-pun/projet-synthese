@@ -163,9 +163,15 @@ const formData = reactive({
   other: "",
 });
 
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'Modifier vos renseignements bancaires'
+  }
+});
+
 // Charger les données depuis le store
 function loadBankingData() {
-
 
   if (bankingStore.bankingDetails) {
     formData.institutionName =

@@ -497,9 +497,8 @@ const isSubmitting = ref(false);
 
 // Charger les données de l'utilisateur
 function loadUserData() {
-  console.log("Début loadUserData");
+
   if (props.userData) {
-    console.log("Données utilisateur disponibles:", props.userData);
 
     formData.firstName = props.userData.firstName || "";
     formData.lastName = props.userData.lastName || "";
@@ -563,8 +562,6 @@ function handleAddressTypeChange() {
 
 // Charger les données au montage du composant
 onMounted(() => {
-  console.log("Composant monté");
-  console.log("Props reçues:", props);
   loadUserData();
 });
 
@@ -574,7 +571,6 @@ async function handleSubmit() {
     const isFormValid = await v$.value.$validate();
 
     if (!isFormValid) {
-      console.log("Erreurs de validation:", v$.value.$errors);
       return;
     }
 
@@ -636,15 +632,11 @@ async function handleSubmit() {
   }
 }
 
-// Ajouter des logs pour la validation
 watch(
   formData,
   async (newVal) => {
-    console.log("Changement détecté dans formData:", newVal);
     if (v$.value.$dirty) {
-      console.log("Validation automatique...");
       await v$.value.$validate();
-      console.log("Erreurs de validation:", v$.value.$errors);
     }
   },
   { deep: true }

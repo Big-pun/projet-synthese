@@ -1,13 +1,15 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useUserStore } from '@/services/userStore';
 
 // État pour le survol
 const hovered = ref(false);
-const userStore = useUserStore();
 
 // Définir les props pour recevoir les données du parent
 const props = defineProps({
+  title: {
+    type: String,
+    default: 'Modifier vos renseignements bancaires'
+  },
   bankingDetails: {
     type: Object,
     default: () => ({

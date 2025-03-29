@@ -40,7 +40,7 @@ function openEditForm() {
     </div>
 
     <!-- Contenu des informations scolaires -->
-    <div class="px-6 pt-4 space-y-2">
+    <div v-if="schoolInfo" class="px-6 pt-4 space-y-2">
       <!-- Nom de l'établissement -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Nom</p>
