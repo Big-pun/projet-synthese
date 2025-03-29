@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useUserStore } from '@/services/userStore';
 import { useAddressStore } from '@/services/addressStore';
 
@@ -8,7 +8,13 @@ const userStore = useUserStore();
 const addressStore = useAddressStore();
 
 const userData = computed(() => userStore.user);
-const userAddresses = computed(() => addressStore.addresses);
+const props = defineProps({
+  userAddresses: {
+    type: Array,
+    default: () => []
+  }
+});
+const userAddresses = computed(() => props.userAddresses || addressStore.addresses);
 
 function getAddressByType(type) {
   return userAddresses.value.find(address => address.type === type);
@@ -30,6 +36,10 @@ const emit = defineEmits(['edit']);
 function openEditForm() {
   emit('edit');
 }
+
+onMounted(async () => {
+  // Aucun chargement ici - tout est géré par le composant parent
+});
 </script>
 
 <template>

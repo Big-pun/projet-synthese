@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useSchoolStore } from '@/services/schoolStore';
 import { useUserStore } from '@/services/userStore';
-import { formatDate } from '@/mock/userData';
+import { formatDate } from '@/utils/format';
 
 const hovered = ref(false);
 const schoolStore = useSchoolStore();

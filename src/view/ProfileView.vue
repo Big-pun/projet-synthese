@@ -27,6 +27,7 @@ const isModalOpen = ref(false);
 const activeForm = shallowRef(null);
 const formTitle = ref('');
 const formData = ref(null);
+const userAddresses = ref([]);
 
 const userStore = useUserStore();
 const bankingStore = useBankingStore();
@@ -86,6 +87,34 @@ function handleClose() {
   formTitle.value = '';
 }
 
+// Ajouter cette fonction pour charger toutes les données nécessaires
+async function loadAllUserData() {
+  try {
+    if (!userStore.user?.id) return;
+    
+    const userId = userStore.user.id;
+    
+    // Charger toutes les données en parallèle
+    await Promise.all([
+      addressStore.fetchAddresses(userId),
+      bankingStore.fetchBankingDetails(userId),
+      schoolStore.fetchSchoolDetails(userId)
+    ]);
+    
+    // Mettre à jour les références locales
+    userAddresses.value = addressStore.addresses;
+    
+  } catch (error) {
+    console.error('Erreur lors du chargement des données:', error);
+    showError('Impossible de charger certaines données utilisateur');
+  }
+}
+
+// Appeler au montage du composant
+onMounted(async () => {
+  await loadAllUserData();
+});
+
 // Gérer la sauvegarde des données en fonction du type de modal
 async function handleSave(data) {
   try {
@@ -144,6 +173,9 @@ async function handleSave(data) {
     
     // Fermer le modal après traitement
     isModalOpen.value = false;
+    
+    // Après une sauvegarde réussie, recharger les données
+    await loadAllUserData();
   } catch (error) {
     // Fermer l'indicateur de chargement en cas d'erreur
     closeLoading();
@@ -163,6 +195,7 @@ async function handleSave(data) {
     />
     
     <ProfilePersonnalInfos 
+      :userAddresses="userAddresses"
       @edit="openForm('personnalInfo')"
     />
     

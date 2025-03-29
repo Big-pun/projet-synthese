@@ -17,11 +17,6 @@ function openChangePasswordForm() {
 function openDeleteProfileForm() {
   emit('delete-profile');
 }
-
-// Function to load user data
-onMounted(async () => {
-  await userStore.getUserById(userStore.user.id);
-});
 </script>
 
 <template>
