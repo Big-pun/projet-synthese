@@ -152,41 +152,22 @@ async function handleSave(data) {
     // Fermer l'indicateur de chargement
     closeLoading();
     
-    // Gérer le cas spécial de suppression de profil
-    if (activeForm.value === DeleteProfileForm) {
-      const result = await showConfirm(
-        'Confirmation de suppression',
-        'Êtes-vous sûr de vouloir supprimer votre profil ? Cette action est irréversible.',
-        'Oui, supprimer',
-        'Annuler'
-      );
-      
-      if (!result.isConfirmed) {
-        return; // L'utilisateur a annulé
-      }
-    }
-    
     // Traitement spécifique selon le type de formulaire
     let successMessage = '';
     
     if (activeForm.value === PersonalInfoForm) {
-      console.log('Saving personal info:', data);
       successMessage = 'Vos informations personnelles ont été mises à jour avec succès.';
     }
     else if (activeForm.value === SchoolInfoForm) {
-      console.log('Saving school info:', data);
       successMessage = 'Vos informations scolaires ont été mises à jour avec succès.';
     }
     else if (activeForm.value === BankingInfoForm) {
-      console.log('Saving banking info:', data);
       successMessage = 'Vos informations bancaires ont été mises à jour avec succès.';
     }
     else if (activeForm.value === ChangePasswordForm) {
-      console.log('Changing password:', data);
       successMessage = 'Votre mot de passe a été modifié avec succès!';
     }
     else if (activeForm.value === DeleteProfileForm) {
-      console.log('Deleting profile with password verification:', data.password);
       successMessage = 'Votre profil a été supprimé avec succès';
     }
     else {

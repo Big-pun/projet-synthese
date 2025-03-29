@@ -181,14 +181,15 @@ async function handleSubmit() {
         if (error.message === "Mot de passe incorrect") {
           errorMessage = "Le mot de passe est incorrect";
         }
-
         toast.error(errorMessage);
       }
     }
   } catch (error) {
     console.error('Erreur lors de la suppression:', error);
     toast.error("Une erreur inattendue est survenue");
+    Swal.close();
   } finally {
+    router.push('/accueil');
     isSubmitting.value = false;
   }
 }

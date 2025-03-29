@@ -594,15 +594,6 @@ async function handleSubmit() {
       country: formData.country,
     };
 
-    // Afficher le loading
-    Swal.fire({
-      title: "Mise à jour en cours...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
     // Récupérer l'ID de l'utilisateur
     const userId = userStore.user?.id;
     if (!userId) {
@@ -615,10 +606,6 @@ async function handleSubmit() {
       addressStore.updateAddress(userId, addressData),
     ]);
 
-    Swal.close();
-    toast.success(
-      "Vos informations personnelles ont été mises à jour avec succès"
-    );
     emit("save", userData, addressData);
   } catch (error) {
     console.error("Erreur lors de la mise à jour:", error);

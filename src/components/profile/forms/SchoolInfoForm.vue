@@ -184,7 +184,7 @@ const formData = reactive({
 
 // Charger les données initiales
 function loadSchoolDataDirectly() {
-  console.log("Chargement direct depuis le store:", schoolStore.schoolDetails);
+
 
   if (schoolStore.schoolDetails) {
     formData.schoolName = schoolStore.schoolDetails.schoolName || "";
@@ -194,7 +194,6 @@ function loadSchoolDataDirectly() {
       formData.startDate = new Date(schoolStore.schoolDetails.startDate)
         .toISOString()
         .split("T")[0];
-      console.log("Date de début formatée:", formData.startDate);
     }
 
     if (schoolStore.schoolDetails.projectedEndDate) {
@@ -203,7 +202,6 @@ function loadSchoolDataDirectly() {
       )
         .toISOString()
         .split("T")[0];
-      console.log("Date de fin formatée:", formData.projectedEndDate);
     }
   }
 }
@@ -264,11 +262,7 @@ const v$ = useVuelidate(rules, formData);
 // Charger les données initiales au montage
 onMounted(async () => {
   if (userStore.user?.id) {
-    console.log(
-      "Chargement des données pour l'utilisateur:",
-      userStore.user.id
-    );
-    await schoolStore.fetchSchoolDetails(userStore.user.id);
+      await schoolStore.fetchSchoolDetails(userStore.user.id);
     loadSchoolDataDirectly();
   }
 });
@@ -320,22 +314,8 @@ async function handleSubmit() {
       projectedEndDate: new Date(formData.projectedEndDate).toISOString(),
     };
 
-    // Afficher le loading
-    Swal.fire({
-      title: "Mise à jour en cours...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
     await schoolStore.updateSchoolDetails(userStore.user.id, schoolData);
 
-    Swal.close();
-
-    toast.success(
-      "Vos informations scolaires ont été mises à jour avec succès"
-    );
     // Émettre l'événement save avec les données
     emit("save", schoolData);
   } catch (error) {

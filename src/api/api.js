@@ -50,6 +50,7 @@ export const updateSchoolDetails = (userId, schoolData) =>
 // Post new user
 export const postNewUser = (userData) => apiClient.post("/users", userData);
 
+
 // Login user
 export const loginUser = async (email, password) => {
   try {
