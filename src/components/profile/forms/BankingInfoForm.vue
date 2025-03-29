@@ -4,7 +4,7 @@
     <div
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
-      <h2 class="text-xl font-main font-semibold text-white ml-4">
+      <h2 class="text-xl font-roboto font-semibold text-white ml-4">
         {{ title }}
       </h2>
 

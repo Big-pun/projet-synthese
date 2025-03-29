@@ -4,7 +4,7 @@
     <div
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
-      <h2 class="text-xl font-main font-semibold text-white ml-4">
+      <h2 class="text-xl font-roboto font-semibold text-white ml-4">
         {{ title }}
       </h2>
 
@@ -349,11 +349,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  isOpen: Boolean,
   title: String,
 });
 
-const emit = defineEmits(["update:isOpen", "save", "cancel"]);
+const emit = defineEmits(["save", "cancel"]);
 
 // Provinces disponibles
 const provinces = [
@@ -620,7 +619,7 @@ async function handleSubmit() {
     toast.success(
       "Vos informations personnelles ont été mises à jour avec succès"
     );
-    emit("save");
+    emit("save", userData, addressData);
   } catch (error) {
     console.error("Erreur lors de la mise à jour:", error);
     Swal.close();

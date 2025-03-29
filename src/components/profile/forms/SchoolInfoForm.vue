@@ -4,7 +4,7 @@
     <div
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
-      <h2 class="text-xl font-main font-semibold text-white ml-4">
+      <h2 class="text-xl font-roboto font-semibold text-white ml-4">
         {{ title }}
       </h2>
 
@@ -23,7 +23,7 @@
 
     <form @submit.prevent="handleSubmit" class="space-y-4 p-4" novalidate>
       <!-- Nom de l'établissement et domaine d'études -->
-      <div class="grid grid-cols-1 gap-x-4 gap-y-2 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-6">
         <!-- Nom de l'établissement -->
         <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
           <label
@@ -76,7 +76,7 @@
       </div>
 
       <!-- Dates du programme -->
-      <div class="grid grid-cols-1 gap-x-4 gap-y-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
         <!-- Date de début -->
         <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
           <label
@@ -185,7 +185,7 @@ const formData = reactive({
 // Charger les données initiales
 function loadSchoolDataDirectly() {
   console.log("Chargement direct depuis le store:", schoolStore.schoolDetails);
-  
+
   if (schoolStore.schoolDetails) {
     formData.schoolName = schoolStore.schoolDetails.schoolName || "";
     formData.fieldOfStudy = schoolStore.schoolDetails.fieldOfStudy || "";
@@ -264,7 +264,10 @@ const v$ = useVuelidate(rules, formData);
 // Charger les données initiales au montage
 onMounted(async () => {
   if (userStore.user?.id) {
-    console.log("Chargement des données pour l'utilisateur:", userStore.user.id);
+    console.log(
+      "Chargement des données pour l'utilisateur:",
+      userStore.user.id
+    );
     await schoolStore.fetchSchoolDetails(userStore.user.id);
     loadSchoolDataDirectly();
   }

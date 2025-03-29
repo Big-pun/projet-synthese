@@ -260,6 +260,7 @@ async function handleSave(data) {
         :userAddresses="userAddresses"
         :bankingDetails="bankingDetails"
         :schoolDetails="schoolDetails"
+        :title="formTitle"
         @save="handleSave"
         @cancel="handleClose"
         class="w-full"
