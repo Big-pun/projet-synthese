@@ -336,7 +336,6 @@ async function handleSubmit() {
     toast.success(
       "Vos informations scolaires ont été mises à jour avec succès"
     );
-
     // Émettre l'événement save avec les données
     emit("save", schoolData);
   } catch (error) {

@@ -4,7 +4,7 @@
     <div
       class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0"
     >
-      <h2 class="text-xl font-roboto font-semibold text-white ml-4">
+      <h2 class="text-xl font-main font-semibold text-white ml-4">
         {{ title }}
       </h2>
 
@@ -252,10 +252,6 @@ async function handleSubmit() {
 
     // Mise à jour via le store
     await bankingStore.updateBankingDetails(userStore.user.id, formattedData);
-
-    toast.success(
-      "Vos informations bancaires ont été mises à jour avec succès"
-    );
     emit("save", formattedData);
   } catch (error) {
     console.error("Erreur lors de la mise à jour:", error);

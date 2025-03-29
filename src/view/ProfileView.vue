@@ -175,7 +175,6 @@ async function handleSave(data) {
     }
     else if (activeForm.value === SchoolInfoForm) {
       console.log('Saving school info:', data);
-      await schoolStore.fetchSchoolDetails(userStore.user.id);
       successMessage = 'Vos informations scolaires ont été mises à jour avec succès.';
     }
     else if (activeForm.value === BankingInfoForm) {
