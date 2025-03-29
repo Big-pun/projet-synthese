@@ -188,7 +188,7 @@ async function handleSave(data) {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto">
     <ProfilePreview 
       @change-password="openForm('changePassword')" 
       @delete-profile="openForm('deleteProfile')"

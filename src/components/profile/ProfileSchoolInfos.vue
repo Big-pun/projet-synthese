@@ -30,7 +30,7 @@ function openEditForm() {
 
     <!-- En-tête de la section avec barre de couleur -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
-      <h3 class="text-white ml-8">Établissement scolaire</h3>
+      <h3 class="text-white ml-8 font-roboto">Établissement scolaire</h3>
 
       <!-- Rectangle coloré à droite -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"

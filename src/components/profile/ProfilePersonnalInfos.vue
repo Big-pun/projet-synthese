@@ -49,7 +49,7 @@ onMounted(async () => {
     @mouseleave="hovered = false">
     <!-- En-tête de la section avec pastille de statut -->
     <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
-      <h3 class="text-white ml-8">Renseignements personnels</h3>
+      <h3 class="text-white ml-8 font-roboto">Renseignements personnels</h3>
 
       <!-- Rectangle SVG avec changement de couleur basé sur l'état hovered -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
