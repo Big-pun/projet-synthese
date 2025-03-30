@@ -1,38 +1,72 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: 'https://money-pie-1.fly.dev/api/v1',
+  baseURL: "https://money-pie-1.fly.dev/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Get user by ID
+// Users endpoints
 export const getUserById = (userId) => apiClient.get(`/users/${userId}`);
-
-// Get user by email
+export const updateUser = (userId, userData) => apiClient.put(`/users/${userId}`, userData);
+export const deleteUser = (userId) => apiClient.delete(`/users/${userId}`);
+export const postNewUser = (userData) => apiClient.post("/users", userData);
 export const getUserByEmail = (email) => apiClient.get(`/users/email/${email}`);
 
-// Get user transactions
+
+// Transactions endpoints
 export const getUserTransactions = (userId) =>
   apiClient.get(`/users/${userId}/transactions`);
 
-// Get user addresses
+export const postNewTransaction = (userId, transactionData) =>{
+  const url = `/users/${userId}/transactions`;
+  console.log('url', url);
+  console.log('transactionData', transactionData);
+  return apiClient.post(url, transactionData);
+}
+
+export const deleteTransaction = (userId, transactionId) => {
+  console.log('deleting en cours');
+  return apiClient.delete(`/users/${userId}/transactions/${transactionId}`);
+}
+
+export const updateTransaction = (userId, transactionId, transactionData) =>
+  apiClient.put(`/users/${userId}/transactions/${transactionId}`, transactionData);
+
+
+// Addresses endpoints
 export const getUserAddresses = (userId) =>
   apiClient.get(`/users/${userId}/addresses`);
 
-// Get user banking details
+export const updateAddress = (userId, addressData) =>
+  apiClient.put(`/users/${userId}/addresses`, addressData);
+
+export const getAddressByType = (userId, addressType) =>
+  apiClient.get(`/users/${userId}/addresses/${addressType}`);
+
+
+// Banking details endpoints
 export const getUserBankingDetails = (userId) =>
   apiClient.get(`/users/${userId}/banking-details`);
 
-// Post new user
-export const postNewUser = (userData) => apiClient.post('/users', userData);
+export const updateBankingDetails = (userId, bankingData) =>
+  apiClient.put(`/users/${userId}/banking-details`, bankingData);
 
+
+// School details endpoints
+export const getUserSchoolDetails = (userId) =>
+  apiClient.get(`/users/${userId}/school-details`);
+
+export const updateSchoolDetails = (userId, schoolData) =>
+  apiClient.put(`/users/${userId}/school-details`, schoolData);
+
+/* A EFFACER (voir userStore)
 // Login user
 export const loginUser = async (email, password) => {
   try {
-    const response = await apiClient.post('/auth/login', { email, password });
-    return response.data; 
+    const response = await apiClient.post("/auth/login", { email, password });
+    return response.data;
   } catch (error) {
     return { success: false, message: "Erreur de connexion." };
   }
@@ -41,9 +75,12 @@ export const loginUser = async (email, password) => {
 // Register user
 export const registerUser = async (userData) => {
   try {
-    const response = await apiClient.post('/auth/register', userData);
-    return response.data; // { success: true, user: {...} } 
+    const response = await apiClient.post("/auth/register", userData);
+    return response.data; // { success: true, user: {...} }
   } catch (error) {
-    return { success: false, message: error.response?.data?.message || "Erreur lors de l'inscription." };
+    return {
+      success: false,
+      message: error.response?.data?.message || "Erreur lors de l'inscription.",
+    };
   }
-};
+}; */

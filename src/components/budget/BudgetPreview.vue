@@ -17,7 +17,14 @@ const balance = computed(() => {
 });
 
 const percentageSpent = computed(() => {
-  return Math.floor((props.spendingsTotal / props.incomesTotal) * 100);
+  // Avoid division by zero
+  if (props.incomesTotal === 0) {
+    return 100;
+  }
+  else {
+    return Math.floor((props.spendingsTotal / props.incomesTotal) * 100);
+  }
+    
 });
 
 // Theme settings
@@ -42,7 +49,7 @@ const themeClasses = computed(() => {
     <!-- Preview Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 space-y-6 lg:space-y-0">
       <!-- Balance Card -->
-      <div :class="themeClasses.borderColor" class="bg-light-gray text-lg shadow-sm rounded-3xl border-b-8 flex flex-col items-center max-w-[500px] mx-auto w-full">
+      <div :class="themeClasses.borderColor" class="self-center bg-light-gray text-lg shadow-sm rounded-3xl border-b-8 flex flex-col items-center max-w-[500px] mx-auto w-full">
         <h2 :class="themeClasses.backgroundColor" class="text-center font-medium w-full rounded-3xl rounded-b-none p-2 text-white text-lg">Balance du mois</h2>
         <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-max justify-center lg:justify-start p-6 md:p-mt-4">
           <img :src="balance > 0 ? balanceIconPositive : balanceIconNegative" class="shrink-0 w-20 md:w-28" alt="Balance du budget">

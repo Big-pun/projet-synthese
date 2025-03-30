@@ -16,11 +16,6 @@
       </div>
     </section>
 
-     <!-- Modale pour l'Inscription -->
-  <Modal :isOpen="showSignup" @close="showSignup = false">
-    <SubscriptionForm @closeModal="showSignup = false" />
-  </Modal>
-
 </template>
 
 <script setup>
@@ -29,13 +24,9 @@
   import SubscriptionForm from "@/components/connexion/SubscriptionForm.vue";
   import { useUserStore } from '@/services/userStore';
 
-  // États pour gérer l'affichage des modales
-  const showSignup = ref(false);
-  const showLogin = ref(false);
-
-  const userStore = useUserStore();
-
-
+  const props = defineProps({
+    showSignUp: Function
+  });
 </script>
 
 

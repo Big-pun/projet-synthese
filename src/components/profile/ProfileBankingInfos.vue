@@ -1,30 +1,53 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { mockUser } from '@/mock/userData';
+import { ref, computed } from 'vue';
 
-// État pour le survol
+// state for the hover
 const hovered = ref(false);
 
-// Données bancaires (provenant du mock)
-const bankingData = reactive({...mockUser.bankingDetails});
+// define the props for receiving the data from the parent
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'Modifier vos renseignements bancaires'
+  },
+  bankingDetails: {
+    type: Object,
+    default: () => ({
+      institutionName: '',
+      accountInfo: '',
+      loanInfo: '',
+      other: ''
+    })
+  }
+});
 
-// Définir l'événement pour l'édition
+// ensure that bankingInfo is always a valid object
+const bankingInfo = computed(() => {
+  return props.bankingDetails || {
+    institutionName: '',
+    accountInfo: '',
+    loanInfo: '',
+    other: ''
+  };
+});
+
+// define the event for the edit
 const emit = defineEmits(['edit']);
 
-// Fonction pour ouvrir le formulaire d'édition
+// function to open the edit form
 function openEditForm() {
   emit('edit');
 }
 </script>
 
 <template>
-  <div class="font-roboto w-full bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200"
+  <div class="box relative font-roboto w-full bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200 flex flex-col"
   @mouseenter="hovered = true"
       @mouseleave="hovered = false">
 
     <!-- En-tête de la section avec barre de couleur -->
-    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
-      <h3 class="text-white ml-8">Renseignements bancaires</h3>
+    <div class="flex items-center justify-between mb-4 p-[14px] rounded-t-lg bg-gray relative">
+      <h3 class="text-white ml-8 font-medium font-roboto text-base">Renseignements bancaires</h3>
 
       <!-- Rectangle coloré à droite -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -38,47 +61,54 @@ function openEditForm() {
       <!-- Institution -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Institution</p>
-        <p>{{ bankingData.institutionName || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.institutionName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Numéro de compte -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Compte</p>
-        <p>{{ bankingData.accountInfo || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.accountInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Prêts -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center">
         <p class="font-medium responsive-margin">Prêts</p>
-        <p>{{ bankingData.loanInfo || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.loanInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Autres informations -->
       <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
         <p class="font-medium responsive-margin">Autres</p>
-        <p>{{ bankingData.other || 'Non spécifié' }}</p>
+        <p>{{ bankingInfo.other || 'Non spécifié' }}</p>
       </div>
     </div>
 
     <!-- Bouton d'édition -->
-    <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden bg-white" 
+    <div class="mx-6 mb-4 border-2 rounded-lg overflow-hidden bg-white mt-auto" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1">
         <span class="mr-2">+</span> Éditer cette section
       </button>
     </div>
+    <!-- Table tag -->
+    <span class="bg-accent2 tag"></span>
   </div>
 </template>
 
 <style scoped>
-.rectangle-fill-default {
-  fill: #F74949;
-  transition: fill 0.2s ease;
+.tag {
+  position: absolute;
+  height: 60px;
+  width: 30px;
+  top: 0;
+  right: 2%;
+  transition: all 200ms ease;
+  border-radius: 0 0 4px 4px;
 }
 
-.rectangle-fill-hovered {
-  fill: #00EC86;
-  transition: fill 0.2s ease;
+.box:hover .tag {
+  height: 75px;
+  background-color: var(--color-accent1);
 }
 </style>

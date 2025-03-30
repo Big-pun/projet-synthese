@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import apiClient from '@/api/api.js';
+import { getUserSchoolDetails, updateSchoolDetails } from '@/api/api.js';
 
 export const useSchoolStore = defineStore('school', {
   state: () => ({
@@ -12,7 +12,7 @@ export const useSchoolStore = defineStore('school', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await apiClient.get(`/users/${userId}/school-details`);
+        const response = await getUserSchoolDetails(userId);
         this.schoolDetails = response.data;
       } catch (error) {
         this.error = "Impossible de récupérer les informations scolaires.";
@@ -21,5 +21,20 @@ export const useSchoolStore = defineStore('school', {
         this.loading = false;
       }
     },
-  },
+
+    async updateSchoolDetails(userId, schoolData) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await updateSchoolDetails(userId, schoolData);
+        this.schoolDetails = response.data;
+        return response.data;
+      } catch (error) {
+        this.error = "Impossible de mettre à jour les informations scolaires.";
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    }
+  }
 });

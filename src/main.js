@@ -19,6 +19,5 @@ app.use(createPinia())
 app.use(router)
 app.use(SweetAlertPlugin)
 app.use(ToastPlugin)
-app.use(Toast);
 
 app.mount('#app')
