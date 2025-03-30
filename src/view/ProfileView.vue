@@ -14,7 +14,7 @@ import PersonalInfoForm from '@/components/profile/forms/PersonalInfoForm.vue';
 import SchoolInfoForm from '@/components/profile/forms/SchoolInfoForm.vue';
 import BankingInfoForm from '@/components/profile/forms/BankingInfoForm.vue';
 
-import { showLoading, closeLoading } from '@/utils/sweetAlert';
+import { closeLoading, showLoadingPopup } from '@/utils/sweetAlert';
 import { showSuccess, showError } from '@/utils/toast';
 
 // Import stores
@@ -138,7 +138,7 @@ onMounted(async () => {
 // handle the save of the data depending on the type of modal
 async function handleSave(data) {
   try {
-    showLoading('Enregistrement en cours...');
+    showLoadingPopup('Enregistrement en cours...');
     
     // simulate a server processing delay (1 second)
     await new Promise(resolve => setTimeout(resolve, 1000));

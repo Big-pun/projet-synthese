@@ -1,15 +1,14 @@
 import Swal from 'sweetalert2';
 
-// Couleurs personnalisées pour correspondre à votre thème
 const colors = {
   success: '#00EC86', // accent1
   error: '#FF6B6B',   // accent2
   warning: '#FFA500',
   info: '#3498db',
-  gray: '#333333'     // gray de votre thème
+  gray: '#333333'
 };
 
-// Configuration de base pour toutes les alertes
+// config
 const baseConfig = {
   confirmButtonColor: colors.success,
   cancelButtonColor: colors.error,
@@ -22,94 +21,124 @@ const baseConfig = {
   }
 };
 
-// /** Desactivé 
-//  * Affiche une alerte de succès
-//  * @param {string} title - Titre de l'alerte
-//  * @param {string} text - Texte de l'alerte
-//  * @param {Object} options - Options supplémentaires
-//  * @returns {Promise} Promesse de SweetAlert2
-//  */
-// export const showSuccess = (title, text, options = {}) => {
-//   return Swal.fire({
-//     ...baseConfig,
-//     title,
-//     text,
-//     icon: 'success',
-//     ...options
-//   });
-// };
-
-// /**
-//  * Affiche une alerte d'erreur
-//  * @param {string} title - Titre de l'alerte
-//  * @param {string} text - Texte de l'alerte
-//  * @param {Object} options - Options supplémentaires
-//  * @returns {Promise} Promesse de SweetAlert2
-//  */
-// export const showError = (title, text, options = {}) => {
-//   return Swal.fire({
-//     ...baseConfig,
-//     title,
-//     text,
-//     icon: 'error',
-//     ...options
-//   });
-// };
-
-export const showInfo = (title, text, options = {}) => {
+// General Popup
+export const showPopup = ({
+  title = '',
+  text = '',
+  icon = 'info',
+  confirmButtonText = 'OK',
+  cancelButtonText = 'Annuler',
+  showCancelButton = false,
+  timer = null,
+  callback = null,
+  options = {}
+}) => {
   return Swal.fire({
     ...baseConfig,
     title,
     text,
-    icon: 'info',
+    icon,
+    confirmButtonText,
+    cancelButtonText,
+    showCancelButton,
+    timer,
     ...options
+  }).then((result) => {
+    if (callback) {
+      callback(result);
+    }
+    return result;
   });
 };
 
-export const showWarning = (title, text, options = {}) => {
-  return Swal.fire({
-    ...baseConfig,
+export const showInfoPopup = ({title, text, options = {}, callback}) => {
+  return showPopup({
+    title,
+    text,
+    icon: 'infos',
+    ...options,
+    callback
+  });
+};
+
+export const showWarningPopup = ({
+  title = 'Attention !',
+  text = '',
+  options = {},
+  callback = null
+}) => {
+  return showPopup({
     title,
     text,
     icon: 'warning',
-    ...options
+    ...options,
+    callback
   });
 };
 
-
-export const showConfirm = (
-  title, 
-  text, 
-  confirmButtonText = 'Confirmer', 
-  cancelButtonText = 'Annuler', 
+// Confirmation popup
+export const showConfirmPopup = ({
+  title = 'Êtes-vous sûr ?',
+  text = 'Cette action est irréversible !',
+  confirmButtonText = 'Confirmer',
+  cancelButtonText = 'Annuler',
+  callback = null,
   options = {}
-) => {
-  return Swal.fire({
-    ...baseConfig,
+}) => {
+  return showPopup({
     title,
     text,
     icon: 'question',
-    showCancelButton: true,
     confirmButtonText,
     cancelButtonText,
+    showCancelButton: true,
+    callback,
     ...options
   });
 };
 
-export const showDelete = (
-  title = 'Êtes-vous sûr ?', 
-  text = 'Cette action est irréversible !', 
-  confirmButtonText = 'Oui, supprimer', 
+export const showDeletePopup = ({
+  title = 'Êtes-vous sûr ?',
+  text = 'Cette action est irréversible !',
+  confirmButtonText = 'Oui, supprimer',
+  cancelButtonText = 'Annuler',
+  callback = null,
   options = {}
-) => {
-  return Swal.fire({
-    ...baseConfig,
+}) => {
+  return showPopup({
     title,
     text,
-    icon: 'warning',
-    showCancelButton: true,
+    icon: 'question',
     confirmButtonText,
-    cancelButtonText: 'Annuler',
+    cancelButtonText,
+    showCancelButton: true,
+    callback,
+    ...options
+  });
+};
+
+
+export const showLoadingPopup = ({
+  title = 'Chargement en cours...',
+  options = {}}) => {
+    return showPopup({
+      title,
+      icon: 'loading',
+      showCancelButton: true,
+      ...options
+    });
+};
+
+
+export const showSuccessPopup = ({
+  title = 'Succès !',
+  text = '',
+  options = {}
+}) => {
+  return showPopup({
+    title,
+    text,
+    icon: 'success',
     ...options
   });
 };
@@ -129,34 +158,10 @@ export const showToast = (title, icon = 'success', options = {}) => {
   });
 };
 
-export const showLoading = (title = 'Chargement en cours...', options = {}) => {
-  return Swal.fire({
-    title,
-    allowOutsideClick: false,
-    didOpen: () => {
-      Swal.showLoading();
-    },
-    ...options
-  });
-};
 
-export const showForm = (title, html, preConfirm, options = {}) => {
-  return Swal.fire({
-    ...baseConfig,
-    title,
-    html,
-    showCancelButton: true,
-    confirmButtonText: 'Enregistrer',
-    cancelButtonText: 'Annuler',
-    preConfirm,
-    ...options
-  });
-};
 
-// Fermer l'indicateur de chargement
 export const closeLoading = () => {
   Swal.close();
 };
 
-// Exporter l'instance Swal pour les cas personnalisés
 export default Swal; 

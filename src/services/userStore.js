@@ -1,10 +1,15 @@
 import { defineStore } from 'pinia';
 import { getUserByEmail, postNewUser, updateUser, deleteUser } from '@/api/api.js';
-import { useRouter } from 'vue-router';
+
+// Enable localStorage for user data - no logout of the user on refresh
+const loadUserFromLocalStorage = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+}
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-      user: null,
+      user: loadUserFromLocalStorage(),
       loading: false,
       error: null,
     }),
@@ -17,6 +22,7 @@ export const useUserStore = defineStore('user', {
             const result = response.data;
             if(result.password === password){
                 this.user = result;
+                this.saveUserToLocalStorage();
             } else {
                 this.error = "Mot de passe incorrect.";
             }
@@ -35,6 +41,7 @@ export const useUserStore = defineStore('user', {
           const response = await postNewUser(userData);
           const result = response.data;
           this.user = result;
+          this.saveUserToLocalStorage();
         } catch(error) {
             if (error.response) {
                 this.error = "Une erreur s'est produite, l'adresse courriel est peut-être déjà utilisée.";
@@ -55,6 +62,7 @@ export const useUserStore = defineStore('user', {
         this.user = null;
         this.loading = false;
         this.error = null;
+        this.clearUserFromLocalStorage();
       },
 
       async updateUser(userId, userData) {
@@ -63,6 +71,7 @@ export const useUserStore = defineStore('user', {
         try {
           const response = await updateUser(userId, userData);
           this.user = { ...this.user, ...response.data };
+          this.saveUserToLocalStorage();
           return response.data;
         } catch (error) {
           this.error = "Impossible de mettre à jour les informations utilisateur.";
@@ -87,7 +96,7 @@ export const useUserStore = defineStore('user', {
           await deleteUser(userId);
           
           this.user = null;
-          localStorage.removeItem('user');
+          this.clearUserFromLocalStorage();
           return true;
         } catch (error) {
           if (error.message === "Mot de passe incorrect") {
@@ -125,6 +134,7 @@ export const useUserStore = defineStore('user', {
           
           // Mettre à jour l'utilisateur dans le store
           this.user = response.data;
+          this.saveUserToLocalStorage();
           return response.data;
         } catch (error) {
           if (error.message !== "Mot de passe actuel incorrect") {
@@ -134,6 +144,14 @@ export const useUserStore = defineStore('user', {
         } finally {
           this.loading = false;
         }
-      }
+      },
+
+      saveUserToLocalStorage() {
+        localStorage.setItem('user', JSON.stringify(this.user));
+      },
+
+      clearUserFromLocalStorage() {
+        localStorage.removeItem('user');
+      },
     },
   });
