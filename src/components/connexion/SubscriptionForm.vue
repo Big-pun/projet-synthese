@@ -99,7 +99,7 @@ const handleSubmit = async () => {
       setTimeout(() => {
         emit('closeModal'); // Close the modal after sign-up
         router.push('/profil'); // Redirect to profile page
-      }, 2000);
+      }, 500);
     } else {
       toast.error(userStore.error);
     }
