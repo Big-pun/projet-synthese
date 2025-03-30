@@ -62,7 +62,7 @@ function openDeleteProfileForm() {
       </div>
 
       <!-- buttons -->
-      <div class="flex text-lg flex-col justify-center items-end space-y-4 md:space-y-6">
+      <div class="flex text-lg flex-col justify-center items-center lg:items-end space-y-4 md:space-y-6">
         <button
           @click="openChangePasswordForm"
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-hover transition-colors">

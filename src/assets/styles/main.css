@@ -47,6 +47,10 @@
     }
 }
 
+* {
+    box-sizing: border-box;
+}
+
 /* swicth (recurrence) */
 .switch {
     position: relative;

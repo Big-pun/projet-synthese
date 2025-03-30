@@ -29,19 +29,13 @@ function openEditForm() {
 </script>
 
 <template>
-  <div class="font-roboto w-full bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200"
+  <div class="box flex flex-col font-roboto w-full bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200 relative"
   @mouseenter="hovered = true"
   @mouseleave="hovered = false">
 
     <!-- header -->
-    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative">
-      <h3 class="text-white ml-8 font-roboto">Établissement scolaire</h3>
-
-      <!-- Rectangle -->
-      <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
-        class="absolute right-5 top-0 rounded-b transition-colors duration-200">
-        <rect width="36" height="75" :class="{ 'rectangle-fill-default': !hovered, 'rectangle-fill-hovered': hovered }" />
-      </svg>
+    <div class="flex items-center justify-between mb-4 p-[14px] rounded-t-lg bg-gray relative">
+      <h3 class="text-white ml-8 font-medium font-roboto text-base">Établissement scolaire</h3>
     </div>
 
     <!-- school information content -->
@@ -72,24 +66,32 @@ function openEditForm() {
     </div>
 
     <!-- edit button -->
-    <div class="mx-6 mt-2 mb-4 border-2 rounded-lg overflow-hidden bg-white" 
+    <div class="mx-6 mt-auto mb-4 border-2 rounded-lg overflow-hidden bg-white" 
     :class="hovered ? 'border-accent1' : 'border-accent2'">
       <button @click="openEditForm"
         class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1">
         <span class="mr-2">+</span> Éditer cette section
       </button>
     </div>
+
+    <!-- Table tag -->
+    <span class="bg-accent2 tag"></span>
   </div>
 </template>
 
 <style scoped>
-.rectangle-fill-default {
-  fill: #F74949;
-  transition: fill 0.2s ease;
+.tag {
+  position: absolute;
+  height: 60px;
+  width: 30px;
+  top: 0;
+  right: 2%;
+  transition: all 200ms ease;
+  border-radius: 0 0 4px 4px;
 }
 
-.rectangle-fill-hovered {
-  fill: #00EC86;
-  transition: fill 0.2s ease;
+.box:hover .tag {
+  height: 75px;
+  background-color: var(--color-accent1);
 }
 </style>
