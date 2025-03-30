@@ -16,16 +16,16 @@
       </img>
     </div>
 <!--Section 1 avec animation OPTION VIDEO SUR YOUTUBE-->
-    <!-- <div class="w-[75%] mb-8">
+    <div class="w-[75%] mb-8">
       <iframe 
-          src="https://www.youtube.com/embed/wLYpcMbNKq4?si=lRcKGUHPBLbvQJZA" 
+          src="https://www.youtube.com/embed/wLYpcMbNKq4?autoplay=1&controls=0&showinfo=0&modestbranding=1&rel=0" 
           width="100%"
           height="auto"
           style="aspect-ratio: 16/9;"
           class="rounded-xl border-1 border-dark-gray">
           
         </iframe>
-    </div> -->
+    </div>
         
 <!--Section 2-->
       <div class="flex md:flex-row flex-col w-[75%] justify-between pb-10">
