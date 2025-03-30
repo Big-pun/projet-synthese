@@ -4,10 +4,8 @@
 
 <template scoped>
   <section class="flex items-center justify-between bg-gray rounded-3xl">
-    
     <div class="main--full-width__boxed-section flex flex-col justify-center items-center py-5 w-full">
-      <h2 class="text-center pt-16 pb-12 uppercase text-dark-gray">Plongez dans l’univers de Flow</h2>
-      <h2 class="text-center">À finaliser plus tard</h2>
+      <h2 class="text-center pt-10 pb-8 uppercase text-dark-gray">Plongez dans l’univers de Flow</h2>
 <!--Section 1 avec animation-->
     <div class="w-[75%] pb-8">
       <img class="rounded-xl border-1 border-dark-gray" src="../../assets/img/renseignements.png" alt="Renseignement">

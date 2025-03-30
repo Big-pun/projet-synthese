@@ -19,9 +19,9 @@
             Commencez à prendre le contrôle de vos finances dès aujourd'hui!
           </p>
           <div class="flex justify-center pt-12">
-            <button
+            <button v-if="!userStore.user" 
               @click="showSignUp"
-              class="font-(family-name:--font-roboto) text-center text-white bg-accent1 hover:bg-hover py-4 px-8 rounded-[5px]"
+              class="font-(family-name:--font-roboto) text-center text-white bg-accent1 hover:bg-hover px-5 py-2 rounded"
             >
               Inscription
             </button>
@@ -32,9 +32,11 @@
 </template>
 
 <script setup>
-  const props = defineProps({
-    showSignUp: Function
-  });
+  import { useUserStore } from '@/services/userStore';
+
+  const userStore = useUserStore();
+
+  const emit = defineEmits(['showSignup']);
 </script>
 
 <style scoped>
