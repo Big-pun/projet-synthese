@@ -13,11 +13,13 @@ const props = defineProps({
 </script>
 
 <template>
-  <HomeHero :showSignUp="showSignup"></HomeHero>
-  <HomeScreenShots></HomeScreenShots>
-  <HomeFeatures></HomeFeatures>
-  <HomeReviews></HomeReviews>
-  <HomeCallToAction></HomeCallToAction>
+  <div class="main--full-width">
+    <HomeHero :showSignUp="showSignup"></HomeHero>
+    <HomeScreenShots></HomeScreenShots>
+    <HomeFeatures></HomeFeatures>
+    <HomeReviews></HomeReviews>
+    <HomeCallToAction :showSignUp="showSignup"></HomeCallToAction>
+  </div>
 </template>
 
 <style></style>

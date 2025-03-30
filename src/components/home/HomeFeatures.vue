@@ -2,7 +2,7 @@
 </script>
 
 <template scoped>
- <div class="flex justify-center">
+ <div class="flex justify-center main--full-width__boxed-section">
 
   <section class="m-auto md:w-[50%] w-[90%] pt-10">
     <!--SECTION TITRE-->

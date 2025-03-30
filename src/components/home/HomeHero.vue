@@ -1,8 +1,8 @@
 <template>
 
-  <section class="flex items-center w-full max-w-1400px my-0 mx-auto mt-15">
-    <div class="flex flex-col w-full">
-        <div class="bg-[url(@/assets/img/Swirls.svg)] bg-no-repeat bg-cover bg-center py-20">
+  <section class="flex items-center relative bg-[url(@/assets/img/Swirls.svg)] bg-no-repeat bg-cover bg-center bg-opacity-50 ">
+    <div class="flex flex-col w-full main--full-width__boxed-section">
+        <div class="py-20">
           <div class="flex flex-col sm:flex-row items-center justify-center pb-5">
             <img
               src="@/assets/img/logo.svg"
@@ -35,7 +35,6 @@
   const props = defineProps({
     showSignUp: Function
   });
-  // const emit = defineEmits(['showSignup']);
 </script>
 
 <style scoped>

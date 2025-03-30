@@ -42,8 +42,22 @@
         @apply hover:cursor-pointer;
     }
 
-    main {
-        @apply min-h-screen pt-12 px-4 sm:px-6 md:px-8 lg:px-16 pb-5 max-w-[1200px] w-full mx-auto;
+    /* main section on homepage */
+    .main--full-width {
+      @apply min-h-screen w-full mx-auto;
+    }
+
+    .main--full-width__boxed-section {
+      @apply pt-12 px-4 sm:px-6 md:px-8 lg:px-16 pb-5 max-w-[1200px] mx-auto;
+    }
+
+    /* main section on budget and profile pages */
+    .main--boxed {
+      @apply min-h-screen pt-12 px-4 sm:px-6 md:px-8 lg:px-16 pb-5 max-w-[1200px] w-full mx-auto;
+    }
+
+    .header-footer-container {
+      @apply py-4 px-4 sm:px-6 md:px-8 lg:px-16 max-w-[1200px] w-full mx-auto;
     }
 }
 

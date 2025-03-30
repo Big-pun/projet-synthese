@@ -81,7 +81,7 @@ const resetBudgetNewMonth = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8 main--boxed">
 
     <BudgetPreview :incomesTotal="incomesTotal" :spendingsTotal="spendingsTotal"></BudgetPreview>
 

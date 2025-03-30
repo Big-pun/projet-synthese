@@ -1,7 +1,7 @@
 <template>
-  <nav class="flex items-center justify-between w-full max-w-1400px my-0 mx-auto border-b-3 border-accent1">
+  <nav class="flex items-center justify-between header-footer-container border-b-3 border-accent1">
     <!-- LOGO -->
-    <div class="w-1/12 my-5 mx-10">
+    <div class="w-1/12 mx-10">
       <img src="../../assets/img/LogoNom.svg" alt="logo camping">
     </div>
 
