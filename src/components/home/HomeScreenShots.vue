@@ -7,10 +7,26 @@
     <div class="main--full-width__boxed-section flex flex-col justify-center items-center py-5 w-full">
       <h2 class="text-center pt-10 pb-8 uppercase text-dark-gray">Plongez dans l’univers de Flow</h2>
 <!--Section 1 avec animation-->
-    <div class="w-[75%] pb-8">
-      <img class="rounded-xl border-1 border-dark-gray" src="../../assets/img/renseignements.png" alt="Renseignement">
+    <div class="w-[75%] mb-8">
+      <img 
+          src="/src/assets/img/Video3.gif"
+          alt="Description du gif" 
+          class="w-full h-auto object-contain rounded-xl border-1 border-dark-gray">
+          
+      </img>
     </div>
-
+<!--Section 1 avec animation OPTION VIDEO SUR YOUTUBE-->
+    <!-- <div class="w-[75%] mb-8">
+      <iframe 
+          src="https://www.youtube.com/embed/wLYpcMbNKq4?si=lRcKGUHPBLbvQJZA" 
+          width="100%"
+          height="auto"
+          style="aspect-ratio: 16/9;"
+          class="rounded-xl border-1 border-dark-gray">
+          
+        </iframe>
+    </div> -->
+        
 <!--Section 2-->
       <div class="flex md:flex-row flex-col w-[75%] justify-between pb-10">
         <div class="md:w-[55%] w-[100%]">
