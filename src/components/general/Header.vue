@@ -21,7 +21,7 @@
       <!-- if user is connected -->
       <!-- Bouton deconnexion -->
       <li v-if="userStore.user" class="px-5 py-2 font-flex rounded text-light-gray bg-accent1 hover:bg-hover">
-        <button @click="emit('logout')">Deconnexion</button>
+        <button @click="emit('logout')">Déconnexion</button>
       </li>
     </ul>
 

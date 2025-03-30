@@ -83,7 +83,7 @@ const signOutUser = () => {
     </nav>
 
      <!-- ***** sign out button - logic inside signOutUser function needs to be added -->
-     <SidebarNavLink v-if="userConnected" :iconSrc="signOutIcon" text="Deconnexion" :collapsed="collapsed" :isButton="true" @handleClick="signOutUser"></SidebarNavLink>
+     <SidebarNavLink v-if="userConnected" :iconSrc="signOutIcon" text="Déconnexion" :collapsed="collapsed" :isButton="true" @handleClick="signOutUser"></SidebarNavLink>
   </div>
 </template>
 
