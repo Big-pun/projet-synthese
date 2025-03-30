@@ -6,9 +6,9 @@ export default {
 
 <template scoped> 
 
-  <footer class="flex items-center justify-between w-full max-w-1400px my-0 mx-auto border-t-3 border-accent1 mt-15">
+  <footer class="flex items-center justify-between header-footer-container border-t-3 border-accent1">
 
-        <div class="flex flex-col justify-center items-center md:flex-row md:justify-between py-5 w-full">
+        <div class="flex flex-col justify-center items-center md:flex-row md:justify-between w-full">
         <!-- LOGO -->
           <img
             src="@/assets/img/LogoNom.svg"

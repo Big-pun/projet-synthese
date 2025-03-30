@@ -14,6 +14,8 @@ const props = defineProps({
   userConnected: Boolean
 });
 
+const emit = defineEmits(['showSignup', 'showLogin', 'logout']);
+
 const collapsed = ref(true);
 
 function toggleSidebar() {
@@ -39,24 +41,21 @@ const profileRouterLink = {
 }
 
 const openSubscriptionModal = () => {
-  // **** logic to open subscription modal to add
-  console.log('open subscription modal');
+  emit('showSignup');
 }
 
 const openConnexionModal = () => {
-  // **** logic to open connexion modal to add
-  console.log('open connexion modal');
+  emit('showLogin');
 }
 
 const signOutUser = () => {
-  // **** logic to sign out user to add
-  console.log('sign out user');
+  emit('logout');
 }
 
 </script>
 
 <template>
-  <div class="sidebar sticky w-max top-0 min-h-[100vh] h-full py-5 text-dark-gray bg-black flex flex-col justify-center">
+  <div class="sidebar sticky min-w-max top-0 min-h-[100vh] h-full py-5 text-dark-gray bg-black flex flex-col justify-center z-10">
     <!-- sidebar is expandable only on md screen and above -->
      <!-- collapse / expand sidebar button -->
     <div @click="toggleSidebar" :class="collapsed ? 'justify-center': 'start w-max'" class="hidden md:flex nav__link relative bg-transparent px-6 py-3 font-medium text-md text-color-dark-gray items-center gap-4 cursor-pointer">
@@ -84,7 +83,7 @@ const signOutUser = () => {
     </nav>
 
      <!-- ***** sign out button - logic inside signOutUser function needs to be added -->
-     <SidebarNavLink v-if="userConnected" :iconSrc="signOutIcon" text="Deconnexion" :collapsed="collapsed" :isButton="true" @handleClick="signOutUser"></SidebarNavLink>
+     <SidebarNavLink v-if="userConnected" :iconSrc="signOutIcon" text="Déconnexion" :collapsed="collapsed" :isButton="true" @handleClick="signOutUser"></SidebarNavLink>
   </div>
 </template>
 

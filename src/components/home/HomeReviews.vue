@@ -3,8 +3,8 @@
 
 <template scoped>
 
-    <section class="flex items-center justify-between w-full max-w-1400px my-0 mx-auto mt-15">
-      <div class="flex flex-col justify-center items-center py-5 w-full">
+    <section class="flex items-center justify-between main--full-width mt-15">
+      <div class="flex flex-col justify-center items-center main--full-width__boxed-section ">
  
         <!--TITRE-->
         <div class="flex items-center justify-center sm:pb-5 pb-20">

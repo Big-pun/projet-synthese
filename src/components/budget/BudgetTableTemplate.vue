@@ -224,6 +224,7 @@ td:nth-child(1) {
   top: 0;
   right: 2%;
   transition: all 200ms ease;
+  border-radius: 0 0 4px 4px;
 }
 
 table:hover .tag {

@@ -48,12 +48,12 @@ function openEditForm() {
 
 <template>
   <div
-    class="lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200"
+    class="box flex flex-col relative lg:mt-24 font-roboto max-w-screen-lg mx-auto bg-light-gray rounded-lg mb-6 pb-1 transition-all duration-200"
     @mouseenter="hovered = true"
     @mouseleave="hovered = false">
     <!-- header of the section with status pill -->
-    <div class="flex items-center justify-between mb-4 p-3 rounded-t-lg bg-gray relative z-0">
-      <h3 class="text-white ml-8 font-roboto">Renseignements personnels</h3>
+    <div class="flex items-center justify-between mb-4 p-[14px] rounded-t-lg bg-gray relative z-0">
+      <h3 class="text-white ml-8 font-roboto font-medium text-base">Renseignements personnels</h3>
 
       <!-- Rectangle SVG with color change based on the hovered state -->
       <svg width="36" height="75" viewBox="0 0 36 75" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -110,8 +110,8 @@ function openEditForm() {
     </div>
 
     <!-- edit buttons -->
-    <div class="mx-6 mt-2 mb-4">
-      <div class="border-2 rounded-lg bg-white overflow-hidden mb-2" 
+    <div class="mx-6 mt-2 mb-4 grow">
+      <div class="border-2 rounded-lg bg-white overflow-hidden mb-2 mt-auto" 
         :class="hovered ? 'border-accent1' : 'border-accent2'">
         <button @click="openEditForm"
           class="w-full py-3 px-4 flex items-center justify-center transition-colors duration-200 text-gray hover:bg-accent1">
@@ -119,19 +119,27 @@ function openEditForm() {
         </button>
       </div>
     </div>
+    <!-- Table tag -->
+    <span class="bg-accent2 tag"></span>
   </div>
 </template>
 
 <style>
-.rectangle-fill-default {
-  fill: #F74949;
-  transition: fill 0.2s ease;
+.tag {
+  position: absolute;
+  height: 60px;
+  width: 30px;
+  top: 0;
+  right: 2%;
+  transition: all 200ms ease;
+  border-radius: 0 0 4px 4px;
 }
 
-.rectangle-fill-hovered {
-  fill: #00EC86;
-  transition: fill 0.2s ease;
+.box:hover .tag {
+  height: 75px;
+  background-color: var(--color-accent1);
 }
+
 .responsive-margin {
   margin-right: clamp(2rem, 2vw, 4rem);
 }

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import logo from '@/assets/img/logo.svg';
 
 // define the props for receiving the user data
 const props = defineProps({
@@ -30,11 +31,12 @@ function openDeleteProfileForm() {
 </script>
 
 <template>
-  <div class="mb-8 font-roboto max-w-screen-lg mx-auto">
+  <div class="mb-8 font-roboto">
     <!-- title of the section -->
-    <div class="flex items-center mb-4 md:-ml-8">
-      <img src="@/assets/img/logo.svg" alt="Logo" class="w-6 h-6 mr-2" />
-      <h1 class="uppercase text-gray font-bold">Details du profil</h1>
+      <!-- Section Title and Logo -->
+      <div class="flex items-center mb-6">
+      <img :src="logo" alt="Logo" class="w-6 h-6 mr-2"/>  
+      <h1 class="uppercase text-gray font-bold">Détails du profil</h1>
     </div>
 
     <!-- complete section in grid -->
@@ -60,7 +62,7 @@ function openDeleteProfileForm() {
       </div>
 
       <!-- buttons -->
-      <div class="flex text-lg flex-col justify-center items-center space-y-4 md:space-y-6">
+      <div class="flex text-lg flex-col justify-center items-center lg:items-end space-y-4 md:space-y-6">
         <button
           @click="openChangePasswordForm"
           class="w-full max-w-xs md:max-w-sm flex items-center justify-around bg-gray text-white py-3 px-4 rounded-md hover:bg-hover transition-colors">
