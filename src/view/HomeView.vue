@@ -7,10 +7,13 @@ import HomeReviews from '@/components/home/HomeReviews.vue';
 import HomeScreenShots from '@/components/home/HomeScreenShots.vue';
 import Footer from '@/components/general/Footer.vue'
 
+const props = defineProps({
+  showSignup: Function,
+});
 </script>
 
 <template>
-  <HomeHero></HomeHero>
+  <HomeHero :showSignUp="showSignup"></HomeHero>
   <HomeScreenShots></HomeScreenShots>
   <HomeFeatures></HomeFeatures>
   <HomeReviews></HomeReviews>

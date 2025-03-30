@@ -14,6 +14,8 @@ const props = defineProps({
   userConnected: Boolean
 });
 
+const emit = defineEmits(['showSignup', 'showLogin', 'logout']);
+
 const collapsed = ref(true);
 
 function toggleSidebar() {
@@ -39,18 +41,15 @@ const profileRouterLink = {
 }
 
 const openSubscriptionModal = () => {
-  // **** logic to open subscription modal to add
-  console.log('open subscription modal');
+  emit('showSignup');
 }
 
 const openConnexionModal = () => {
-  // **** logic to open connexion modal to add
-  console.log('open connexion modal');
+  emit('showLogin');
 }
 
 const signOutUser = () => {
-  // **** logic to sign out user to add
-  console.log('sign out user');
+  emit('logout');
 }
 
 </script>

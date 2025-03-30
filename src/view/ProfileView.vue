@@ -190,7 +190,7 @@ async function handleSave(data) {
 <template>
   <div class="container mx-auto">
     <!-- global loading indicator (optional) -->
-    <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div v-if="isLoading" class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white p-4 rounded-lg shadow-lg">
         Chargement en cours...
       </div>
