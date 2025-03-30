@@ -1,8 +1,11 @@
 <script setup>
+import { useTransactionStore } from '@/services/transactionStore';
 import FormTemplate from '../general/FormTemplate.vue';
 import { ref } from 'vue';
 
 const emit = defineEmits(['submit']);
+
+const transactionStore = useTransactionStore();
 
 const props = defineProps({
   title: String,
@@ -72,7 +75,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <FormTemplate :title="title" :subTitle="subTitle" :handleSubmit="submitForm" btnText="Valider" :disableBtn="false">
+  <FormTemplate :title="title" :subTitle="subTitle" :handleSubmit="submitForm" btnText="Valider" :disableBtn="transactionStore.loading">
 
     <!-- Description Field -->
     <div class="flex flex-col gap-2 items-center">
@@ -97,9 +100,9 @@ const submitForm = () => {
 
     <!-- Recurrence Field -->
     <div class="flex flex-col gap-4 mx-auto">
-        <!-- Toggle Switch -->
+        <!-- Toggle Switch - Activate / Deactivate Recurrence -->
         <div class="flex flex-col items-center gap-2">
-            <span>Recurrent</span>
+            <span>Récurrent</span>
             <label class="switch">
                 <input
                 type="checkbox"
@@ -110,7 +113,7 @@ const submitForm = () => {
             </label>
         </div>
 
-        <!-- Frequency Select -->
+        <!-- Frequency Select - Visible only if transaction is recurrent -->
         <select
             v-model="frequency"
             class="border border-gray-300 rounded-md p-1"

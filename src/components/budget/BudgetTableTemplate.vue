@@ -2,6 +2,7 @@
 import { defineProps, defineEmits } from 'vue';
 import deleteIcon from '@/assets/img/icons/delete_icon.svg';
 import Swal from 'sweetalert2';
+import { showDeletePopup } from '@/utils/sweetAlert';
 
 const props = defineProps({
   name: String,
@@ -16,22 +17,14 @@ const emit = defineEmits(['toggleTransactionReccurence', 'updateFrequency', 'ope
 
 const handleDeleteItem = async (itemId) => {
   // Sweet alert confirmation
-  const result = await Swal.fire({
-    title: "Etes vous surs?",
-    text: `Cette action est irreversible!`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#00EC86",
-    cancelButtonColor: "#F74949",
-    confirmButtonText: "Oui, supprimer!"
-  });
+  const result = await showDeletePopup({});
 
   // If user confirms, delete item (fires deleteItem event)
   if (result.isConfirmed) {
     emit('deleteItem', itemId);
     Swal.fire({
-      title: "Supprime!",
-      text: `L'entree a bien ete supprimee.`,
+      title: "Supprimé!",
+      text: `L'entrée a bien été supprimée.`,
       icon: "success"
     });
   }
@@ -56,6 +49,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
     <!-- Table -->
     <table class="w-full bg-light-gray rounded-lg relative">
       <!-- Table header - loop through headers props to populate table header -->
+      <!-- Headers text hidden on screens < md (table rows switch to cards) -->
       <thead class="bg-gray relative text-white font-medium">
         <tr>
           <th v-for="header in headers" :key="header.label" class="text-left">
@@ -66,7 +60,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
       </thead>
       <!-- Table body -->
       <tbody>
-        <!-- Loading And No transaction yet handling -->
+        <!-- Loading And 'No transaction yet' handling -->
       <tr class="tr-w-full bg-white rounded-[8px]" v-if="items.length === 0">
         <td class="text-gray-500 font-medium py-5">
           <p class="text-sm">{{ loading ? "Loading..." : "Aucune transaction pour le moment" }}</p>
@@ -76,7 +70,7 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
         <tr v-for="item in items" :key="item.id" class="bg-white rounded-[8px]">
           <td v-for="header in headers" :key="header.label">
 
-            <!-- Recurrence -->
+            <!-- Recurrence column -->
             <template v-if="header.key === 'recurrent'">
               <div class="flex flex-col items-center gap-2" :class="!isEntryRecurrent(item) ? 'my-5' : ''">
                 <span class="block md:hidden font-semibold">Récurrent</span>
@@ -106,12 +100,12 @@ const isEntryRecurrent = (entry) => entry.frequency !== -1;
               </div>
             </template>
 
-            <!-- Actions -->
+            <!-- Actions column -->
             <template v-else-if="header.key === 'actions'">
               <button @click="handleDeleteItem(item.id)"><img :src="deleteIcon" class="h-6" alt="supprimer"></button>
             </template>
 
-            <!-- Other fields -->
+            <!-- Other fields columns -->
             <template v-else>
               {{ item[header.key] === '' ? '-' : item[header.key] }} {{ header.key === 'amount' ? '$' : '' }}
             </template>

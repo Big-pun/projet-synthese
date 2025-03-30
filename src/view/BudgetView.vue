@@ -6,170 +6,75 @@ import SpendingTable from '@/components/budget/SpendingTable.vue';
 import Modal from '@/components/general/Modal.vue';
 import { useTransactionStore } from '@/services/transactionStore';
 import { computed, onMounted, ref } from 'vue';
-import Swal from 'sweetalert2';
 import { useUserStore } from '@/services/userStore';
+import { showConfirmPopup, showSuccessPopup } from '@/utils/sweetAlert';
 
 const transactionStore = useTransactionStore();
 const userStore = useUserStore();
 
-// a remettre apres tests
-// const userId = computed(() => userStore.user?.id || null);
-
-// a enlever apres tests
-const userId = ref(18);
+// Get user ID from the user store to fetch transactions infos
+const userId = computed(() => userStore.user?.id || null);
 
 // Fetch transactions on component mount
 onMounted(() => {
   transactionStore.fetchTransactions(userId.value);
-  console.log('BudgetView mounted');
 });
 
-const defaultFrequency = 30;
+// Modal Management (Forms)
+const modalType = ref(null);
 
-// State Management
-const incomeFormModalOpen = ref(false);
-const spendingFormModalOpen = ref(false);
-
-// this code (incomes and spendings arrays) will be deleted once the api will be linked. We'll get these arrays from the transactionsStore
-// but the structure of the transactions objects will need to be this way
-// use a computed value to perform any needed transformations from the transactions object from the API to the object below
-/* const incomes = ref([
-    { id: 1, name: 'Salaire', amount: 3000, frequency: 7 },
-    { id: 2, name: 'Bourse universitaire', amount: 700, frequency: 30 },
-    { id: 3, name: 'Revenu freelance', amount: 500, frequency: -1 }
-  ]);
-
-const spendings = ref([
-    { id: 1, name: 'Loyer', category: 'Logement', amount: 900, frequency: 30 },
-    { id: 2, name: 'Courses alimentaires', category: 'Alimentation', amount: 300, frequency: 14},
-    { id: 3, name: 'Abonnement Internet', category: 'Services', amount: 50, frequency: 30 },
-    { id: 4, name: 'Transport en commun', category: 'Transport', amount: 80, frequency: -1 },
-    { id: 5, name: 'Sorties et loisirs', category: 'Divertissement', amount: 150, frequency: -1 }
-  ]);
-*/
-const transactionsFormatted = computed(() => {
-  return transactionStore.transactions 
-    ? transactionStore.transactions.map(transaction => ({... transaction, amount: parseFloat(transaction.amount)}))
-    : [];
-})
-
-const incomes = computed(() => transactionsFormatted.value.filter((transaction) => transaction.type === 'Revenue'));
-
-const spendings = computed(() => transactionsFormatted.value.filter((transaction) => transaction.type === 'Expense'));
-
-// Totals Calculations
-const calcItemsTotal = (items) => {
-  const itemsTotalsWithFrequency = items.map((item) => {
-    if(item.frequency === 1) {
-      return ({...item, amount: item.amount * 30});
-    } else if(item.frequency === 7) {
-      return ({...item, amount: item.amount * 4});
-    } else if(item.frequency === 14) {
-      return ({...item, amount: item.amount * 2});
-    } else {
-      return item;
-    }
-  });
-  return itemsTotalsWithFrequency.reduce((acc, item) => acc + item.amount, 0);
-};
-
-const incomesTotal = computed(() => {
-  return calcItemsTotal(incomes.value);
-});
-
-const spendingsTotal = computed(() => {
-  return calcItemsTotal(spendings.value);
-});
-
-// Recurrence Toggle Switch Function (set a default frequency value)
-const toggleTransactionReccurence = (transactionId) => {
-  const transaction = transactionsFormatted.value.find((transaction) => transaction.id === transactionId);
-  transactionStore.updateTransaction(userId.value, transactionId, {
-    ...transaction, frequency: transaction.frequency === -1 ? defaultFrequency : -1
-  })
-}
-
-const updateTransactionFrequency = (payload) => {
-  const { transactionId= payload.itemId, frequency } = payload;
-  console.log('transactionId', transactionId);
-  console.log('frequency', frequency);
-  const transaction = transactionsFormatted.value.find((transaction) => transaction.id === transactionId);
-  transactionStore.updateTransaction(userId.value, transactionId, {
-    ...transaction, frequency: frequency
-  })
-}
-
-const deleteTransaction = (transactionId) => {
-  transactionStore.deleteTransaction(userId.value, transactionId);
-};
-
-const addIncome = (transaction) => {
-  const newTransaction = {
-    ...transaction,
-    amount: parseFloat(transaction.amount),
-    type: 'Revenue',
-    isDone: true,
-    startDate: new Date().toISOString(),
-    endDate: new Date().toISOString(),
-  };
-  console.log(newTransaction);
-  transactionStore.addNewTransaction(userId.value, newTransaction);
-};
-
-const addSpending = (transaction) => {
-  transactionStore.addNewTransaction(userId.value, {
-      ...transaction,
-       type: 'Expense',
-       isDone: true,
-       startDate: new Date().toISOString(),
-       endDate: new Date().toISOString(),
-    });
-};
-
-const handleAddEntry = (newEntry) => {
-  if (incomeFormModalOpen.value) {
-    addIncome(newEntry);
-  } else {
-    addSpending(newEntry);
-  }
-}
-
-// Modal Management
-const openIncomeFormModal = () => {
-  incomeFormModalOpen.value = true;
-  spendingFormModalOpen.value = false;
-};
-
-const openSpendingFormModal = () => {
-  spendingFormModalOpen.value = true;
-  incomeFormModalOpen.value = false;
+const openModal = (type) => {
+  modalType.value = type;
 };
 
 const closeModal = () => {
-  incomeFormModalOpen.value = false;
-  spendingFormModalOpen.value = false;
+  modalType.value = null;
+};
+
+// Easy acces to reactive transactionStore state variables - Need to be computed to be reactive to the store changes
+const incomes = computed(() => transactionStore.incomes);
+const spendings = computed(() => transactionStore.spendings);
+const incomesTotal = computed(() => transactionStore.incomesTotal);
+const spendingsTotal = computed(() => transactionStore.spendingsTotal);
+
+// Recurrence Toggle Switch Function (activate and set a default frequency value OR deactivate and set frequency to -1)
+const toggleTransactionReccurence = (transactionId) => transactionStore.toggleTransactionReccurence(transactionId);
+
+const updateTransactionFrequency = (payload) => {
+  const { transactionId= payload.itemId, frequency } = payload;
+  transactionStore.updateTransactionFrequency(transactionId, frequency);
+}
+
+const deleteTransaction = (transactionId) => transactionStore.deleteTransaction(userId.value, transactionId);
+
+const addTransaction = (transaction) => {
+  const newTransaction = {
+      ...transaction,
+      amount: parseFloat(transaction.amount),
+      type: modalType.value === 'income' ? 'Revenue' : 'Expense',
+      isDone: true,
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+    };
+
+  transactionStore.addNewTransaction(userId.value, newTransaction);
+  closeModal();
 };
 
 // Reset Budget for New Month Function
 const resetBudgetNewMonth = async () => {
   // SweetAlert2 confirmation modal
-  const result = await Swal.fire({
-    title: "Etes vous surs de vouloir commencer un nouveau mois?",
-    text: `Cette action est irreversible et effacera toutes vos transactions non récurrentes!`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#00EC86",
-    cancelButtonColor: "#F74949",
-    confirmButtonText: "Oui, supprimer!"
+  const result = await showConfirmPopup({
+    text: 'Cette action est irréversible et effacera toutes vos transactions non récurrentes!',
+    confirmButtonText: 'Oui, supprimer',
   });
 
   // If user confirms, delete all non-recurrent items
   if (result.isConfirmed) {
     transactionStore.deleteNonRecurrentTransactions(userId.value);
-    Swal.fire({
+    showSuccessPopup({
       title: "Supprime!",
       text: `Les transactions non réccurentes ont bien ete supprimées. Vous êtes prêt pour votre nouveau mois !`,
-      icon: "success"
     });
   }
 }
@@ -188,7 +93,7 @@ const resetBudgetNewMonth = async () => {
     :itemsTotal="incomesTotal"
     @toggleTransactionReccurence="toggleTransactionReccurence"
     @deleteItem="deleteTransaction"
-    @openForm="openIncomeFormModal" 
+    @openForm="openModal('income')" 
     @updateFrequency="updateTransactionFrequency"
     />
     
@@ -196,18 +101,18 @@ const resetBudgetNewMonth = async () => {
     :loading ="transactionStore.loading"
     :spendings="spendings"
     :itemsTotal="spendingsTotal"
-    @openForm="openSpendingFormModal"
+    @openForm="openModal('spending')"
     @deleteItem="deleteTransaction"
     @toggleTransactionReccurence="toggleTransactionReccurence"
     @updateFrequency="updateTransactionFrequency"
     />
 
-    <Modal :isOpen="incomeFormModalOpen || spendingFormModalOpen" @close="closeModal">
+    <Modal :isOpen="modalType !== null || undefined" @close="closeModal">
       <BudgetForm 
-      :title="incomeFormModalOpen ? 'Ajouter un revenu' : 'Ajouter une dépense'"
-      :subTitle="incomeFormModalOpen ? 'Ajoutez un revenu récurrent ou ponctuel' : 'Ajoutez une dépense récurrente ou ponctuelle'"
-      :hasCategory="spendingFormModalOpen"
-      @submit="handleAddEntry"
+      :title="modalType === 'income' ? 'Ajouter un revenu' : 'Ajouter une dépense'"
+      :subTitle="modalType === 'income'  ? 'Ajoutez un revenu récurrent ou ponctuel' : 'Ajoutez une dépense récurrente ou ponctuelle'"
+      :hasCategory="modalType === 'spending' "
+      @submit="addTransaction"
       />
     </Modal>
 

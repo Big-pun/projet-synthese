@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { deleteTransaction, getUserTransactions, updateTransaction, postNewTransaction } from '@/api/api.js';
+import { useUserStore } from './userStore';
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
@@ -7,6 +8,45 @@ export const useTransactionStore = defineStore('transaction', {
     loading: false,
     error: null,
   }),
+
+  getters: {
+    formattedTransactions(state) {
+      return state.transactions
+      ? state.transactions.map(transaction => ({
+        ...transaction,
+        amount: parseFloat(transaction.amount),
+      }))
+      : [];
+    },
+
+    incomes() {
+      return this.formattedTransactions.filter((transaction) => transaction.type === 'Revenue');
+    },
+
+    spendings() {
+      return this.formattedTransactions.filter((transaction) => transaction.type === 'Expense');
+    },
+
+    calcItemsTotal: () => (items) => {
+      console.log('items', items);
+      return items.reduce((acc, item) => {
+        const amount = item.amount * (item.frequency === 1 ? 30
+          : item.frequency === 7 ? 4
+          : item.frequency === 14 ? 2
+          : 1);
+        return acc + amount;
+      }, 0);
+    },
+
+    incomesTotal() {
+      return this.calcItemsTotal(this.incomes);
+    },
+
+    spendingsTotal() {
+      return this.calcItemsTotal(this.spendings);
+    },
+  },
+
   actions: {
     async fetchTransactions(userId) {
       this.loading = true;
@@ -85,6 +125,32 @@ export const useTransactionStore = defineStore('transaction', {
       });
       // update the local state
       this.transactions = this.transactions.filter(transaction => this.isEntryRecurrent(transaction));
+    },
+
+    findTransactionById(transactionId) {
+      return this.formattedTransactions.find(transaction => transaction.id === transactionId);
+    },
+
+    toggleTransactionReccurence(transactionId) {
+      const defaultFrequency = 30; // Default frequency = monthly
+      const userId = useUserStore().user.id;
+      const transaction = this.findTransactionById(transactionId);
+      if(transaction) {
+        console.log('transaction.frequency', transaction.frequency);
+        this.updateTransaction(userId, transactionId, {
+          ...transaction, frequency: transaction.frequency === -1 ? defaultFrequency : -1
+        })
+      }
+    },
+
+    updateTransactionFrequency(transactionId, frequency) {
+      const userId = useUserStore().user.id;
+      const transaction = this.findTransactionById(transactionId);
+      if(transaction) {
+        this.updateTransaction(userId, transactionId, {
+          ...transaction, frequency: frequency
+        })
+      }
     }
   },
 });
