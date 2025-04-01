@@ -31,7 +31,7 @@
         <!-- Grille pour prénom et nom -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <!-- Prénom -->
-          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <div class="rounded-lg bg-white p-4 mb-2 sm:mb-0 sm:flex sm:flex-row items-center">
             <label
               for="firstName"
               class="block text-sm font-medium text-gray responsive-margin"

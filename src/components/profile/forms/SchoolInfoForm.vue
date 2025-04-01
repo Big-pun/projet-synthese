@@ -25,7 +25,7 @@
       <!-- Nom de l'établissement et domaine d'études -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-6">
         <!-- Nom de l'établissement -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="schoolName"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -50,7 +50,7 @@
         </div>
 
         <!-- Domaine d'études -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="fieldOfStudy"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -78,7 +78,7 @@
       <!-- Dates du programme -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
         <!-- Date de début -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="startDate"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Date de fin prévue -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="projectedEndDate"
             class="block text-sm font-medium text-gray responsive-margin"
