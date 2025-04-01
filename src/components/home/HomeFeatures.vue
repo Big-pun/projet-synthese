@@ -4,11 +4,11 @@
 <template scoped>
  <div class="flex justify-center main--full-width__boxed-section">
 
-  <section class="m-auto md:w-[50%] w-[90%] pt-10">
+  <section class="m-auto md:w-[50%] w-[90%]">
     <!--SECTION TITRE-->
-    <div class="flex items-center justify-center">
+    <div class="flex items-start justify-center gap-2">
       <img src="@/assets/img/logo.svg" alt="Flow icon" class="w-[25px] pb-8 md:pb-0 hover:animate-spin" > <!--Je me suis amusé ;), c'est peut-être trop-->
-      <h3 class="text-black font-roboto p-[6px] text-center uppercase">Avantages</h3>
+      <h3 class="text-black font-roboto text-center uppercase mb-12">Avantages</h3>
     </div>
 
     <!--SECTION FEATURES-->

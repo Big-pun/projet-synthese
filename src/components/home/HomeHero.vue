@@ -1,8 +1,8 @@
 <template>
 
-  <section class="flex items-center relative bg-[url(@/assets/img/Swirls.svg)] bg-no-repeat bg-cover bg-center bg-opacity-50 ">
+  <section class="flex items-center relative bg-[url(@/assets/img/Swirls.svg)] bg-no-repeat bg-cover bg-center bg-opacity-50 py-5 sm:py-20">
     <div class="flex flex-col w-full main--full-width__boxed-section">
-        <div class="py-20">
+        <div>
           <div class="flex flex-col sm:flex-row items-center justify-center pb-5">
             <img
               src="@/assets/img/logo.svg"

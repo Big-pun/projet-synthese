@@ -62,13 +62,13 @@ const themeClasses = computed(() => {
         <button
           class="w-full max-w-xs md:max-w-sm flex items-center bg-gray text-white py-3 px-6 rounded-md">
           <img :src="calendarIcon" alt="Icon de calendrier" class="h-9 w-8" />
-          <span class="grow">{{ spendingsTotal }}$ de dépensés</span>
+          <span class="grow text-sm md:text-base">{{ spendingsTotal }}$ de dépensés</span>
         </button>
 
         <button
           class="w-full max-w-xs md:max-w-sm flex items-center bg-gray text-white py-3 px-6 rounded-md">
           <img :src="pieIcon" alt="Icon de diagramme circulaire" class="h-9 w-10" />
-          <span class="grow">{{ percentageSpent }}% du budget dépensé</span>
+          <span class="grow text-sm md:text-base">{{ percentageSpent }}% du budget dépensé</span>
         </button>
       </div>
     </div>

@@ -3,19 +3,19 @@
 
 <template scoped>
 
-    <section class="flex items-center justify-between main--full-width mt-15">
+    <section class="flex items-center justify-between main--full-width mt-[-20px]">
       <div class="flex flex-col justify-center items-center main--full-width__boxed-section ">
  
         <!--TITRE-->
-        <div class="flex items-center justify-center sm:pb-5 pb-20">
+        <div class="flex items-start justify-center sm:pb-5 pb-20 gap-2">
           <img src="@/assets/img/logo.svg" alt="Flow icon" class="w-[25px] pb-8 md:pb-0 hover:animate-spin" > <!--Je me suis amusé ;), c'est peut-être trop-->
-          <h3 class="text-black font-roboto p-[6px] text-center uppercase">Avis des utilisateurs</h3>
+          <h3 class="text-black font-roboto text-center uppercase">Avis des utilisateurs</h3>
         </div>
 
         <!--Blocs des avis des utilisateurs-->
         <div class="pb-20">
           <div class="m-auto relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
-            <h4 class="font-roboto text-accent2 uppercase">Enfin une app de budget qui ne me prend pas la tête!</h4>
+            <h4 class="font-roboto text-accent2 uppercase font-semibold">Enfin une app de budget qui ne me prend pas la tête!</h4>
             <p class="py-6">Grâce à Flow, j’ai une vision claire de mes dépenses et j’ai pu mettre de côté pour mon voyage. J’adore la fonction de transactions récurrentes, ça change tout!</p>
             <p class="text-right"><strong>— Maxime, 22 ans, étudiant en ingénierie</strong></p>
             <div class="absolute top-[-10%] sm:top-[-15%] right-[-3%]">
@@ -29,9 +29,9 @@
 
         <div class="pb-20">
           <div class="m-auto relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
-            <h4 class="font-roboto text-accent1 uppercase">Enfin une app de budget qui ne me prend pas la tête!</h4>
-            <p class="py-6">Grâce à Flow, j’ai une vision claire de mes dépenses et j’ai pu mettre de côté pour mon voyage. J’adore la fonction de transactions récurrentes, ça change tout!</p>
-            <p class="text-right"><strong>— Maxime, 22 ans, étudiant en ingénierie</strong></p>
+            <h4 class="font-roboto text-accent1 uppercase font-semibold">Simple et intuitif</h4>
+            <p class="py-6">Flow m’a vraiment simplifié la gestion de mon budget. Je n’ai plus besoin de jongler entre plusieurs applis, tout est clair et intuitif. Suivre mes dépenses n’a jamais été aussi facile!</p>
+            <p class="text-right"><strong>— Clara, 20 ans, étudiante en communication</strong></p>
             <div class="absolute top-[-10%] sm:top-[-15%] left-[-3%]">
               <svg xmlns="http://www.w3.org/2000/svg" alt="bulle" width="80" viewBox="0 0 88 88" fill="none">
                 <path d="M77.6875 9.1675e-06H10.3125C7.57745 9.1675e-06 4.95443 1.0865 3.02046 3.02047C1.08649 4.95444 0 7.57746 0 10.3125L0 54.7044C0 57.4394 1.08649 60.0625 3.02046 61.9964C4.95443 63.9304 7.57745 65.0169 10.3125 65.0169H26.3175C26.4998 65.0169 26.6747 65.0893 26.8036 65.2182C26.9326 65.3472 27.005 65.522 27.005 65.7044V83.1875C27.0049 84.1394 27.2871 85.0699 27.8159 85.8614C28.3447 86.6528 29.0964 87.2697 29.9758 87.634C30.8552 87.9983 31.8229 88.0936 32.7565 87.9079C33.69 87.7221 34.5476 87.2637 35.2206 86.5906L56.5881 65.2231C56.6524 65.1594 56.7285 65.109 56.8123 65.0748C56.8961 65.0406 56.9858 65.0232 57.0762 65.0238H77.7012C80.4363 65.0238 83.0593 63.9373 84.9933 62.0033C86.9273 60.0693 88.0137 57.4463 88.0137 54.7113V10.3125C88.0137 8.95709 87.7465 7.61497 87.2274 6.36291C86.7083 5.11084 85.9475 3.97339 84.9884 3.0156C84.0294 2.05782 82.8909 1.29849 81.6381 0.781052C80.3854 0.263609 79.0429 -0.00179805 77.6875 9.1675e-06ZM83.875 54.7044C83.875 56.3454 83.2231 57.9192 82.0627 59.0796C80.9023 60.24 79.3285 60.8919 77.6875 60.8919H57.0625C55.791 60.8826 54.5676 61.377 53.6594 62.2669L32.3125 83.6688C32.2163 83.7657 32.0935 83.8318 31.9596 83.8587C31.8257 83.8856 31.6868 83.8719 31.5607 83.8196C31.4346 83.7672 31.3269 83.6785 31.2515 83.5647C31.176 83.4509 31.1361 83.3172 31.1369 83.1806V65.7044C31.1369 64.428 30.6298 63.2039 29.7273 62.3014C28.8248 61.3989 27.6007 60.8919 26.3244 60.8919H10.3125C8.67147 60.8919 7.09766 60.24 5.93728 59.0796C4.7769 57.9192 4.125 56.3454 4.125 54.7044V10.3125C4.125 8.67148 4.7769 7.09767 5.93728 5.93729C7.09766 4.7769 8.67147 4.12501 10.3125 4.12501H77.6875C79.3285 4.12501 80.9023 4.7769 82.0627 5.93729C83.2231 7.09767 83.875 8.67148 83.875 10.3125V54.7044Z" 
@@ -44,9 +44,9 @@
 
         <div class="pb-20">
           <div class="m-auto relative flex flex-col item-center bg-[#F2f2f2] p-10 rounded-xl max-w-7xl">
-            <h4 class="font-roboto text-accent2 uppercase">Enfin une app de budget qui ne me prend pas la tête!</h4>
-            <p class="py-6">Grâce à Flow, j’ai une vision claire de mes dépenses et j’ai pu mettre de côté pour mon voyage. J’adore la fonction de transactions récurrentes, ça change tout!</p>
-            <p class="text-right"><strong>— Maxime, 22 ans, étudiant en ingénierie</strong></p>
+            <h4 class="font-roboto text-accent2 uppercase font-semibold">Mon app de budget numéro 1</h4>
+            <p class="py-6">J’avais du mal à savoir où partait mon argent chaque mois. Avec Flow, je vois directement mes catégories de dépenses et je peux ajuster en conséquence. C’est exactement ce qu’il me fallait!</p>
+            <p class="text-right"><strong>— Lucas, 23 ans, étudiant en économie</strong></p>
             <div class="absolute top-[-10%] sm:top-[-15%] right-[-3%]">
               <svg xmlns="http://www.w3.org/2000/svg" alt="bulle" width="80" viewBox="0 0 88 88" fill="none">
                 <path d="M77.6875 9.1675e-06H10.3125C7.57745 9.1675e-06 4.95443 1.0865 3.02046 3.02047C1.08649 4.95444 0 7.57746 0 10.3125L0 54.7044C0 57.4394 1.08649 60.0625 3.02046 61.9964C4.95443 63.9304 7.57745 65.0169 10.3125 65.0169H26.3175C26.4998 65.0169 26.6747 65.0893 26.8036 65.2182C26.9326 65.3472 27.005 65.522 27.005 65.7044V83.1875C27.0049 84.1394 27.2871 85.0699 27.8159 85.8614C28.3447 86.6528 29.0964 87.2697 29.9758 87.634C30.8552 87.9983 31.8229 88.0936 32.7565 87.9079C33.69 87.7221 34.5476 87.2637 35.2206 86.5906L56.5881 65.2231C56.6524 65.1594 56.7285 65.109 56.8123 65.0748C56.8961 65.0406 56.9858 65.0232 57.0762 65.0238H77.7012C80.4363 65.0238 83.0593 63.9373 84.9933 62.0033C86.9273 60.0693 88.0137 57.4463 88.0137 54.7113V10.3125C88.0137 8.95709 87.7465 7.61497 87.2274 6.36291C86.7083 5.11084 85.9475 3.97339 84.9884 3.0156C84.0294 2.05782 82.8909 1.29849 81.6381 0.781052C80.3854 0.263609 79.0429 -0.00179805 77.6875 9.1675e-06ZM83.875 54.7044C83.875 56.3454 83.2231 57.9192 82.0627 59.0796C80.9023 60.24 79.3285 60.8919 77.6875 60.8919H57.0625C55.791 60.8826 54.5676 61.377 53.6594 62.2669L32.3125 83.6688C32.2163 83.7657 32.0935 83.8318 31.9596 83.8587C31.8257 83.8856 31.6868 83.8719 31.5607 83.8196C31.4346 83.7672 31.3269 83.6785 31.2515 83.5647C31.176 83.4509 31.1361 83.3172 31.1369 83.1806V65.7044C31.1369 64.428 30.6298 63.2039 29.7273 62.3014C28.8248 61.3989 27.6007 60.8919 26.3244 60.8919H10.3125C8.67147 60.8919 7.09766 60.24 5.93728 59.0796C4.7769 57.9192 4.125 56.3454 4.125 54.7044V10.3125C4.125 8.67148 4.7769 7.09767 5.93728 5.93729C7.09766 4.7769 8.67147 4.12501 10.3125 4.12501H77.6875C79.3285 4.12501 80.9023 4.7769 82.0627 5.93729C83.2231 7.09767 83.875 8.67148 83.875 10.3125V54.7044Z" 

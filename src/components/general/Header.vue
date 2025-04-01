@@ -1,12 +1,19 @@
 <template>
   <nav class="flex items-center justify-between header-footer-container border-b-3 border-accent1">
     <!-- LOGO -->
-    <div class="w-1/12 mx-10">
-      <img src="../../assets/img/LogoNom.svg" alt="logo camping">
-    </div>
+    <img
+            src="@/assets/img/LogoNom.svg"
+            alt="Flow logo"
+            class="w-[100px] hidden sm:block"
+      />
+      <img
+            src="@/assets/img/logo.svg"
+            alt="Flow logo"
+            class="w-[30px] block sm:hidden"
+      />
 
     <!-- MENUS -->
-    <ul class="flex items-center mx-10 gap-10">
+    <ul class="flex items-center justify-end gap-10">
 
       <!-- if user is NOT connected -->
       <!-- Bouton Inscription -->
