@@ -229,7 +229,6 @@ async function handleSave(data) {
     <Modal
       v-if="isModalOpen"
       :isOpen="isModalOpen"
-      :title="formTitle"
       @close="handleClose"
     >
       <component 

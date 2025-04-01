@@ -7,18 +7,6 @@
       <h2 class="text-xl font-roboto font-semibold text-white ml-4">
         Modifier votre établissement scolaire
       </h2>
-
-      <!-- Rectangle SVG avec couleur d'accent -->
-      <svg
-        width="36"
-        height="75"
-        viewBox="0 0 36 75"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="absolute right-5 top-0 rounded-b"
-      >
-        <rect width="36" height="75" class="rectangle-fill-hovered" />
-      </svg>
     </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-4 p-4" novalidate>
@@ -320,8 +308,4 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-.rectangle-fill-hovered {
-  fill: #00ec86;
-  transition: fill 0.2s ease;
-}
 </style>
