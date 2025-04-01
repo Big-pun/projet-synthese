@@ -48,7 +48,7 @@ const showLogin = ref(false);
        @showLogin = "handleShowLogin"
        @logout = "handleLogout">
       </Sidebar>
-      <div class="flex flex-col grow bg-white overflow-y-auto">
+      <div class="flex flex-col grow bg-white overflow-y-auto z-50">
         <Header
          @showSignup = "handleShowSignup"
          @showLogin = "handleShowLogin"

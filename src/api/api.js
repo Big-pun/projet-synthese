@@ -60,27 +60,3 @@ export const getUserSchoolDetails = (userId) =>
 
 export const updateSchoolDetails = (userId, schoolData) =>
   apiClient.put(`/users/${userId}/school-details`, schoolData);
-
-/* A EFFACER (voir userStore)
-// Login user
-export const loginUser = async (email, password) => {
-  try {
-    const response = await apiClient.post("/auth/login", { email, password });
-    return response.data;
-  } catch (error) {
-    return { success: false, message: "Erreur de connexion." };
-  }
-};
-
-// Register user
-export const registerUser = async (userData) => {
-  try {
-    const response = await apiClient.post("/auth/register", userData);
-    return response.data; // { success: true, user: {...} }
-  } catch (error) {
-    return {
-      success: false,
-      message: error.response?.data?.message || "Erreur lors de l'inscription.",
-    };
-  }
-}; */

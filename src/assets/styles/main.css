@@ -20,13 +20,13 @@
 
 @layer base {
     h1 {
-        @apply text-3xl text-black font-roboto uppercase;
+        @apply text-2xl md:text-3xl text-black font-roboto uppercase font-semibold;
     }
     h2 {
-        @apply text-2xl text-accent1 font-flex;
+        @apply text-xl md:text-2xl text-accent1 font-flex font-semibold;
     }
     h3 {
-        @apply text-xl font-main;
+        @apply text-xl md:text-2xl font-main font-semibold;
     }
     h4 {
         @apply text-lg font-main;

@@ -6,6 +6,7 @@ import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
 import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
+import loadingGif from '@/assets/img/loading.gif';
 
 // Import forms
 import ChangePasswordForm from '@/components/profile/forms/ChangePasswordForm.vue';
@@ -190,8 +191,9 @@ async function handleSave(data) {
 <template>
   <div class="main--boxed">
     <!-- global loading indicator (optional) -->
-    <div v-if="isLoading" class="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white p-4 rounded-lg shadow-lg">
+    <div v-if="isLoading" class="absolute inset-0 bg-[rgba(27,27,27,0.64)] flex justify-center z-50">
+      <div class="bg-white p-4 rounded-lg shadow-lg h-fit mt-40 text-center font-medium">
+        <img :src="loadingGif" alt="Chargement">
         Chargement en cours...
       </div>
     </div>
@@ -210,7 +212,7 @@ async function handleSave(data) {
     />
     
     <!-- section with school and banking information side by side -->
-    <div class="grid grid-cols-1 md:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-4 max-w-screen-lg mx-auto">
       <ProfileSchoolInfos
         :schoolDetails="schoolDetails"
         @edit="openForm('schoolInfo')"
@@ -236,7 +238,7 @@ async function handleSave(data) {
         :schoolDetails="schoolDetails"
         @save="handleSave"
         @cancel="handleClose"
-        class="w-full"
+        class=""
       />
     </Modal>
   </div>

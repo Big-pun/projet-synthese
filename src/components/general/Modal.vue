@@ -36,9 +36,19 @@ const closeModal = () => {
 
 .modal-content {
   background: white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   position: relative;
+  max-width: 75%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 767px) {
+  .modal-content {
+  max-width: 92%;
+  max-height: 85%;
+}
 }
 
 
