@@ -41,25 +41,25 @@ function openEditForm() {
     <!-- school information content -->
     <div class="px-6 pt-4 space-y-2">
       <!-- school name -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Nom</p>
         <p>{{ schoolInfo?.schoolName || 'Non spécifié' }}</p>
       </div>
 
       <!-- field of study -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Domaine</p>
         <p>{{ schoolInfo?.fieldOfStudy || 'Non spécifié' }}</p>
       </div>
 
       <!-- start date -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Début du programme</p>
         <p>{{ formatDate(schoolInfo?.startDate) }}</p>
       </div>
 
       <!-- projected end date -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Fin du programme</p>
         <p>{{ formatDate(schoolInfo?.projectedEndDate) }}</p>
       </div>

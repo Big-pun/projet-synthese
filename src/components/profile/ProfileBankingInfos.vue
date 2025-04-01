@@ -59,25 +59,25 @@ function openEditForm() {
     <!-- Contenu des informations bancaires -->
     <div class="px-6 pt-4 space-y-2">
       <!-- Institution -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Institution</p>
         <p>{{ bankingInfo.institutionName || 'Non spécifié' }}</p>
       </div>
 
       <!-- Numéro de compte -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Compte</p>
         <p>{{ bankingInfo.accountInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Prêts -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Prêts</p>
         <p>{{ bankingInfo.loanInfo || 'Non spécifié' }}</p>
       </div>
 
       <!-- Autres informations -->
-      <div class="rounded-lg bg-white p-4 flex flex-row items-center mb-2">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
         <p class="font-medium responsive-margin">Autres</p>
         <p>{{ bankingInfo.other || 'Non spécifié' }}</p>
       </div>
