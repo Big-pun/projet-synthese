@@ -66,12 +66,12 @@ function openEditForm() {
     <div class="grid grid-cols-1 md:grid-cols-2 md:gap-4 gap-2 px-6 pt-4">
       <!-- first column -->
       <div>
-        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start md:justify-between">
+        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start ">
           <p class="font-medium responsive-margin">Prénom</p>
           <p>{{ userInfo?.firstName || 'Non spécifié' }}</p>
         </div>
 
-        <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
+        <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start ">
           <p class="font-medium responsive-margin">Date de naissance</p>
           <p>{{ userInfo?.birthDate ? formatDate(userInfo.birthDate) : 'Non spécifié' }}</p>
         </div>
@@ -79,12 +79,12 @@ function openEditForm() {
 
       <!-- second column -->
       <div>
-        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start md:justify-between">
+        <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start ">
           <p class="font-medium responsive-margin">Nom</p>
           <p>{{ userInfo?.lastName || 'Non spécifié' }}</p>
         </div>
 
-          <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
+          <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start ">
           <p class="font-medium responsive-margin">Téléphone</p>
           <p>{{ userInfo?.phone || 'Non spécifié' }}</p>
         </div>
@@ -93,17 +93,17 @@ function openEditForm() {
 
     <!-- addresses -->
     <div class="mt-2 px-6">
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start md:justify-between">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start ">
         <p class="font-medium responsive-margin">Courriel</p>
         <p>{{ userInfo?.email || 'Non spécifié' }}</p>
       </div>
 
-      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start md:justify-between">
+      <div class="rounded-lg bg-white mb-2 p-4 flex flex-col md:flex-row justify-start ">
         <p class="font-medium responsive-margin">Adresse personnelle</p>
         <p>{{ formatAddress(getAddressByType('PERSONAL')) }}</p>
       </div>
 
-      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start md:justify-between">
+      <div class="rounded-lg bg-white p-4 flex flex-col md:flex-row justify-start ">
         <p class="font-medium responsive-margin">Adresse au travail</p>
         <p>{{ formatAddress(getAddressByType('WORK')) }}</p>
       </div>
