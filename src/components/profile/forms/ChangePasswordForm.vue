@@ -174,7 +174,7 @@
       </div>
 
       <!-- Boutons -->
-      <div class="flex justify-end space-x-4 p-4">
+      <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 mt-8">
         <button
           type="button"
           @click="$emit('cancel')"
