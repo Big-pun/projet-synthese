@@ -75,6 +75,7 @@ const resetBudgetNewMonth = async () => {
     showSuccessPopup({
       title: "Supprime!",
       text: `Les transactions non réccurentes ont bien ete supprimées. Vous êtes prêt pour votre nouveau mois !`,
+      timer: 4000,
     });
   }
 }

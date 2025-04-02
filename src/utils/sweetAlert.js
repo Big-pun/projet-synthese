@@ -94,6 +94,7 @@ export const showConfirmPopup = ({
     confirmButtonText,
     cancelButtonText,
     showCancelButton: true,
+    showConfirmButton: true,
     callback,
     ...options
   });
@@ -114,6 +115,7 @@ export const showDeletePopup = ({
     confirmButtonText,
     cancelButtonText,
     showCancelButton: true,
+    showConfirmButton: true,
     callback,
     ...options
   });
@@ -135,12 +137,14 @@ export const showLoadingPopup = ({
 export const showSuccessPopup = ({
   title = 'Succès !',
   text = '',
-  options = {}
+  options = {},
+  timer = null
 }) => {
   return showPopup({
     title,
     text,
     icon: 'success',
+    timer,
     ...options
   });
 };
