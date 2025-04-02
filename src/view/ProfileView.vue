@@ -6,7 +6,6 @@ import ProfilePreview from '@/components/profile/ProfilePreview.vue';
 import ProfilePersonnalInfos from '@/components/profile/ProfilePersonnalInfos.vue';
 import ProfileSchoolInfos from '@/components/profile/ProfileSchoolInfos.vue';
 import ProfileBankingInfos from '@/components/profile/ProfileBankingInfos.vue';
-import loadingGif from '@/assets/img/loading.gif';
 
 // Import forms
 import ChangePasswordForm from '@/components/profile/forms/ChangePasswordForm.vue';
@@ -31,7 +30,6 @@ const formData = ref(null);
 const userAddresses = ref([]);
 const bankingDetails = ref(null);
 const schoolDetails = ref(null);
-const isLoading = ref(false);
 
 const userStore = useUserStore();
 const bankingStore = useBankingStore();
@@ -96,7 +94,14 @@ function handleClose() {
 // Add this function to load all necessary data
 async function loadAllUserData() {
   try {
-    isLoading.value = true;
+    showLoadingPopup({
+      title: 'Chargement en cours...',
+      icon: 'info',
+      options: {
+        showCancelButton: false,
+        showConfirmButton: false,
+      }});
+    
     // Check if the user is connected first
     if (!userStore.user?.id) {
       checkAuthentication();
@@ -105,14 +110,18 @@ async function loadAllUserData() {
     
     const userId = userStore.user.id;
     
-    // load all the data in parallel
+    // Créer une promesse de délai de 1 seconde
+    const minDelay = new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Charger toutes les données en parallèle avec le délai minimum
     await Promise.all([
+      minDelay,
       addressStore.fetchAddresses(userId),
       bankingStore.fetchBankingDetails(userId),
       schoolStore.fetchSchoolDetails(userId)
     ]);
     
-    // update all the local references
+    // Mettre à jour TOUTES les références locales
     userAddresses.value = addressStore.addresses;
     bankingDetails.value = bankingStore.bankingDetails;
     schoolDetails.value = schoolStore.schoolDetails;
@@ -121,7 +130,7 @@ async function loadAllUserData() {
     console.error('Erreur lors du chargement des données:', error);
     showError('Impossible de charger certaines données utilisateur');
   } finally {
-    isLoading.value = false;
+    closeLoading();
   }
 }
 
@@ -190,13 +199,6 @@ async function handleSave(data) {
 
 <template>
   <div class="main--boxed">
-    <!-- global loading indicator (optional) -->
-    <div v-if="isLoading" class="absolute inset-0 bg-[rgba(27,27,27,0.64)] flex justify-center z-50">
-      <div class="bg-white p-4 rounded-lg shadow-lg h-fit mt-40 text-center font-medium">
-        <img :src="loadingGif" alt="Chargement">
-        Chargement en cours...
-      </div>
-    </div>
     
     <ProfilePreview 
       :userData="userStore.user"
@@ -238,7 +240,7 @@ async function handleSave(data) {
         :schoolDetails="schoolDetails"
         @save="handleSave"
         @cancel="handleClose"
-        class=""
+        class="w-full"
       />
     </Modal>
   </div>

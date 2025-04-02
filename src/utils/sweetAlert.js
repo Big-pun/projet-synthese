@@ -29,6 +29,7 @@ export const showPopup = ({
   confirmButtonText = 'OK',
   cancelButtonText = 'Annuler',
   showCancelButton = false,
+  showConfirmButton = false,
   timer = null,
   callback = null,
   options = {}
@@ -41,6 +42,7 @@ export const showPopup = ({
     confirmButtonText,
     cancelButtonText,
     showCancelButton,
+    showConfirmButton,
     timer,
     ...options
   }).then((result) => {
@@ -92,6 +94,7 @@ export const showConfirmPopup = ({
     confirmButtonText,
     cancelButtonText,
     showCancelButton: true,
+    showConfirmButton: true,
     callback,
     ...options
   });
@@ -112,6 +115,7 @@ export const showDeletePopup = ({
     confirmButtonText,
     cancelButtonText,
     showCancelButton: true,
+    showConfirmButton: true,
     callback,
     ...options
   });
@@ -120,25 +124,27 @@ export const showDeletePopup = ({
 
 export const showLoadingPopup = ({
   title = 'Chargement en cours...',
-  options = {}}) => {
-    return showPopup({
-      title,
-      icon: 'loading',
-      showCancelButton: true,
-      ...options
-    });
+  options = {}
+}) => {
+  return showPopup({
+    title,
+    icon: 'info',
+    ...options
+  });
 };
 
 
 export const showSuccessPopup = ({
   title = 'Succès !',
   text = '',
-  options = {}
+  options = {},
+  timer = null
 }) => {
   return showPopup({
     title,
     text,
     icon: 'success',
+    timer,
     ...options
   });
 };

@@ -7,25 +7,13 @@
       <h2 class="text-xl font-roboto font-semibold text-white ml-4">
         Modifier votre établissement scolaire
       </h2>
-
-      <!-- Rectangle SVG avec couleur d'accent -->
-      <svg
-        width="36"
-        height="75"
-        viewBox="0 0 36 75"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="absolute right-5 top-0 rounded-b"
-      >
-        <rect width="36" height="75" class="rectangle-fill-hovered" />
-      </svg>
     </div>
 
     <form @submit.prevent="handleSubmit" class="space-y-4 p-4" novalidate>
       <!-- Nom de l'établissement et domaine d'études -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-6">
         <!-- Nom de l'établissement -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="schoolName"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -50,7 +38,7 @@
         </div>
 
         <!-- Domaine d'études -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="fieldOfStudy"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -78,7 +66,7 @@
       <!-- Dates du programme -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
         <!-- Date de début -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="startDate"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -100,7 +88,7 @@
         </div>
 
         <!-- Date de fin prévue -->
-        <div class="sm:flex sm:flex-row p-4 bg-white rounded-lg items-center">
+        <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
           <label
             for="projectedEndDate"
             class="block text-sm font-medium text-gray responsive-margin"
@@ -127,7 +115,7 @@
       </div>
 
       <!-- Boutons d'action -->
-      <div class="flex justify-end space-x-4 p-4">
+      <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 mt-8">
         <button
           type="button"
           @click="$emit('cancel')"
@@ -320,8 +308,4 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-.rectangle-fill-hovered {
-  fill: #00ec86;
-  transition: fill 0.2s ease;
-}
 </style>

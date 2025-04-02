@@ -27,7 +27,7 @@
         <!-- Institution et compte -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-2">
           <!-- Institution bancaire -->
-          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
             <label
               for="institutionName"
               class="block text-sm font-medium text-gray mb-2 responsive-margin"
@@ -52,7 +52,7 @@
           </div>
 
           <!-- Informations du compte -->
-          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
             <label
               for="accountInfo"
               class="block text-sm font-medium text-gray mb-2 responsive-margin"
@@ -80,7 +80,7 @@
         <!-- Prêts et autres -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <!-- Informations de prêt -->
-          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
             <label
               for="loanInfo"
               class="block text-sm font-medium text-gray mb-2 responsive-margin"
@@ -103,7 +103,7 @@
           </div>
 
           <!-- Autres informations -->
-          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <div class="rounded-lg bg-white p-4 flex flex-col lg:flex-row justify-start">
             <label
               for="other"
               class="block text-sm font-medium text-gray mb-2 responsive-margin"
@@ -121,11 +121,11 @@
       </div>
 
       <!-- Boutons d'action -->
-      <div class="flex justify-end space-x-4 mt-8">
+      <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 mt-8">
         <button
           type="button"
           @click="$emit('cancel')"
-          class="px-8 py-3 border-2 border-accent2 bg-white text-gray rounded-md hover:bg-accent2 transition-colors"
+          class=" px-8 py-3 border-2 border-accent2 bg-white text-gray rounded-md hover:bg-accent2 transition-colors"
         >
           Annuler
         </button>

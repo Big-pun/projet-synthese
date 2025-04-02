@@ -31,7 +31,7 @@
         <!-- Grille pour prénom et nom -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 mb-2">
           <!-- Prénom -->
-          <div class="rounded-lg bg-white p-4 sm:flex sm:flex-row items-center">
+          <div class="rounded-lg bg-white p-4 mb-2 sm:mb-0 sm:flex sm:flex-row items-center">
             <label
               for="firstName"
               class="block text-sm font-medium text-gray responsive-margin"
@@ -311,7 +311,7 @@
       </div>
 
       <!-- Boutons d'action -->
-      <div class="flex justify-end space-x-4 p-4">
+      <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 mt-8">
         <button
           type="button"
           @click="$emit('cancel')"
