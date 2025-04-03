@@ -1,88 +1,95 @@
-# Projet Synthèse
+# Projet Synthèse 🎨💻  
 
-## Lien
+## 🔗 Lien  
 
-Repo : https://github.com/Big-pun/projet-synthese
+📌 **Repo** : [GitHub - Projet Synthèse](https://github.com/Big-pun/projet-synthese)  
 
-## Description
+## 📝 Description  
 
-Dans le cadre de la fin de notre programme en développement front-end, un projet synthèse devait être développé en groupe de 4 étudiants, avec un framework parmi ceux vus en cours (React, Angular ou Vue.js). Le backend était fourni. 
+Dans le cadre de la fin de notre programme en développement front-end, nous avons développé un **projet synthèse** en groupe de 4 étudiants. Nous devions utiliser un framework parmi ceux vus en cours (**React, Angular ou Vue.js**). Le backend était fourni.  
 
-Le but est de créer web de gestion de budget orienté vers les étudiants en se basant sur les wireframes fournis. L’objectif est de créer un outil interactif et intuitif permettant aux utilisateurs de suivre leurs revenus et leurs dépenses de manière efficace. 
+Le but était de créer une **application web de gestion de budget** orientée vers les étudiants, en se basant sur les wireframes fournis. L’objectif : proposer un **outil interactif et intuitif** permettant aux utilisateurs de suivre leurs **revenus** et leurs **dépenses** de manière efficace.  
 
-Nous avons choisi de développer le projet avec Vue.js. C'est le framework avec lequel nous étions le plus à l'aise et nous permettrait d'accorder plus de temps à la gestion du travail en équipe sans complexifier trop le processus. Vue.js nous permettait aussi de garder une bonne structure (stores, composants, appels à l'api...) et séparation des tâches.
+Nous avons choisi **Vue.js** 🚀, car c'était le framework avec lequel nous étions le plus à l'aise. Cela nous permettait de mieux nous concentrer sur la gestion du travail en équipe sans complexifier le processus. Vue.js nous offrait aussi une bonne structure (**stores, composants, appels API...**) et une séparation claire des tâches.  
 
+## 🎯 Objectifs  
 
-## Objectifs
+✔️ **Mener à bien un projet en équipe** en planifiant et répartissant les tâches  
+✔️ Gagner en expérience avec le **workflow Git/GitHub en équipe** (branches, PR, gestion des conflits...)  
+✔️ Se perfectionner avec **Vue.js et l'API Composition**  
+✔️ **Structurer** le code de manière organisée  
+✔️ Construire une **SPA** grâce à Vue Router  
 
-*  **Mener à bien un projet en équipe** en planifiant et distribuant les tâches
-*  Gagner en expérience avec le **workflow git/Github en équipe** (branches, PR, conflits...)
-*  Se perfectionner avec le framework **Vue et l'API Composition**
-*  **Structurer** le code de manière organisée
-*  Construire une **SPA** grâce à Vue Router
+## 👥 Équipe  
 
+- **Marie-Pier** [→](https://github.com/marie-pierv)  
+- **Ines** [→](https://github.com/ines-taborin)  
+- **Adrien** [→](https://github.com/Big-pun)  
+- **Jeanne** [→](https://github.com/jeannepietropaoli)  
 
-## Répartition des tâches
+## 🔄 Répartition des tâches  
 
-Voici dans les grandes lignes la réparition des tâches durant le projet. Nous avons aussi pu s'entraider / revoir le code de chacun tout au long du processus. Pour les détails, voir directement dans les commits des PR !
+Voici la répartition des tâches durant le projet. Nous avons également pu **nous entraider et revoir le code de chacun** tout au long du processus. Pour plus de détails, voir directement les commits des PR ! 🔍  
 
-*  Design (à partir des wireframes) - Jeanne (et le retour de tous)
-*  Page d'accueil - Marie-Pier
-*  Page Profile - Adrien
-*  Page Budget - Jeanne
-*  Récupération et gestion des données de l'API - Ines
-*  Header - Ines
-*  Footer - Marie-Pier
-*  Sidebar - Jeanne
+- 🎨 **Design** (wireframes) - Jeanne (+ feedback du groupe)  
+- 🏠 **Page d’accueil** - Marie-Pier  
+- 👤 **Page Profil** - Adrien  
+- 📊 **Page Budget** - Jeanne  
+- 🔄 **Récupération et gestion des données de l’API** - Ines  
+- 🚀 **Header** - Ines  
+- 🔚 **Footer** - Marie-Pier  
+- 📌 **Sidebar** - Jeanne  
 
-## Technologies utilisées
+## 🛠️ Technologies utilisées  
 
-* HTML
-* JavaScript
-* Vue.js
-* CSS
-* Tailwind CSS
+- **HTML**  
+- **JavaScript**  
+- **Vue.js**  
+- **CSS**  
+- **Tailwind CSS**  
 
-## Outils
+## ⚙️ Outils  
 
-* Outil Gestion de projet :
-    - Trello
+**Gestion de projet** :  
+- Trello 📋  
 
-* Outil de communication :
-    - Discord
+**Communication** :  
+- Discord 💬  
 
-* Maquettes : 
-    - Figma
+**Maquettes** :  
+- Figma 🎨  
 
-* Création Logo :
-    - Logo illustrator
+**Création du logo** :  
+- Adobe Illustrator 🖌️  
 
+## 📦 Dépendances  
 
-## Dépendances
+- **Vite** - Installation et configuration  
+- **TailwindCSS** - Librairie de styles  
+- **Pinia** - Store et gestion du state  
+- **Vue Router** - Navigation  
+- **SweetAlert2** - Librairie d’animations pour les alertes  
+- **Vuelidate** - Validation des formulaires  
+- **Vue Toastification** - Toasts de confirmation  
 
-- **Vite** => Installation et configuration
-- **TailwindCSS** => Libraire de CSS
-- **Pinia** => Store et gestion de state
-- **VueRouter** => Navigation
-- **SweetAlert2** => Librairie d'animations pour les alertes
-- **vuelidate** => Librairie de regles de validation de formulaire
-- **vue-toastification** => Pastilles de confimations
+## 🎨 Design  
 
-## Design
+### Fonts  
 
-* ### Fonts :
+- **Roboto Mono** (h1, texte) → [Voir](https://fonts.google.com/specimen/Roboto+Mono)  
+- **Roboto Flex** (h2) → [Voir](https://fonts.google.com/specimen/Roboto+Flex)  
+- **Bebas Neue** (h3-6, chiffres) → [Voir](https://fonts.google.com/specimen/Bebas+Neue)  
 
-  * Roboto Mono (h1, texte) [->](https://fonts.google.com/specimen/Roboto+Mono)
-  * Roboto Flex (h2) [->](https://fonts.google.com/specimen/Roboto+Flex)
-  * Bebas Neue (h3-6, chiffres) [->](https://fonts.google.com/specimen/Bebas+Neue)
+### Palette de couleurs  
 
+Une **palette sobre et moderne** avec du noir/blanc et deux accents de couleur :  
+- **Vert émeraude** pour les aspects positifs ✅  
+- **Corail** pour les aspects négatifs ❌  
 
-* ### Palette de couleurs :
+<img src="src/assets/img/palette.png" alt="Palette de couleurs du site" width="600"/>  
 
-Sobre et moderne avec le noir/blanc et deux accents de couleurs clairs pour le côté balance positive (vert emeraude) et négative (corail).
+## 🎥 Aperçu  
 
-<img src="src/assets/img/palette.png" alt="Palette de couleurs du site" width="600"/>
+**Cliquez sur l’image pour voir un aperçu vidéo de l’application !**  
 
-
-## Aperçu
-[![Capture vidéo de l'application](src/assets/img/screenshot-video.png)](src/assets/img/video-app.webm)
+[![Capture vidéo de l'application](src/assets/img/screenshot-video.png)](src/assets/img/video-app.webm)  
