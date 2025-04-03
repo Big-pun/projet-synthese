@@ -55,7 +55,7 @@ const showLogin = ref(false);
          @logout = "handleLogout">
         </Header>
         <main class="grow relative"> <!-- ensures that the footer is pushed to the bottom of the page -->
-          <RouterView :showSignup="handleShowSignup"></RouterView>
+          <RouterView></RouterView>
         </main>
         <Footer></Footer>
       </div>
