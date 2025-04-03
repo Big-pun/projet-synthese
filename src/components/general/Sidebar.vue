@@ -55,7 +55,7 @@ const signOutUser = () => {
 </script>
 
 <template>
-  <div class="sidebar sticky min-w-max top-0 min-h-[100vh] h-full py-5 text-dark-gray bg-black flex flex-col justify-center z-10">
+  <div class="sidebar z-[100] sticky min-w-max top-0 min-h-[100vh] h-full py-5 text-dark-gray bg-black flex flex-col justify-center">
     <!-- sidebar is expandable only on md screen and above -->
      <!-- collapse / expand sidebar button -->
     <div @click="toggleSidebar" :class="collapsed ? 'justify-center': 'start w-max'" class="hidden md:flex nav__link relative bg-transparent px-6 py-3 font-medium text-md text-color-dark-gray items-center gap-4 cursor-pointer">

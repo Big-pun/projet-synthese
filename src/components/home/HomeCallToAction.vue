@@ -24,6 +24,10 @@
   const userStore = useUserStore();
 
   const emit = defineEmits(['showSignup']);
+
+  const showSignUp = () => {
+    emit('showSignup');
+  };
 </script>
 
 

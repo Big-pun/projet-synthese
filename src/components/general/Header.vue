@@ -13,7 +13,7 @@
       />
 
     <!-- MENUS -->
-    <ul class="flex items-center justify-end gap-10">
+    <ul class="flex flex-col sm:flex-row items-center justify-end gap-2 sm:gap-10">
 
       <!-- if user is NOT connected -->
       <!-- Bouton Inscription -->

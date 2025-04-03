@@ -36,7 +36,9 @@
 
   const userStore = useUserStore();
 
-  const emit = defineEmits(['showSignup']);
+  const props = defineProps({
+    showSignUp: Function
+  });
 </script>
 
 <style scoped>
