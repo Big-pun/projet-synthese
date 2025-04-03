@@ -121,7 +121,7 @@ const submitForm = () => {
         >
             <option :value="1">Quotidien</option>
             <option :value="7">Hebdomadaire</option>
-            <option :value="14">Bihebdomadaire</option>
+            <option :value="14">Bimensuel</option>
             <option :value="30">Mensuel</option>
             <option :value="-1">Non récurrent</option>
         </select>
