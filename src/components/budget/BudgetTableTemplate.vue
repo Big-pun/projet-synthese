@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-import deleteIcon from '@/assets/img/icons/delete_icon.svg';
+import deleteIcon from '@/assets/img/delete_icon.svg';
 import Swal from 'sweetalert2';
 import { showDeletePopup } from '@/utils/sweetAlert';
 

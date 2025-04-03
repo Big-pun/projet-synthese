@@ -25,8 +25,8 @@ const handleShowSignup = () => {
     <HomeCallToAction @showSignup="handleShowSignup"></HomeCallToAction>
   </div>
 
-    <!-- Subscription Modal -->
-    <Modal :isOpen="showSignup" @close="showSignup = false">
+  <!-- Subscription Modal -->
+  <Modal :isOpen="showSignup" @close="showSignup = false">
     <SubscriptionForm @closeModal="showSignup = false" />
   </Modal>
 </template>

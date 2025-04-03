@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue';
-import closeIcon from '../../assets/icons/close_icon.svg';
-import menuIcon from '../../assets/icons/menu_icon.svg';
-import homeIcon from '../../assets/icons/home_icon.svg';
-import budgetIcon from '../../assets/icons/budget_icon.svg';
-import profileIcon from '../../assets/icons/profil_icon.svg';
-import signOutIcon from '../../assets/icons/sign_out_icon_alt.svg';
-import signInIcon from '../../assets/icons/sign_in_icon.svg';
-import signUpIcon from '../../assets/icons/sign_up_icon.svg';
+import closeIcon from '../../assets/img/close_icon.svg';
+import menuIcon from '../../assets/img/menu_icon.svg';
+import homeIcon from '../../assets/img/home_icon.svg';
+import budgetIcon from '../../assets/img/budget_icon.svg';
+import profileIcon from '../../assets/img/profil_icon.svg';
+import signOutIcon from '../../assets/img/sign_out_icon_alt.svg';
+import signInIcon from '../../assets/img/sign_in_icon.svg';
+import signUpIcon from '../../assets/img/sign_up_icon.svg';
 import SidebarNavLink from './SidebarNavLink.vue';
 
 const props = defineProps({
