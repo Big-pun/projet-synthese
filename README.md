@@ -81,11 +81,8 @@ Voici dans les grandes lignes la réparition des tâches durant le projet. Nous 
 
 Sobre et moderne avec le noir/blanc et deux accents de couleurs clairs pour le côté balance positive (vert emeraude) et négative (corail).
 
-<img src="img/palette.JPG" alt="Palette de couleurs du site" width="600"/>
+<img src="src/assets/img/palette.png" alt="Palette de couleurs du site" width="600"/>
 
 
 ## Aperçu
-
-<video alt="caputre vidéo de l'application" width="600" style="margin: 20px 0; border-bottom: 4px solid #D1D5DB;">
-    <source src="img/video-app.webm" type="video/webm" />
-</video>
+[![Capture vidéo de l'application](src/assets/img/screenshot-video.png)](src/assets/img/video-app.webm)
