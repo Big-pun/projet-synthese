@@ -1,8 +1,8 @@
-# Projet Synthèse 🎨💻  
+# Projet Synthèse
 
 ## 🔗 Lien  
 
-📌 **Repo** : [GitHub - Projet Synthèse](https://github.com/Big-pun/projet-synthese)  
+**Repo** : [GitHub - Projet Synthèse](https://github.com/Big-pun/projet-synthese)  
 
 ## 📝 Description  
 
@@ -10,7 +10,7 @@ Dans le cadre de la fin de notre programme en développement front-end, nous avo
 
 Le but était de créer une **application web de gestion de budget** orientée vers les étudiants, en se basant sur les wireframes fournis. L’objectif : proposer un **outil interactif et intuitif** permettant aux utilisateurs de suivre leurs **revenus** et leurs **dépenses** de manière efficace.  
 
-Nous avons choisi **Vue.js** 🚀, car c'était le framework avec lequel nous étions le plus à l'aise. Cela nous permettait de mieux nous concentrer sur la gestion du travail en équipe sans complexifier le processus. Vue.js nous offrait aussi une bonne structure (**stores, composants, appels API...**) et une séparation claire des tâches.  
+Nous avons choisi **Vue.js**, car c'était le framework avec lequel nous étions le plus à l'aise. Cela nous permettait de mieux nous concentrer sur la gestion du travail en équipe sans complexifier le processus. Vue.js nous offrait aussi une bonne structure (**stores, composants, appels API...**) et une séparation claire des tâches.  
 
 ## 🎯 Objectifs  
 
@@ -31,7 +31,7 @@ Nous avons choisi **Vue.js** 🚀, car c'était le framework avec lequel nous é
 
 Voici la répartition des tâches durant le projet. Nous avons également pu **nous entraider et revoir le code de chacun** tout au long du processus. Pour plus de détails, voir directement les commits des PR ! 🔍  
 
-- 🎨 **Design** (wireframes) - Jeanne (+ feedback du groupe)  
+- 🎨 **Design** (à partir des wireframes) - Jeanne (+ feedback du groupe)  
 - 🏠 **Page d’accueil** - Marie-Pier  
 - 👤 **Page Profil** - Adrien  
 - 📊 **Page Budget** - Jeanne  
