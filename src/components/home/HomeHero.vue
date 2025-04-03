@@ -20,7 +20,7 @@
           </p>
           <div class="flex justify-center pt-12">
             <button v-if="!userStore.user" 
-              @click="showSignUp"
+              @click="showSignup"
               class="font-(family-name:--font-roboto) text-center text-white bg-accent1 hover:bg-hover px-5 py-2 rounded"
             >
               Inscription
@@ -37,6 +37,10 @@
   const userStore = useUserStore();
 
   const emit = defineEmits(['showSignup']);
+
+  const showSignup = () => {
+    emit('showSignup');
+  };
 </script>
 
 <style scoped>

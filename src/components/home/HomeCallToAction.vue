@@ -11,7 +11,7 @@
         <!--À VOIR SI ON REMPLACE LA CLASS DE P PAR UNE CLASS DANS LE THEME-->
         <p class="text-center text-base text-white">Inscris toi des maintenant et profite de l’ensemble de l’application gratuitement</p>
         <div class="flex justify-center pt-12">
-          <button @click="showSignUp" class="font-(family-name:--font-roboto) text-center text-white bg-accent1 hover:bg-hover px-5 py-2 rounded">Inscription</button>
+          <button @click="showSignup" class="font-(family-name:--font-roboto) text-center text-white bg-accent1 hover:bg-hover px-5 py-2 rounded">Inscription</button>
         </div>
       </div>
     </section>
@@ -24,6 +24,10 @@
   const userStore = useUserStore();
 
   const emit = defineEmits(['showSignup']);
+
+  const showSignup = () => {
+    emit('showSignup');
+  };
 </script>
 
 

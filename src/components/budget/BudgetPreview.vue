@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue';
-import balanceIconPositive from '@/assets/img/icons/balance_icon_positive.svg';
-import balanceIconNegative from '@/assets/img/icons/balance_icon_negative.svg';
-import pieIcon from '@/assets/img/icons/pie_icon.svg';
-import calendarIcon from '@/assets/img/icons/calendar_icon.svg';
+import balanceIconPositive from '@/assets/img/balance_icon_positive.svg';
+import balanceIconNegative from '@/assets/img/balance_icon_negative.svg';
+import pieIcon from '@/assets/img/pie_icon.svg';
+import calendarIcon from '@/assets/img/calendar_icon.svg';
 import logo from '@/assets/img/logo.svg';
 
 const props = defineProps({

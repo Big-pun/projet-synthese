@@ -48,14 +48,14 @@ const showLogin = ref(false);
        @showLogin = "handleShowLogin"
        @logout = "handleLogout">
       </Sidebar>
-      <div class="flex flex-col grow bg-white overflow-y-auto z-50">
+      <div class="flex flex-col grow bg-white overflow-y-auto" >
         <Header
          @showSignup = "handleShowSignup"
          @showLogin = "handleShowLogin"
          @logout = "handleLogout">
         </Header>
         <main class="grow relative"> <!-- ensures that the footer is pushed to the bottom of the page -->
-          <RouterView :showSignup="handleShowSignup"></RouterView>
+          <RouterView></RouterView>
         </main>
         <Footer></Footer>
       </div>
