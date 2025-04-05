@@ -19,10 +19,10 @@
         <div class="md:w-[55%] w-[100%]">
           <img class="rounded-xl border-1 border-dark-gray mt-6" src="../../assets/img/renseignements.png" alt="Renseignement">
         </div>
-        <div class="md:w-[41%] w-[100%] flex flex-col justify-between items-center gap-y-5 mt-8">
+        <div class="md:w-[41%] w-[100%] flex flex-col justify-between items-center gap-y-1 mt-4">
           <img class="w-[80px] sm:w-[170px]" src="../../assets/img/LogoNom-White.svg" alt="Logo">
-          <p class="text-xs md:text-base text-dark-gray text-center bg-accent2 p-2 md:mb-3 rounded">Utilisation simple et efficace</p>
-          <p class="text-xs md:text-base text-dark-gray text-center bg-accent1 p-2 md:mb-3 rounded">Entièrement gratuit</p>
+          <p class="text-xs md:text-base text-dark-gray text-center bg-accent2 p-2 md:mb-1 w-full rounded">Utilisation simple et efficace</p>
+          <p class="text-xs md:text-base text-dark-gray text-center bg-accent1 p-2 md:mb-1 w-full rounded">Entièrement gratuit</p>
           <img class="rounded-xl border-1 border-dark-gray" src="../../assets/img/profil.png" alt="Profil">
         </div>
       </div>
