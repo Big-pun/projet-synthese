@@ -133,7 +133,6 @@ export const useTransactionStore = defineStore('transaction', {
       const userId = useUserStore().user.id;
       const transaction = this.findTransactionById(transactionId);
       if(transaction) {
-        console.log('transaction.frequency', transaction.frequency);
         this.updateTransaction(userId, transactionId, {
           ...transaction, frequency: transaction.frequency === -1 ? defaultFrequency : -1
         })
