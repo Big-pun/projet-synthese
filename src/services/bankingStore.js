@@ -20,12 +20,8 @@ export const useBankingStore = defineStore('banking', {
         const response = await getUserBankingDetails(userId);
         this.bankingDetails = response.data;
       } catch (error) {
-        if (error.response?.status === 404) {
-          console.log('Aucune donnée bancaire disponible pour cet utilisateur');
-        } else {
-          this.error = "Impossible de récupérer les détails bancaires.";
-          console.error('Erreur lors de la récupération des données bancaires:', error);
-        }
+        this.error = "Impossible de récupérer les détails bancaires.";
+        console.error('Erreur lors de la récupération des données bancaires:', error);
       } finally {
         this.loading = false;
       }
