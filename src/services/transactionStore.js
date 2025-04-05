@@ -28,7 +28,6 @@ export const useTransactionStore = defineStore('transaction', {
     },
 
     calcItemsTotal: () => (items) => {
-      console.log('items', items);
       return items.reduce((acc, item) => {
         const amount = item.amount * (item.frequency === 1 ? 30
           : item.frequency === 7 ? 4
@@ -54,7 +53,6 @@ export const useTransactionStore = defineStore('transaction', {
       try {
         const response = await getUserTransactions(userId);
         this.transactions = response.data;
-        console.log(this.transactions);
       } catch (error) {
         this.error = "Impossible de récupérer les transactions.";
         console.error(error);
@@ -69,11 +67,10 @@ export const useTransactionStore = defineStore('transaction', {
       try {
         const response = await postNewTransaction(userId, transactionData);
         this.transactions.push(response.data);
-        console.log(response.data);
         return response.data;
       } catch (error) {
         this.error = "Impossible de créer la transaction.";
-        console.log(error);
+        console.error(error);
       } finally {
         this.loading = false;
       }
@@ -136,7 +133,6 @@ export const useTransactionStore = defineStore('transaction', {
       const userId = useUserStore().user.id;
       const transaction = this.findTransactionById(transactionId);
       if(transaction) {
-        console.log('transaction.frequency', transaction.frequency);
         this.updateTransaction(userId, transactionId, {
           ...transaction, frequency: transaction.frequency === -1 ? defaultFrequency : -1
         })
